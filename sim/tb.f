@@ -1,4 +1,4 @@
-# Verification source list - paths are relative to sim/
+# Verification files are compiled in dependency order. Paths are relative to sim/.
 +incdir+../vip
 +incdir+../tb
 +incdir+../sequences

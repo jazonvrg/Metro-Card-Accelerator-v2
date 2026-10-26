@@ -24,6 +24,17 @@ class metro_base_test extends uvm_test;
         uvm_top.print_topology();
     endfunction
 
+    virtual function void final_phase(uvm_phase phase);
+        uvm_report_server svr;
+        super.final_phase(phase);
+        svr = uvm_report_server::get_server();
+        if (svr.get_severity_count(UVM_FATAL) + svr.get_severity_count(UVM_ERROR) > 0) begin
+            $display("#### TEST FAILED ####");
+        end else begin
+            $display("#### TEST PASSED ####");
+        end
+    endfunction: final_phase
+
     task wait_for_reset_release();
         wait (vif.PRESETN === 1'b1);
         repeat (2) @(posedge vif.PCLK);

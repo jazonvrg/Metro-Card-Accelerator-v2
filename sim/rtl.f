@@ -1,4 +1,4 @@
-# RTL source list - paths are relative to sim/
+# RTL source list. Paths are relative to sim/ and match the project RTL tree.
 ../rtl/apb_slave.sv
 ../rtl/hash_engine.sv
 ../rtl/fallback_lookup.sv
