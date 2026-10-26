@@ -27,7 +27,7 @@ VLOG = vlog $(CMP_COV_OPT) \
        +define+UVM_NO_DPI \
        -mfcu \
        -suppress 2181 \
-       +acc=rmb \
+       +acc \
        +incdir+$(UVM_HOME)/src \
        $(UVM_HOME)/src/uvm.sv
 

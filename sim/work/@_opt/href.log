@@ -1,0 +1,21 @@
+BEGIN 3:metro_apb_if:fast__1:work
+    PRDATA :  1:metro_apb_pkg:fast:work
+    PRESETN :  1:metro_apb_pkg:fast:work 1:test_pkg:fast:work
+    PCLK :  1:metro_apb_pkg:fast:work 1:test_pkg:fast:work
+    PENABLE :  1:metro_apb_pkg:fast:work
+    PADDR :  1:metro_apb_pkg:fast:work
+    PSEL :  1:metro_apb_pkg:fast:work
+    PREADY :  1:metro_apb_pkg:fast:work
+    PWDATA :  1:metro_apb_pkg:fast:work
+    PWRITE :  1:metro_apb_pkg:fast:work
+END 
+BEGIN 3:metro_apb_if:fast__2:work
+    PENABLE :  1:testbench:fast:work
+    PWDATA :  1:testbench:fast:work
+    PREADY :  1:testbench:fast:work
+    PRESETN :  1:testbench:fast:work
+    PWRITE :  1:testbench:fast:work
+    PADDR :  1:testbench:fast:work
+    PRDATA :  1:testbench:fast:work
+    PSEL :  1:testbench:fast:work
+END 

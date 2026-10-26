@@ -1,8 +1,9 @@
 class metro_apb_transaction extends uvm_sequence_item;
-    rand bit        is_write;
-    rand bit [7:0]  addr;
-    rand bit [31:0] data;
-         logic [31:0] rdata;
+
+    rand logic is_write;
+    rand logic [7:0]  addr;
+    rand logic [31:0] data;
+    logic [31:0] rdata;
 
     `uvm_object_utils_begin(metro_apb_transaction)
         `uvm_field_int(is_write, UVM_ALL_ON)
@@ -15,4 +16,5 @@ class metro_apb_transaction extends uvm_sequence_item;
         super.new(name);
         rdata = '0;
     endfunction
+
 endclass

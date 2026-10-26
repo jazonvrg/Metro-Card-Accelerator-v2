@@ -1,11 +1,12 @@
 class metro_environment extends uvm_env;
     `uvm_component_utils(metro_environment)
+
     virtual metro_apb_if vif;
     int unsigned bit_count;
     metro_apb_agent apb_agent;
     metro_scoreboard scoreboard;
 
-    function new(string name = "metro_environment", uvm_component parent = null);
+    function new(string name = "metro_environment", uvm_component parent);
         super.new(name, parent);
     endfunction
 
@@ -25,4 +26,5 @@ class metro_environment extends uvm_env;
         super.connect_phase(phase);
         apb_agent.monitor.ap.connect(scoreboard.apb_export);
     endfunction
+
 endclass

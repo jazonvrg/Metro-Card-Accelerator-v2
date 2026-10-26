@@ -5,25 +5,26 @@ module testbench;
     import metro_apb_pkg::*;
     import test_pkg::*;
 
-    // Simulation uses a small bit array for runtime; RTL default is 9.6M bits.
-    localparam int unsigned ADDR = 8;
-    localparam int unsigned DATA = 32;
-    localparam int unsigned HASH = 24;
-    localparam int unsigned BIT_COUNT = 4096;
-    localparam int unsigned FALLBACK_DEPTH = METRO_FALLBACK_DEPTH;
+    parameter int unsigned ADDR = 8;
+    parameter int unsigned DATA = 32;
+    parameter int unsigned HASH = 24;
+    parameter int unsigned BIT_COUNT = 4096;
+    parameter int unsigned FALLBACK_DEPTH = METRO_FALLBACK_DEPTH;
 
     logic PCLK = 1'b0;
     always #5 PCLK = ~PCLK;
     metro_apb_if apb_if(PCLK);
 
-    metro_card_top #(
-        .ADDR(ADDR), .DATA(DATA), .HASH(HASH), .BIT_COUNT(BIT_COUNT),
-        .FALLBACK_DEPTH(FALLBACK_DEPTH), .FALLBACK_BASE_ADDR(METRO_FALLBACK_BASE)
-    ) dut (
-        .PCLK(PCLK), .PRESETN(apb_if.PRESETN), .PSEL(apb_if.PSEL),
-        .PWRITE(apb_if.PWRITE), .PENABLE(apb_if.PENABLE),
-        .PADDR(apb_if.PADDR), .PWDATA(apb_if.PWDATA),
-        .PRDATA(apb_if.PRDATA), .PREADY(apb_if.PREADY)
+    metro_card_top #(.ADDR(ADDR), .DATA(DATA), .HASH(HASH), .BIT_COUNT(BIT_COUNT), .FALLBACK_DEPTH(FALLBACK_DEPTH), .FALLBACK_BASE_ADDR(METRO_FALLBACK_BASE)) dut (
+        .PCLK		(PCLK),
+	.PRESETN	(apb_if.PRESETN),
+	.PSEL		(apb_if.PSEL),
+        .PWRITE		(apb_if.PWRITE),
+	.PENABLE	(apb_if.PENABLE),
+        .PADDR		(apb_if.PADDR),
+	.PWDATA		(apb_if.PWDATA),
+        .PRDATA		(apb_if.PRDATA),
+	.PREADY		(apb_if.PREADY)
     );
 
     initial begin
@@ -41,4 +42,5 @@ module testbench;
         uvm_config_db#(int unsigned)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
         run_test();
     end
+
 endmodule

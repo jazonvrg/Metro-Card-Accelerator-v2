@@ -1,6 +1,9 @@
 class metro_base_sequence extends uvm_sequence #(metro_apb_transaction);
     `uvm_object_utils(metro_base_sequence)
-    function new(string name = "metro_base_sequence"); super.new(name); endfunction
+
+    function new(string name = "metro_base_sequence");
+	super.new(name);
+    endfunction
 
     task apb_write(input logic [7:0] addr, input logic [31:0] data);
         metro_apb_transaction tr, rsp;
@@ -28,38 +31,40 @@ class metro_base_sequence extends uvm_sequence #(metro_apb_transaction);
     task program_bloom(input logic [31:0] id);
         logic [31:0] status;
         set_card_id(id);
-        apb_write(METRO_CTRL_REG, 32'h0000_0003); // START=1, MODE=program
+        apb_write(METRO_CTRL_REG, 32'h0000_0003);
         apb_read(METRO_STAT_REG, status);
-        if (status[0] !== 1'b1 || status[1] !== 1'b0 || status[2] !== 1'b0)
+        if (status[0] !== 1'b1 || status[1] !== 1'b0 || status[2] !== 1'b0) begin
             `uvm_error(get_type_name(), $sformatf("Program status mismatch ID=0x%08h status=0x%08h", id, status))
+	end
     endtask
 
     task query_card(input logic [31:0] id, input bit expected_match, input bit expected_fallback = 1'b0);
         logic [31:0] status;
         set_card_id(id);
-        apb_write(METRO_CTRL_REG, 32'h0000_0001); // START=1, MODE=query
+        apb_write(METRO_CTRL_REG, 32'h0000_0001);
         apb_read(METRO_STAT_REG, status);
-        if (status[0] !== 1'b1 || status[1] !== expected_match || status[2] !== expected_fallback)
-            `uvm_error(get_type_name(),
-                       $sformatf("Query mismatch ID=0x%08h exp_match=%0b exp_fallback=%0b status=0x%08h",
-                                 id, expected_match, expected_fallback, status))
-        else
+        if (status[0] !== 1'b1 || status[1] !== expected_match || status[2] !== expected_fallback) begin
+            `uvm_error(get_type_name(), $sformatf("Query mismatch ID=0x%08h exp_match=%0b exp_fallback=%0b status=0x%08h", id, expected_match, expected_fallback, status))
+        end else begin
             `uvm_info(get_type_name(), $sformatf("QUERY PASS ID=0x%08h status=0x%08h", id, status), UVM_LOW)
+	end
     endtask
 
-    // Capture actual DUT status without imposing an expected prediction.
-    // Used by the metrics test so the CSV contains observed RTL results,
-    // not predictions copied from the reference model.
     task query_card_capture(input logic [31:0] id, output logic [31:0] status);
         set_card_id(id);
-        apb_write(METRO_CTRL_REG, 32'h0000_0001); // START=1, MODE=query
+        apb_write(METRO_CTRL_REG, 32'h0000_0001);
         apb_read(METRO_STAT_REG, status);
     endtask
+
 endclass
 
 class metro_hash_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_hash_sequence)
-    function new(string name = "metro_hash_sequence"); super.new(name); endfunction
+
+    function new(string name = "metro_hash_sequence");
+	super.new(name);
+    endfunction
+	
     virtual task body();
         logic [31:0] ids [0:3];
         ids[0] = 32'h1000_0001;
@@ -69,36 +74,41 @@ class metro_hash_sequence extends metro_base_sequence;
         foreach (ids[i]) program_bloom(ids[i]);
         foreach (ids[i]) query_card(ids[i], 1'b1, 1'b0);
     endtask
+
 endclass
 
 class metro_fallback_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_fallback_sequence)
-    function new(string name = "metro_fallback_sequence"); super.new(name); endfunction
+
+    function new(string name = "metro_fallback_sequence");
+	super.new(name);
+    endfunction
+
     virtual task body();
         logic [31:0] fallback_only_id;
         fallback_only_id = 32'hD00D_CAFE;
-        // Deliberately do NOT program fallback_only_id into the Bloom filter.
-        // It is inserted only into the exact-match side table, exercising the miss recovery path.
         apb_write(METRO_FALLBACK_BASE, fallback_only_id);
         query_card(fallback_only_id, 1'b1, 1'b1);
-        // Readback confirms the list entry is accessible through APB.
         begin
             logic [31:0] readback;
             apb_read(METRO_FALLBACK_BASE, readback);
             if (readback !== fallback_only_id)
                 `uvm_error(get_type_name(), $sformatf("Fallback slot readback mismatch expected=0x%08h got=0x%08h", fallback_only_id, readback))
         end
-        // Writing zero invalidates the entry. It was never inserted into Bloom,
-        // so after clearing the exact table it must no longer be matched.
         apb_write(METRO_FALLBACK_BASE, 32'h0000_0000);
         query_card(fallback_only_id, 1'b0, 1'b0);
         query_card(32'hCAFE_BABE, 1'b0, 1'b0);
     endtask
+
 endclass
 
 class metro_register_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_register_sequence)
-    function new(string name = "metro_register_sequence"); super.new(name); endfunction
+
+    function new(string name = "metro_register_sequence");
+	super.new(name);
+    endfunction
+
     virtual task body();
         logic [31:0] rdata;
         apb_write(METRO_ID_REG, 32'h1357_2468);
@@ -110,23 +120,33 @@ class metro_register_sequence extends metro_base_sequence;
         if (rdata[1:0] !== 2'b10)
             `uvm_error(get_type_name(), $sformatf("CTRL register readback failed: 0x%08h", rdata))
     endtask
+
 endclass
 
 class metro_reset_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_reset_sequence)
-    function new(string name = "metro_reset_sequence"); super.new(name); endfunction
+
+    function new(string name = "metro_reset_sequence");
+	super.new(name);
+    endfunction
+
     virtual task body();
         logic [31:0] rdata;
         apb_read(METRO_STAT_REG, rdata);
         if (rdata !== 32'h0)
             `uvm_error(get_type_name(), $sformatf("Status register should be zero after reset: 0x%08h", rdata))
     endtask
+
 endclass
 
 
 class metro_fallback_table_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_fallback_table_sequence)
-    function new(string name = "metro_fallback_table_sequence"); super.new(name); endfunction
+
+    function new(string name = "metro_fallback_table_sequence");
+	super.new(name);
+    endfunction
+
     virtual task body();
         logic [31:0] rdata;
         logic [31:0] ids [0:2];
@@ -140,23 +160,19 @@ class metro_fallback_table_sequence extends metro_base_sequence;
             if (rdata !== ids[i])
                 `uvm_error(get_type_name(), $sformatf("Fallback slot readback mismatch addr=0x%02h exp=0x%08h got=0x%08h", addrs[i], ids[i], rdata))
         end
-        // Overwrite slot 1 and confirm only the replacement ID is found there.
         apb_write(addrs[1], 32'hABCD_00F2);
         apb_read(addrs[1], rdata);
         if (rdata !== 32'hABCD_00F2)
             `uvm_error(get_type_name(), $sformatf("Fallback overwrite failed got=0x%08h", rdata))
-        // Clear slot 0; its ID was never inserted into Bloom, so it must now miss.
         apb_write(addrs[0], 32'h0);
         query_card(ids[0], 1'b0, 1'b0);
         query_card(32'hABCD_00F2, 1'b1, 1'b1);
         query_card(ids[2], 1'b1, 1'b1);
     endtask
+
 endclass
 
 
-// Collects a labelled dataset from actual DUT queries. The known labels are
-// defined by this controlled test: Bloom-programmed and fallback-loaded IDs
-// are blacklist (1); IDs in the clean range are not loaded anywhere (0).
 class metro_metrics_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_metrics_sequence)
 
@@ -193,7 +209,7 @@ class metro_metrics_sequence extends metro_base_sequence;
             `uvm_error(get_type_name(), $sformatf("Metric sample ID=0x%08h has DONE=%b; status=0x%08h", id, status[0], status))
         if ((status[1] !== 1'b0) && (status[1] !== 1'b1)) begin
             `uvm_error(get_type_name(), $sformatf("Metric sample ID=0x%08h has unknown MATCH bit; status=0x%08h", id, status))
-            predicted_label = 1'b0; // Keep CSV syntactically valid; UVM test is failed by the error above.
+            predicted_label = 1'b0;
         end else begin
             predicted_label = status[1];
         end
@@ -218,13 +234,11 @@ class metro_metrics_sequence extends metro_base_sequence;
                   $sformatf("Preparing labelled metric dataset: bloom_black=%0d fallback_black=%0d clean=%0d",
                             num_bloom_black, num_fallback_black, num_clean), UVM_LOW)
 
-        // Load the known blacklist into Bloom Filter.
         for (int unsigned i = 0; i < num_bloom_black; i++) begin
             id = bloom_base + i;
             program_bloom(id);
         end
 
-        // Load an additional blacklist slice only into exact-match fallback.
         if (num_fallback_black > METRO_FALLBACK_DEPTH)
             `uvm_fatal(get_type_name(), "num_fallback_black exceeds fallback table depth")
         for (int unsigned i = 0; i < num_fallback_black; i++) begin
@@ -233,7 +247,6 @@ class metro_metrics_sequence extends metro_base_sequence;
             apb_write(slot_addr, id);
         end
 
-        // Query blacklist IDs and record actual DUT predictions as rows.
         for (int unsigned i = 0; i < num_bloom_black; i++) begin
             id = bloom_base + i;
             collect_sample(id, 1'b1, "bloom_black");
@@ -243,8 +256,6 @@ class metro_metrics_sequence extends metro_base_sequence;
             collect_sample(id, 1'b1, "fallback_black");
         end
 
-        // Clean IDs are never written to either structure; false positives
-        // here are real outputs of the DUT and remain labelled as clean.
         for (int unsigned i = 0; i < num_clean; i++) begin
             id = clean_base + i;
             collect_sample(id, 1'b0, "clean");
@@ -253,8 +264,7 @@ class metro_metrics_sequence extends metro_base_sequence;
         $fflush(metrics_fd);
         $fclose(metrics_fd);
         metrics_fd = 0;
-        `uvm_info(get_type_name(),
-                  $sformatf("Wrote %0d observed samples to log/metro_metrics_results.csv; predicted_black=%0d",
-                            samples_written, predicted_black_count), UVM_LOW)
+        `uvm_info(get_type_name(), $sformatf("Wrote %0d observed samples to log/metro_metrics_results.csv; predicted_black=%0d", samples_written, predicted_black_count), UVM_LOW)
     endtask
+
 endclass

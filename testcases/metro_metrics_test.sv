@@ -1,7 +1,7 @@
 class metro_metrics_test extends metro_base_test;
     `uvm_component_utils(metro_metrics_test)
 
-    function new(string name = "metro_metrics_test", uvm_component parent = null);
+    function new(string name = "metro_metrics_test", uvm_component parent);
         super.new(name, parent);
     endfunction
 
@@ -11,9 +11,6 @@ class metro_metrics_test extends metro_base_test;
         wait_for_reset_release();
 
         seq = metro_metrics_sequence::type_id::create("metrics_seq");
-        // 240 Bloom-programmed blacklist IDs, 16 fallback-only blacklist IDs,
-        // and 1024 clean IDs. Labels come from this known test dataset;
-        // predictions are captured from DUT STAT_REG bit 1.
         seq.num_bloom_black = 240;
         seq.num_fallback_black = METRO_FALLBACK_DEPTH;
         seq.num_clean = 1024;
@@ -24,4 +21,5 @@ class metro_metrics_test extends metro_base_test;
 
         phase.drop_objection(this);
     endtask
+
 endclass

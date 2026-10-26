@@ -1,10 +1,9 @@
 `timescale 1ns/1ps
 
-// Four deterministic, parallel hash functions for the Bloom-filter bit array.
 module hash_engine #(
-    parameter int unsigned DATA      = 32,
-    parameter int unsigned HASH      = 24,
-    parameter int unsigned BIT_COUNT = 9_600_000
+    parameter int DATA      = 32,
+    parameter int HASH      = 24,
+    parameter int BIT_COUNT = 9_600_000
 ) (
     input  logic [DATA-1:0] id_data,
     output logic [HASH-1:0] index1,
@@ -12,11 +11,12 @@ module hash_engine #(
     output logic [HASH-1:0] index3,
     output logic [HASH-1:0] index4
 );
+
     logic [31:0] mix;
     logic [31:0] hash1, hash2, hash3, hash4;
 
     always_comb begin
-        mix   = id_data ^ (id_data >> 16);
+        mix = id_data ^ (id_data >> 16);
         hash1 = (mix + (mix << 3) + (mix >> 5) + 32'h1234_5678) % BIT_COUNT;
         hash2 = (mix ^ (mix << 7) ^ ((mix >> 2) + 32'h8765_4321)) % BIT_COUNT;
         hash3 = ((mix + (mix << 4)) ^ ((mix >> 9) + 32'h9E37_79B9)) % BIT_COUNT;
@@ -27,4 +27,5 @@ module hash_engine #(
     assign index2 = hash2[HASH-1:0];
     assign index3 = hash3[HASH-1:0];
     assign index4 = hash4[HASH-1:0];
+
 endmodule

@@ -1,5 +1,24 @@
 ############################################################
 ####          Metro Card Regression Report             ####
 ############################################################
-Status: NOT RUN YET
-No simulation results are bundled as pass/fail evidence. Run ./regress.pl to execute the configured testcases.
+Log files classified: 13
+Passed              : 13
+Failed              : 0
+Unknown             : 0
+------------------------------------------------------------
+Run log detail:
+log/metro_fallback_miss_test_240067.log      : Passed
+log/metro_fallback_miss_test_455108.log      : Passed
+log/metro_fallback_table_test_754094.log     : Passed
+log/metro_fallback_table_test_755267.log     : Passed
+log/metro_hash_program_test_314355.log       : Passed
+log/metro_hash_program_test_682943.log       : Passed
+log/metro_metrics_test_622996.log            : Passed
+log/metro_register_test_822938.log           : Passed
+log/metro_register_test_851094.log           : Passed
+log/metro_reset_test_354272.log              : Passed
+log/metro_reset_test_810213.log              : Passed
+log/metro_smoke_test_535339.log              : Passed
+log/metro_smoke_test_770517.log              : Passed
+------------------------------------------------------------
+Note: only simulation logs with TEST PASSED / TEST FAILED markers are conclusive.

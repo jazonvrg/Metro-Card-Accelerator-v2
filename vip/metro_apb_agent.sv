@@ -1,11 +1,12 @@
 class metro_apb_agent extends uvm_agent;
     `uvm_component_utils(metro_apb_agent)
+
     virtual metro_apb_if vif;
     metro_apb_sequencer sequencer;
     metro_apb_driver    driver;
     metro_apb_monitor   monitor;
 
-    function new(string name = "metro_apb_agent", uvm_component parent = null);
+    function new(string name = "metro_apb_agent", uvm_component parent);
         super.new(name, parent);
     endfunction
 
@@ -24,4 +25,5 @@ class metro_apb_agent extends uvm_agent;
         super.connect_phase(phase);
         driver.seq_item_port.connect(sequencer.seq_item_export);
     endfunction
+
 endclass

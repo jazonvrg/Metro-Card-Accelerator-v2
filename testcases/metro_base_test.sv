@@ -1,10 +1,11 @@
 class metro_base_test extends uvm_test;
     `uvm_component_utils(metro_base_test)
+
     virtual metro_apb_if vif;
     int unsigned bit_count;
     metro_environment env;
 
-    function new(string name = "metro_base_test", uvm_component parent = null);
+    function new(string name = "metro_base_test", uvm_component parent);
         super.new(name, parent);
     endfunction
 
@@ -39,4 +40,5 @@ class metro_base_test extends uvm_test;
         wait (vif.PRESETN === 1'b1);
         repeat (2) @(posedge vif.PCLK);
     endtask
+
 endclass
