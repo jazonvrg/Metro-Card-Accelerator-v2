@@ -1,5 +1,0 @@
-############################################################
-####          Metro Card Regression Report             ####
-############################################################
-Status: NOT RUN YET
-No simulation results are bundled as pass/fail evidence. Run ./regress.pl to execute the configured testcases.
