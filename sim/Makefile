@@ -6,9 +6,10 @@
 #   make clean
 #   make all COV=ON TESTNAME=metro_metrics_test SEED=1
 #
-# Run regression with coverage enabled (regress.cfg controls COV):
+# Run regression with coverage enabled:
 #   ./regress.pl
 #   make cov_merge
+#   make cov_summary
 ## ------------------------------------------------------------------
 
 TB_NAME   ?= testbench
@@ -23,9 +24,8 @@ ifeq ($(strip $(SEED)),random)
   SEED := $(shell date +%s)
 endif
 
-# Instrument the RTL only for code coverage, to keep UVM/VIP overhead out of
-# RTL statement/branch/toggle statistics. Functional covergroups are in the
-# APB monitor and are saved with -cvg when COV=ON.
+COV_FILE  ?= $(shell if [ -f "log/IP_MERGE_$(SEED).ucdb" ]; then echo "log/IP_MERGE_$(SEED).ucdb"; else echo "log/$(TESTNAME)_$(SEED).ucdb"; fi)
+
 ifeq ($(COV),ON)
   RTL_COV_OPT  = -cover bcesft -coveropt 3
   SIM_COV_OPT  = -coverage -coveranalysis -cvgperinstance
@@ -51,7 +51,7 @@ VSIM = vsim -sv_seed $(SEED) $(SIM_COV_OPT) \
        -do "$(SIM_COV_SAVE) log -r /*; run -all; quit -f" \
        -l $(TESTNAME)_$(SEED).log
 
-.PHONY: all build run vlib wave cov_gui cov_merge cov_report clean help regress metrics
+.PHONY: all build run vlib wave cov_gui cov_merge cov_report cov_summary clean help regress metrics
 all: build run
 
 build: vlib
@@ -83,17 +83,20 @@ vlib:
 	vmap work work
 
 wave:
-	vsim -i -view log/$(TESTNAME)_$(SEED).wlf
-
-COV_FILE ?= $(if $(wildcard log/IP_MERGE_$(SEED).ucdb),log/IP_MERGE_$(SEED).ucdb,log/$(TESTNAME)_$(SEED).ucdb)
+	vsim -i -view log/$(TESTNAME)_$(SEED).wlf &
 
 cov_gui:
 	@test -f "$(COV_FILE)" || { echo "No UCDB file found: $(COV_FILE)"; exit 1; }
 	vsim -i -viewcov $(COV_FILE) &
 
+cov_summary:
+	@test -f "$(COV_FILE)" || { echo "No UCDB file found: $(COV_FILE)"; exit 1; }
+	@vcover report -cvg -bsr $(COV_FILE)
+
 cov_report:
 	@test -f "$(COV_FILE)" || { echo "No UCDB file found: $(COV_FILE)"; exit 1; }
-	vcover report -details -codeAll -cvg $(COV_FILE) > $(basename $(COV_FILE))_coverage.txt
+	@vcover report -cvg -bsr $(COV_FILE) > $(basename $(COV_FILE))_coverage.txt
+	@vcover report -details -codeAll -cvg $(COV_FILE) >> $(basename $(COV_FILE))_coverage.txt
 	@echo "Coverage report generated: $(basename $(COV_FILE))_coverage.txt"
 
 cov_merge:
@@ -101,22 +104,27 @@ cov_merge:
 	  files=$$(find log -maxdepth 1 -type f -name '*.ucdb' ! -name 'IP_MERGE_*.ucdb' -print); \
 	  test -n "$$files" || { echo "No UCDB files found under log/. Run tests with COV=ON first."; exit 1; }; \
 	  vcover merge log/IP_MERGE_$(SEED).ucdb $$files; \
-	  vcover report -details -codeAll -cvg log/IP_MERGE_$(SEED).ucdb > log/IP_MERGE_$(SEED)_coverage.txt; \
-	  echo "Merged coverage report: log/IP_MERGE_$(SEED)_coverage.txt"
+	  vcover report -cvg -bsr log/IP_MERGE_$(SEED).ucdb > log/IP_MERGE_$(SEED)_coverage.txt; \
+	  vcover report -details -codeAll -cvg log/IP_MERGE_$(SEED).ucdb >> log/IP_MERGE_$(SEED)_coverage.txt; \
+	  echo "Merged coverage report: log/IP_MERGE_$(SEED)_coverage.txt"; \
+	  echo ""; \
+	  echo "=== MERGED COVERAGE SUMMARY ==="; \
+	  vcover report -cvg -bsr log/IP_MERGE_$(SEED).ucdb
 
 clean:
 	rm -rf work log *.ini *.log *.trace *.wlf *.ucdb transcript vsim.dbg tmp_report
 
 help:
-	@echo "make build   : compile RTL + UVM testbench"
-	@echo "make run     : run current TESTNAME"
-	@echo "make all     : compile and run"
+	@echo "make build       : compile RTL + UVM testbench"
+	@echo "make run         : run current TESTNAME"
+	@echo "make all         : compile and run"
 	@echo "make all COV=ON TESTNAME=... : collect RTL code + functional coverage"
-	@echo "make cov_report TESTNAME=... : generate text coverage report from UCDB"
-	@echo "make cov_gui TESTNAME=...    : open UCDB in Questa Coverage GUI"
-	@echo "make cov_merge              : merge all log/*.ucdb and report combined coverage"
-	@echo "make metrics                : compute metrics from last metro_metrics_test run"
-	@echo "make clean                  : remove generated simulation data"
+	@echo "make cov_summary : print instance summary table directly to terminal"
+	@echo "make cov_report  : generate detailed text coverage report from UCDB"
+	@echo "make cov_gui     : open UCDB in Questa Coverage GUI"
+	@echo "make cov_merge   : merge all log/*.ucdb and report combined coverage"
+	@echo "make metrics     : compute metrics from last metro_metrics_test run"
+	@echo "make clean       : remove generated simulation data"
 
 regress:
 	./regress.pl
