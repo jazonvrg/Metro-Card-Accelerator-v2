@@ -1,23 +1,31 @@
 ############################################################
 ####          Metro Card Regression Report             ####
 ############################################################
-Log files classified: 13
-Passed              : 13
+Log files classified: 21
+Passed              : 21
 Failed              : 0
 Unknown             : 0
 ------------------------------------------------------------
 Run log detail:
+log/metro_fallback_miss_test_1.log           : Passed
 log/metro_fallback_miss_test_240067.log      : Passed
 log/metro_fallback_miss_test_455108.log      : Passed
+log/metro_fallback_miss_test_837089.log      : Passed
+log/metro_fallback_table_test_154478.log     : Passed
 log/metro_fallback_table_test_754094.log     : Passed
 log/metro_fallback_table_test_755267.log     : Passed
 log/metro_hash_program_test_314355.log       : Passed
 log/metro_hash_program_test_682943.log       : Passed
+log/metro_hash_program_test_848767.log       : Passed
+log/metro_metrics_test_541776.log            : Passed
 log/metro_metrics_test_622996.log            : Passed
 log/metro_register_test_822938.log           : Passed
 log/metro_register_test_851094.log           : Passed
+log/metro_register_test_912968.log           : Passed
 log/metro_reset_test_354272.log              : Passed
+log/metro_reset_test_441126.log              : Passed
 log/metro_reset_test_810213.log              : Passed
+log/metro_smoke_test_170516.log              : Passed
 log/metro_smoke_test_535339.log              : Passed
 log/metro_smoke_test_770517.log              : Passed
 ------------------------------------------------------------

@@ -14,3 +14,12 @@
   CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
   CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
   CREATE_STREAM @55000 {NAME:metrics_seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:fallback_seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @410000 {NAME:hash_seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:819}
+  CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}
+  CREATE_STREAM @55000 {NAME:metrics_seq T:Transactions SCOPE:uvm_test_top.env.apb_agent.sequencer STREAM:651}

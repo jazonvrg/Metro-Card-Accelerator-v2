@@ -243,7 +243,7 @@ class metro_scoreboard extends uvm_scoreboard;
 
     function void report_phase(uvm_phase phase);
         super.report_phase(phase);
-        `uvm_info(get_type_name(), sformatf("Scoreboard: operations=%0d status_checks=%0d fallback_hits=%0d BIT_COUNT=%0d", operation_count, status_checks, fallback_queries, bit_count), UVM_LOW)
+        `uvm_info(get_type_name(), $sformatf("Scoreboard: operations=%0d status_checks=%0d fallback_hits=%0d BIT_COUNT=%0d", operation_count, status_checks, fallback_queries, bit_count), UVM_LOW)
         `uvm_info("SCOREBOARD_FUNC_COV", $sformatf("Scoreboard functional coverage: operation_mode=%0.2f%% fallback_slot_action=%0.2f%% query_result=%0.2f%% idle_status=%0.2f%%", operation_mode_cg.get_coverage(), fallback_slot_action_cg.get_coverage(), query_result_cg.get_coverage(), idle_status_cg.get_coverage()), UVM_LOW)
     endfunction
 
