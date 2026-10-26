@@ -85,14 +85,16 @@ vlib:
 wave:
 	vsim -i -view log/$(TESTNAME)_$(SEED).wlf
 
+COV_FILE ?= $(if $(wildcard log/IP_MERGE_$(SEED).ucdb),log/IP_MERGE_$(SEED).ucdb,log/$(TESTNAME)_$(SEED).ucdb)
+
 cov_gui:
-	@test -f "log/$(TESTNAME)_$(SEED).ucdb" || { echo "No UCDB: log/$(TESTNAME)_$(SEED).ucdb. Run with COV=ON."; exit 1; }
-	vsim -i -viewcov log/$(TESTNAME)_$(SEED).ucdb
+	@test -f "$(COV_FILE)" || { echo "No UCDB file found: $(COV_FILE)"; exit 1; }
+	vsim -i -viewcov $(COV_FILE) &
 
 cov_report:
-	@test -f "log/$(TESTNAME)_$(SEED).ucdb" || { echo "No UCDB: log/$(TESTNAME)_$(SEED).ucdb. Run with COV=ON."; exit 1; }
-	vcover report -details -codeAll -cvg log/$(TESTNAME)_$(SEED).ucdb > log/$(TESTNAME)_$(SEED)_coverage.txt
-	@echo "Coverage report: log/$(TESTNAME)_$(SEED)_coverage.txt"
+	@test -f "$(COV_FILE)" || { echo "No UCDB file found: $(COV_FILE)"; exit 1; }
+	vcover report -details -codeAll -cvg $(COV_FILE) > $(basename $(COV_FILE))_coverage.txt
+	@echo "Coverage report generated: $(basename $(COV_FILE))_coverage.txt"
 
 cov_merge:
 	@set -e; \
