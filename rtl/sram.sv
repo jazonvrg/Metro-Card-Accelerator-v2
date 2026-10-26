@@ -30,7 +30,9 @@ module sram #(
             mem[i] = 1'b0;
     end
 
-    always_ff @(posedge PCLK or negedge PRESETN) begin
+    // Use a behavioral always block because mem is also initialized in an initial block.
+    // always_ff forbids variables written by more than one process (including initial).
+    always @(posedge PCLK or negedge PRESETN) begin
         if (!PRESETN) begin
             match          <= 1'b0;
             fallback_match <= 1'b0;
