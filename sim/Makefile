@@ -41,7 +41,7 @@ VLOG_COMMON = vlog \
        +define+UVM_NO_DPI \
        -mfcu \
        -suppress 2181 \
-       +acc=rmb \
+       +acc \
        +incdir+$(UVM_HOME)/src
 
 VSIM = vsim -sv_seed $(SEED) $(SIM_COV_OPT) \
