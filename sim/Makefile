@@ -6,6 +6,7 @@
 #   make clean
 #   make all COV=ON TESTNAME=metro_metrics_test SEED=1
 #
+# QuestaSim 10.6d compatibility: use -totals (this version rejects -summary).
 # Run regression with coverage enabled (regress.cfg controls COV):
 #   ./regress.pl
 #   make cov_merge
@@ -108,8 +109,10 @@ cov_merge:
 	  test -n "$$files" || { echo "No testcase UCDB files under log/. Run tests with COV=ON first."; exit 1; }; \
 	  rm -f log/IP_MERGE.ucdb log/IP_MERGE_coverage_summary.txt log/IP_MERGE_coverage_details.txt; \
 	  vcover merge log/IP_MERGE.ucdb $$files; \
-	  vcover report -summary -instance -codeAll -cvg log/IP_MERGE.ucdb > log/IP_MERGE_coverage_summary.txt; \
-	  vcover report -details -codeAll -cvg log/IP_MERGE.ucdb > log/IP_MERGE_coverage_details.txt; \
+	  vcover report -totals -codeAll -cvg log/IP_MERGE.ucdb > log/IP_MERGE_coverage_summary.txt 2>&1; \
+	  if grep -E '\*\* Error:|Errors: [1-9]' log/IP_MERGE_coverage_summary.txt >/dev/null; then cat log/IP_MERGE_coverage_summary.txt; echo "ERROR: summary generation failed."; exit 1; fi; \
+	  vcover report -details -codeAll -cvg log/IP_MERGE.ucdb > log/IP_MERGE_coverage_details.txt 2>&1; \
+	  if grep -E '\*\* Error:|Errors: [1-9]' log/IP_MERGE_coverage_details.txt >/dev/null; then cat log/IP_MERGE_coverage_details.txt; echo "ERROR: detailed report generation failed."; exit 1; fi; \
 	  echo "Merged UCDB : log/IP_MERGE.ucdb"; \
 	  echo "Summary     : log/IP_MERGE_coverage_summary.txt"; \
 	  echo "Details     : log/IP_MERGE_coverage_details.txt"
@@ -117,8 +120,11 @@ cov_merge:
 # Reprint summary from the already-merged UCDB (all merged testcases).
 cov_summary:
 	@test -f "log/IP_MERGE.ucdb" || { echo "No merged UCDB. Run make cov_merge first."; exit 1; }
-	vcover report -summary -instance -codeAll -cvg log/IP_MERGE.ucdb | tee log/IP_MERGE_coverage_summary.txt
-	@echo "Summary saved to log/IP_MERGE_coverage_summary.txt"
+	@set -e; \
+	  vcover report -totals -codeAll -cvg log/IP_MERGE.ucdb > log/IP_MERGE_coverage_summary.txt 2>&1; \
+	  if grep -E '\*\* Error:|Errors: [1-9]' log/IP_MERGE_coverage_summary.txt >/dev/null; then cat log/IP_MERGE_coverage_summary.txt; echo "ERROR: summary generation failed."; exit 1; fi; \
+	  cat log/IP_MERGE_coverage_summary.txt; \
+	  echo "Summary saved to log/IP_MERGE_coverage_summary.txt"
 
 clean:
 	rm -rf work log *.ini *.log *.trace *.wlf *.ucdb transcript vsim.dbg tmp_report
