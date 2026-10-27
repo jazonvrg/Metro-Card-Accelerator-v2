@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
 
 module sram #(
-    parameter int DATA = 32,
-    parameter int HASH = 24,
-    parameter int BIT_COUNT = 9_600_000
+    parameter int unsigned DATA = 32,
+    parameter int unsigned HASH = 24,
+    parameter int unsigned BIT_COUNT = 9_600_000
 ) (
     input  logic             PCLK,
     input  logic             PRESETN,
@@ -19,12 +19,12 @@ module sram #(
     output logic             fallback_match,
     output logic             done
 );
+    
     logic mem [0:BIT_COUNT-1];
-    logic [$clog2(BIT_COUNT+1)-1:0] i;
 
     initial begin
-        for (i = 0; i < BIT_COUNT; i = i + 1)
-            mem[i] = 1'b0;
+        for (int unsigned init_idx = 0; init_idx < BIT_COUNT; init_idx++)
+            mem[init_idx] = 1'b0;
     end
 
     always @(posedge PCLK or negedge PRESETN) begin
