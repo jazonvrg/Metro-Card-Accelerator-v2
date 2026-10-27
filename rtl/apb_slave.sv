@@ -10,9 +10,9 @@ module apb_slave (
 );
 
     always_comb begin
-        PREADY = 1'b1;
+        PREADY = PSEL && PENABLE;
         wr_en = PSEL && PENABLE && PWRITE;
         rd_en = PSEL && PENABLE && !PWRITE;
     end
-
+    
 endmodule
