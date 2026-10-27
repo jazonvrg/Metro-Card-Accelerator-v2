@@ -18,6 +18,7 @@ module metro_card_top #(
     output logic [DATA-1:0]  PRDATA,
     output logic             PREADY
 );
+	
     logic [DATA-1:0] id_data;
     logic start, mode, match, fallback_hit, fallback_match, done;
     logic [DATA-1:0] fallback_rdata;
