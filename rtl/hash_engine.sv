@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 
 module hash_engine #(
-    parameter int DATA      = 32,
-    parameter int HASH      = 24,
+    parameter int DATA = 32,
+    parameter int HASH = 24,
     parameter int BIT_COUNT = 9_600_000
 ) (
     input  logic [DATA-1:0] id_data,
@@ -11,9 +11,8 @@ module hash_engine #(
     output logic [HASH-1:0] index3,
     output logic [HASH-1:0] index4
 );
-
     logic [31:0] mix;
-    logic [31:0] hash1, hash2, hash3, hash4;
+    logic [HASH-1:0] hash1, hash2, hash3, hash4;
 
     always_comb begin
         mix = id_data ^ (id_data >> 16);
@@ -27,5 +26,5 @@ module hash_engine #(
     assign index2 = hash2[HASH-1:0];
     assign index3 = hash3[HASH-1:0];
     assign index4 = hash4[HASH-1:0];
-
+    
 endmodule
