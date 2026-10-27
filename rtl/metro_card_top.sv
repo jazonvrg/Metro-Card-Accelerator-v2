@@ -34,7 +34,9 @@ module metro_card_top #(
     );
 
     hash_engine #(
-		.DATA(DATA), .HASH(HASH), .BIT_COUNT(BIT_COUNT)
+		.DATA			(DATA),
+		.HASH			(HASH),
+		.BIT_COUNT		(BIT_COUNT)
 	) hash_engine_dut (
         .id_data		(id_data),
 		.index1			(index1),
@@ -44,7 +46,10 @@ module metro_card_top #(
     );
 
     fallback_lookup #(
-        .ADDR(ADDR), .DATA(DATA), .DEPTH(FALLBACK_DEPTH), .BASE_ADDR(FALLBACK_BASE_ADDR)
+        .ADDR			(ADDR),
+		.DATA			(DATA),
+		.DEPTH			(FALLBACK_DEPTH),
+		.BASE_ADDR		(FALLBACK_BASE_ADDR)
     ) fallback_lookup_dut (
         .PCLK			(PCLK),
 		.PRESETN		(PRESETN),
@@ -58,7 +63,8 @@ module metro_card_top #(
     );
 
     register #(
-		.ADDR(ADDR), .DATA(DATA)
+		.ADDR			(ADDR),
+		.DATA			(DATA)
 	) reg_dut (
         .PCLK			(PCLK),
 		.PRESETN		(PRESETN),
@@ -77,7 +83,9 @@ module metro_card_top #(
     );
 
     sram #(
-		.DATA(DATA), .HASH(HASH), .BIT_COUNT(BIT_COUNT)
+		.DATA			(DATA),
+		.HASH			(HASH),
+		.BIT_COUNT		(BIT_COUNT)
 	) sram_dut (
         .PCLK			(PCLK),
 		.PRESETN		(PRESETN),
