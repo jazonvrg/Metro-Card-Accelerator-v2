@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
 
 module sram #(
-    parameter int unsigned DATA = 32,
-    parameter int unsigned HASH = 24,
-    parameter int unsigned BIT_COUNT = 9_600_000
+    parameter int DATA = 32,
+    parameter int HASH = 24,
+    parameter int BIT_COUNT = 9_600_000
 ) (
     input  logic             PCLK,
     input  logic             PRESETN,
