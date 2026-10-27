@@ -48,8 +48,8 @@ module fallback_lookup #(
 
     always_ff @(posedge PCLK or negedge PRESETN) begin
         if (!PRESETN) begin
-            for (i = 0; i < DEPTH; i = i + 1)
-                entries[i] <= '0;
+            for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
+                entries[reset_idx] <= '0;
         end else if (wr_en && (write_slot >= 0)) begin
             entries[write_slot] <= PWDATA;
         end
