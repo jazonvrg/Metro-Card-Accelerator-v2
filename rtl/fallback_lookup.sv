@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
 
 module fallback_lookup #(
-    parameter int ADDR = 8,
-    parameter int DATA = 32,
-    parameter int DEPTH = 16,
+    parameter int unsigned ADDR = 8,
+    parameter int unsigned DATA = 32,
+    parameter int unsigned DEPTH = 16,
     parameter logic [ADDR-1:0] BASE_ADDR = 8'h10
 ) (
     input  logic             PCLK,
@@ -16,10 +16,10 @@ module fallback_lookup #(
     output logic             hit,
     output logic [DATA-1:0]  read_data
 );
+	
     logic [DATA-1:0] entries [0:DEPTH-1];
     integer write_slot;
     integer read_slot;
-    logic [$clog2(DEPTH+1)-1:0] i;
 
     function automatic integer slot_from_addr(input logic [ADDR-1:0] addr);
         integer offset;
@@ -35,7 +35,7 @@ module fallback_lookup #(
 
     always_comb begin
         write_slot = slot_from_addr(PADDR);
-        read_slot = slot_from_addr(PADDR);
+        read_slot  = slot_from_addr(PADDR);
         hit = 1'b0;
         for (int unsigned k = 0; k < DEPTH; k++) begin
             if ((id_data != '0) && (entries[k] == id_data))
