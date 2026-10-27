@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
 
 module fallback_lookup #(
-    parameter int unsigned ADDR = 8,
-    parameter int unsigned DATA = 32,
-    parameter int unsigned DEPTH = 16,
+    parameter int ADDR = 8,
+    parameter int DATA = 32,
+    parameter int DEPTH = 16,
     parameter logic [ADDR-1:0] BASE_ADDR = 8'h10
 ) (
     input  logic             PCLK,
