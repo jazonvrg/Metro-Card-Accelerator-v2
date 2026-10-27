@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 
 module sram #(
-    parameter int DATA      = 32,
-    parameter int HASH      = 24,
+    parameter int DATA = 32,
+    parameter int HASH = 24,
     parameter int BIT_COUNT = 9_600_000
 ) (
     input  logic             PCLK,
@@ -19,9 +19,8 @@ module sram #(
     output logic             fallback_match,
     output logic             done
 );
-
     logic mem [0:BIT_COUNT-1];
-    integer i;
+    logic [$clog2(BIT_COUNT+1)-1:0] i;
 
     initial begin
         for (i = 0; i < BIT_COUNT; i = i + 1)
@@ -48,5 +47,5 @@ module sram #(
             end
         end
     end
-
+    
 endmodule
