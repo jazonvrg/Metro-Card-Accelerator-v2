@@ -11,6 +11,7 @@ module hash_engine #(
     output logic [HASH-1:0] index3,
     output logic [HASH-1:0] index4
 );
+    
     logic [31:0] mix;
     logic [HASH-1:0] hash1, hash2, hash3, hash4;
 
