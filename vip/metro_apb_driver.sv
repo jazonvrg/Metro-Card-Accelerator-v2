@@ -38,7 +38,7 @@ class metro_apb_driver extends uvm_driver #(metro_apb_transaction);
     task drive_transfer(metro_apb_transaction tr);
         @(negedge vif.PCLK);
         vif.PSEL <= 1'b1;
-        vif.PWRITE  <= tr.is_write;
+        vif.PWRITE <= tr.is_write;
         vif.PENABLE <= 1'b0;
         vif.PADDR <= tr.addr;
         vif.PWDATA <= tr.data;
