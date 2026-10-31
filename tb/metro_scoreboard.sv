@@ -25,7 +25,7 @@ class metro_scoreboard extends uvm_scoreboard;
     endgroup
 
     covergroup fallback_slot_action_cg with function sample(
-        int unsigned sample_slot,
+        int sample_slot,
         bit [1:0] sample_action
     );
         option.per_instance = 1;
@@ -102,7 +102,7 @@ class metro_scoreboard extends uvm_scoreboard;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        if (!uvm_config_db#(int unsigned)::get(this, "", "bit_count", bit_count))
+        if (!uvm_config_db#(int)::get(this, "", "bit_count", bit_count))
             `uvm_fatal(get_type_name(), "Missing bit_count in config_db")
         if (bit_count == 0)
             `uvm_fatal(get_type_name(), "bit_count must be greater than zero")
@@ -122,10 +122,10 @@ class metro_scoreboard extends uvm_scoreboard;
 
     function automatic void calc_indices(
         input logic [31:0] id,
-        output int unsigned i1,
-        output int unsigned i2,
-        output int unsigned i3,
-        output int unsigned i4
+        output int i1,
+        output int i2,
+        output int i3,
+        output int i4
     );
         logic [31:0] mix;
         logic [31:0] h1, h2, h3, h4;
@@ -163,7 +163,7 @@ class metro_scoreboard extends uvm_scoreboard;
     endfunction
 
     function void write(metro_apb_transaction tr);
-        int unsigned i1, i2, i3, i4;
+        int i1, i2, i3, i4;
         integer slot;
         logic previous_entry_valid;
         logic [1:0] fallback_action;
