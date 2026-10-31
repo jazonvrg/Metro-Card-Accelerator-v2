@@ -181,8 +181,7 @@ class metro_scoreboard extends uvm_scoreboard;
                     fallback_action = 2'd0;
                 fallback_slot_action_cg.sample(slot, fallback_action);
                 fallback_ids[slot] = tr.data;
-                `uvm_info(get_type_name(),
-                          $sformatf("MODEL FALLBACK slot=%0d value=0x%08h", slot, tr.data), UVM_MEDIUM)
+                `uvm_info(get_type_name(), $sformatf("MODEL FALLBACK slot=%0d value=0x%08h", slot, tr.data), UVM_MEDIUM)
             end else begin
                 case (tr.addr)
                     METRO_ID_REG: current_id = tr.data;
@@ -201,19 +200,13 @@ class metro_scoreboard extends uvm_scoreboard;
                                 model_bits[i4] = 1'b1;
                                 expected_bloom_match = 1'b0;
                                 expected_match = 1'b0;
-                                `uvm_info(get_type_name(),
-                                          $sformatf("MODEL PROGRAM id=0x%08h indexes={%0d,%0d,%0d,%0d}",
-                                                    current_id, i1, i2, i3, i4), UVM_MEDIUM)
+                                `uvm_info(get_type_name(), $sformatf("MODEL PROGRAM id=0x%08h indexes={%0d,%0d,%0d,%0d}", current_id, i1, i2, i3, i4), UVM_MEDIUM)
                             end else begin
-                                expected_bloom_match = model_bits[i1] & model_bits[i2] &
-                                                        model_bits[i3] & model_bits[i4];
+                                expected_bloom_match = model_bits[i1] & model_bits[i2] & model_bits[i3] & model_bits[i4];
                                 expected_fallback_match = model_fallback_hit(current_id);
                                 expected_match = expected_bloom_match | expected_fallback_match;
                                 if (expected_fallback_match) fallback_queries++;
-                                `uvm_info(get_type_name(),
-                                          $sformatf("MODEL QUERY id=0x%08h bloom=%0b fallback=%0b combined=%0b",
-                                                    current_id, expected_bloom_match,
-                                                    expected_fallback_match, expected_match), UVM_MEDIUM)
+                                `uvm_info(get_type_name(), $sformatf("MODEL QUERY id=0x%08h bloom=%0b fallback=%0b combined=%0b", current_id, expected_bloom_match, expected_fallback_match, expected_match), UVM_MEDIUM)
                             end
                         end
                     end
