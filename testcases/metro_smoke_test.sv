@@ -2,7 +2,7 @@ class metro_smoke_test extends metro_base_test;
     `uvm_component_utils(metro_smoke_test)
 
     function new(string name = "metro_smoke_test", uvm_component parent);
-	super.new(name, parent);
+		super.new(name, parent);
     endfunction
 
     task run_phase(uvm_phase phase);
