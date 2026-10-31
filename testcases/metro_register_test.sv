@@ -2,7 +2,7 @@ class metro_register_test extends metro_base_test;
     `uvm_component_utils(metro_register_test)
 
     function new(string name = "metro_register_test", uvm_component parent);
-	super.new(name, parent);
+		super.new(name, parent);
     endfunction
 
     task run_phase(uvm_phase phase);
