@@ -1,7 +1,7 @@
 # Verification Plan (VPLAN) — Metro Card Accelerator
 
 ## Scope and assumptions
-- APB3-like peripheral with no wait states.
+- APB3 like peripheral with no wait states.
 - Bloom Filter uses four deterministic hash functions; simulation overrides `BIT_COUNT=4096` (RTL default 9,600,000 bits).
 - Exact-match fallback table contains 16 32-bit entries at `0x10 + 4*n`. It catches only IDs explicitly loaded into that table.
 - `STAT_REG[0]=DONE`, `[1]=MATCH (Bloom OR fallback)`, `[2]=FALLBACK_MATCH`.
