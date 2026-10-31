@@ -1,7 +1,7 @@
 class metro_apb_transaction extends uvm_sequence_item;
 
     rand logic is_write;
-    rand logic [7:0]  addr;
+    rand logic [7:0] addr;
     rand logic [31:0] data;
     logic [31:0] rdata;
 
