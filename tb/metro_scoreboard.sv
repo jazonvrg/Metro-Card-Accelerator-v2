@@ -19,7 +19,7 @@ class metro_scoreboard extends uvm_scoreboard;
     covergroup operation_mode_cg with function sample(logic sample_is_program);
         option.per_instance = 1;
         cp_operation_mode: coverpoint sample_is_program {
-            bins query_mode   = {1'b0};
+            bins query_mode = {1'b0};
             bins program_mode = {1'b1};
         }
     endgroup
@@ -30,18 +30,18 @@ class metro_scoreboard extends uvm_scoreboard;
     );
         option.per_instance = 1;
         cp_slot: coverpoint sample_slot {
-            bins first_slot  = {0};
+            bins first_slot = {0};
             bins middle_slot = {[1:14]};
-            bins last_slot   = {15};
+            bins last_slot = {15};
         }
         cp_action: coverpoint sample_action {
             bins insert_new = {2'd0};
-            bins overwrite  = {2'd1};
-            bins clear      = {2'd2};
+            bins overwrite = {2'd1};
+            bins clear = {2'd2};
         }
         cp_clear_vs_write: coverpoint (sample_action == 2'd2) {
             bins write_or_overwrite = {1'b0};
-            bins clear_slot         = {1'b1};
+            bins clear_slot = {1'b1};
         }
         slot_x_action: cross cp_slot, cp_clear_vs_write;
     endgroup
@@ -56,9 +56,9 @@ class metro_scoreboard extends uvm_scoreboard;
     );
         option.per_instance = 1;
         cp_expected_path: coverpoint sample_expected_path {
-            bins no_match       = {2'b00};
-            bins bloom_only     = {2'b01};
-            bins fallback_only  = {2'b10};
+            bins no_match = {2'b00};
+            bins bloom_only = {2'b01};
+            bins fallback_only = {2'b10};
             bins bloom_and_fallback = {2'b11};
         }
         cp_actual_match: coverpoint sample_actual_match {
