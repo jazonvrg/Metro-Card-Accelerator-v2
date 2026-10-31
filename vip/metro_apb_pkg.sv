@@ -5,10 +5,10 @@ package metro_apb_pkg;
 
     `include "uvm_macros.svh"
 
-    parameter logic [7:0] METRO_ID_REG          = 8'h00;
-    parameter logic [7:0] METRO_CTRL_REG        = 8'h04;
-    parameter logic [7:0] METRO_STAT_REG        = 8'h08;
-    parameter logic [7:0] METRO_FALLBACK_BASE   = 8'h10;
+    parameter logic [7:0] METRO_ID_REG = 8'h00;
+    parameter logic [7:0] METRO_CTRL_REG = 8'h04;
+    parameter logic [7:0] METRO_STAT_REG = 8'h08;
+    parameter logic [7:0] METRO_FALLBACK_BASE = 8'h10;
     parameter int METRO_FALLBACK_DEPTH = 16;
 
     `include "metro_apb_transaction.sv"
