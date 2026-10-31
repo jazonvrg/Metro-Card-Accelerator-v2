@@ -35,7 +35,7 @@ module fallback_lookup #(
 
     always_comb begin
         write_slot = slot_from_addr(PADDR);
-        read_slot  = slot_from_addr(PADDR);
+        read_slot = slot_from_addr(PADDR);
         hit = 1'b0;
         for (int unsigned k = 0; k < DEPTH; k++) begin
             if ((id_data != '0) && (entries[k] == id_data))
