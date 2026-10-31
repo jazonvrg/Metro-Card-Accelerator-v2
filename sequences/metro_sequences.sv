@@ -2,7 +2,7 @@ class metro_base_sequence extends uvm_sequence #(metro_apb_transaction);
     `uvm_object_utils(metro_base_sequence)
 
     function new(string name = "metro_base_sequence");
-	super.new(name);
+		super.new(name);
     endfunction
 
     task apb_write(input logic [7:0] addr, input logic [31:0] data);
@@ -38,7 +38,7 @@ class metro_base_sequence extends uvm_sequence #(metro_apb_transaction);
 	end
     endtask
 
-    task query_card(input logic [31:0] id, input bit expected_match, input bit expected_fallback = 1'b0);
+	task query_card(input logic [31:0] id, input logic expected_match, input logic expected_fallback = 1'b0);
         logic [31:0] status;
         set_card_id(id);
         apb_write(METRO_CTRL_REG, 32'h0000_0001);
@@ -62,7 +62,7 @@ class metro_hash_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_hash_sequence)
 
     function new(string name = "metro_hash_sequence");
-	super.new(name);
+		super.new(name);
     endfunction
 	
     virtual task body();
@@ -81,7 +81,7 @@ class metro_fallback_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_fallback_sequence)
 
     function new(string name = "metro_fallback_sequence");
-	super.new(name);
+		super.new(name);
     endfunction
 
     virtual task body();
@@ -106,7 +106,7 @@ class metro_register_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_register_sequence)
 
     function new(string name = "metro_register_sequence");
-	super.new(name);
+		super.new(name);
     endfunction
 
     virtual task body();
@@ -127,7 +127,7 @@ class metro_reset_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_reset_sequence)
 
     function new(string name = "metro_reset_sequence");
-	super.new(name);
+		super.new(name);
     endfunction
 
     virtual task body();
