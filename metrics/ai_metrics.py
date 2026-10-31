@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Compute binary classification metrics from a CSV file.
 
-Expected CSV columns: true_label,predicted_label
-Labels must be 0 (clean/allow) or 1 (blacklisted/block). This evaluates outputs;
-it does not train an AI model or make the RTL itself an AI system.
-"""
 import argparse
 import csv
 import math
