@@ -17,21 +17,21 @@ module testbench;
 
     metro_card_top #(
         .ADDR				(ADDR),
-		.DATA				(DATA),
-		.HASH				(HASH),
-		.BIT_COUNT			(BIT_COUNT),
+	.DATA				(DATA),
+	.HASH				(HASH),
+	.BIT_COUNT			(BIT_COUNT),
         .FALLBACK_DEPTH		(FALLBACK_DEPTH),
-		.FALLBACK_BASE_ADDR	(METRO_FALLBACK_BASE)
+	.FALLBACK_BASE_ADDR	(METRO_FALLBACK_BASE)
     ) dut (
         .PCLK				(PCLK),
-		.PRESETN			(apb_if.PRESETN),
-		.PSEL				(apb_if.PSEL),
+	.PRESETN			(apb_if.PRESETN),
+	.PSEL				(apb_if.PSEL),
         .PWRITE				(apb_if.PWRITE),
-		.PENABLE			(apb_if.PENABLE),
+	.PENABLE			(apb_if.PENABLE),
         .PADDR				(apb_if.PADDR),
-		.PWDATA				(apb_if.PWDATA),
+	.PWDATA				(apb_if.PWDATA),
         .PRDATA				(apb_if.PRDATA),
-		.PREADY				(apb_if.PREADY)
+	.PREADY				(apb_if.PREADY)
     );
 
     initial begin
@@ -46,7 +46,7 @@ module testbench;
 
     initial begin
         uvm_config_db#(virtual metro_apb_if)::set(null, "uvm_test_top", "vif", apb_if);
-        uvm_config_db#(int unsigned)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
+        uvm_config_db#(int)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
         run_test();
     end
 	
