@@ -46,7 +46,7 @@ module testbench;
 
     initial begin
         uvm_config_db#(virtual metro_apb_if)::set(null, "uvm_test_top", "vif", apb_if);
-        uvm_config_db#(int unsigned)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
+        uvm_config_db#(int)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
         run_test();
     end
 	
