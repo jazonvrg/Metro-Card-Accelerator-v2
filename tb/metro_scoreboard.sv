@@ -1,10 +1,14 @@
 class metro_scoreboard extends uvm_scoreboard;
     `uvm_component_utils(metro_scoreboard)
-
+    
     uvm_analysis_imp #(metro_apb_transaction, metro_scoreboard) apb_export;
 
     int bit_count;
-    logic model_bits[];
+    int bank_bit_count;
+    logic model_bank0[];
+    logic model_bank1[];
+    logic model_bank2[];
+    logic model_bank3[];
     logic [31:0] current_id;
     logic [31:0] fallback_ids [0:METRO_FALLBACK_DEPTH-1];
     logic pending_valid;
@@ -12,9 +16,9 @@ class metro_scoreboard extends uvm_scoreboard;
     logic expected_fallback_match;
     logic expected_bloom_match;
     logic last_operation_program;
-    logic operation_count;
-    logic status_checks;
-    logic fallback_queries;
+    int operation_count;
+    int status_checks;
+    int fallback_queries;
 
     covergroup operation_mode_cg with function sample(logic sample_is_program);
         option.per_instance = 1;
@@ -26,7 +30,7 @@ class metro_scoreboard extends uvm_scoreboard;
 
     covergroup fallback_slot_action_cg with function sample(
         int sample_slot,
-        bit [1:0] sample_action
+        logic [1:0] sample_action
     );
         option.per_instance = 1;
         cp_slot: coverpoint sample_slot {
@@ -45,7 +49,7 @@ class metro_scoreboard extends uvm_scoreboard;
         }
         slot_x_action: cross cp_slot, cp_clear_vs_write;
     endgroup
-    
+
     covergroup query_result_cg with function sample(
         logic [1:0] sample_expected_path,
         logic sample_actual_match,
@@ -67,7 +71,7 @@ class metro_scoreboard extends uvm_scoreboard;
         }
         cp_actual_fallback: coverpoint sample_actual_fallback {
             bins fallback_miss = {1'b0};
-            bins fallback_hit  = {1'b1};
+            bins fallback_hit = {1'b1};
         }
         cp_done: coverpoint sample_done {
             bins done = {1'b1};
@@ -91,7 +95,7 @@ class metro_scoreboard extends uvm_scoreboard;
         }
     endgroup
 
-    function new(string name = "metro_scoreboard", uvm_component parent);
+    function new(string name = "metro_scoreboard", uvm_component parent = null);
         super.new(name, parent);
         apb_export = new("apb_export", this);
         operation_mode_cg = new();
@@ -106,8 +110,19 @@ class metro_scoreboard extends uvm_scoreboard;
             `uvm_fatal(get_type_name(), "Missing bit_count in config_db")
         if (bit_count == 0)
             `uvm_fatal(get_type_name(), "bit_count must be greater than zero")
-        model_bits = new[bit_count];
-        foreach (model_bits[i]) model_bits[i] = 1'b0;
+        if ((bit_count % 4) != 0)
+            `uvm_fatal(get_type_name(), $sformatf("BIT_COUNT=%0d must be divisible by 4 for 4-bank Bloom Filter", bit_count))
+        bank_bit_count = bit_count / 4;
+        model_bank0 = new[bank_bit_count];
+        model_bank1 = new[bank_bit_count];
+        model_bank2 = new[bank_bit_count];
+        model_bank3 = new[bank_bit_count];
+        foreach (model_bank0[i]) begin
+            model_bank0[i] = 1'b0;
+            model_bank1[i] = 1'b0;
+            model_bank2[i] = 1'b0;
+            model_bank3[i] = 1'b0;
+        end
         foreach (fallback_ids[i]) fallback_ids[i] = '0;
         current_id = '0;
         pending_valid = 1'b0;
@@ -121,7 +136,7 @@ class metro_scoreboard extends uvm_scoreboard;
     endfunction
 
     function automatic void calc_indices(
-        input logic [31:0] id,
+        input  logic [31:0] id,
         output int i1,
         output int i2,
         output int i3,
@@ -134,10 +149,10 @@ class metro_scoreboard extends uvm_scoreboard;
         h2 = mix ^ (mix << 7) ^ ((mix >> 2) + 32'h8765_4321);
         h3 = (mix + (mix << 4)) ^ ((mix >> 9) + 32'h9E37_79B9);
         h4 = mix ^ ((mix << 5) + (mix >> 3) + 32'hDEAD_BEEF);
-        i1 = h1 % bit_count;
-        i2 = h2 % bit_count;
-        i3 = h3 % bit_count;
-        i4 = h4 % bit_count;
+        i1 = h1 % bank_bit_count;
+        i2 = h2 % bank_bit_count;
+        i3 = h3 % bank_bit_count;
+        i4 = h4 % bank_bit_count;
     endfunction
 
     function automatic integer fallback_slot(input logic [7:0] addr);
@@ -152,7 +167,7 @@ class metro_scoreboard extends uvm_scoreboard;
         end
     endfunction
 
-    function automatic bit model_fallback_hit(input logic [31:0] id);
+    function automatic logic model_fallback_hit(input logic [31:0] id);
         logic found;
         found = 1'b0;
         if (id != '0) begin
@@ -168,7 +183,6 @@ class metro_scoreboard extends uvm_scoreboard;
         logic previous_entry_valid;
         logic [1:0] fallback_action;
         logic [1:0] expected_path;
-
         if (tr.is_write) begin
             slot = fallback_slot(tr.addr);
             if (slot >= 0) begin
@@ -176,9 +190,9 @@ class metro_scoreboard extends uvm_scoreboard;
                 if (tr.data == 32'h0)
                     fallback_action = 2'd2;
                 else if (previous_entry_valid)
-                    fallback_action = 2'd1;
+                    fallback_action = 2'd1; 
                 else
-                    fallback_action = 2'd0;
+                    fallback_action = 2'd0; 
                 fallback_slot_action_cg.sample(slot, fallback_action);
                 fallback_ids[slot] = tr.data;
                 `uvm_info(get_type_name(), $sformatf("MODEL FALLBACK slot=%0d value=0x%08h", slot, tr.data), UVM_MEDIUM)
@@ -194,15 +208,15 @@ class metro_scoreboard extends uvm_scoreboard;
                             pending_valid = 1'b1;
                             expected_fallback_match = 1'b0;
                             if (tr.data[1]) begin
-                                model_bits[i1] = 1'b1;
-                                model_bits[i2] = 1'b1;
-                                model_bits[i3] = 1'b1;
-                                model_bits[i4] = 1'b1;
+                                model_bank0[i1] = 1'b1;
+                                model_bank1[i2] = 1'b1;
+                                model_bank2[i3] = 1'b1;
+                                model_bank3[i4] = 1'b1;
                                 expected_bloom_match = 1'b0;
                                 expected_match = 1'b0;
                                 `uvm_info(get_type_name(), $sformatf("MODEL PROGRAM id=0x%08h indexes={%0d,%0d,%0d,%0d}", current_id, i1, i2, i3, i4), UVM_MEDIUM)
                             end else begin
-                                expected_bloom_match = model_bits[i1] & model_bits[i2] & model_bits[i3] & model_bits[i4];
+                                expected_bloom_match = model_bank0[i1] & model_bank1[i2] & model_bank2[i3] & model_bank3[i4];
                                 expected_fallback_match = model_fallback_hit(current_id);
                                 expected_match = expected_bloom_match | expected_fallback_match;
                                 if (expected_fallback_match) fallback_queries++;
@@ -239,5 +253,5 @@ class metro_scoreboard extends uvm_scoreboard;
         `uvm_info(get_type_name(), $sformatf("Scoreboard: operations=%0d status_checks=%0d fallback_hits=%0d BIT_COUNT=%0d", operation_count, status_checks, fallback_queries, bit_count), UVM_LOW)
         `uvm_info("SCOREBOARD_FUNC_COV", $sformatf("Scoreboard functional coverage: operation_mode=%0.2f%% fallback_slot_action=%0.2f%% query_result=%0.2f%% idle_status=%0.2f%%", operation_mode_cg.get_coverage(), fallback_slot_action_cg.get_coverage(), query_result_cg.get_coverage(), idle_status_cg.get_coverage()), UVM_LOW)
     endfunction
-
+    
 endclass
