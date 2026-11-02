@@ -150,7 +150,7 @@ endclass
 class metro_coverage_closure_test extends metro_base_test;
     `uvm_component_utils(metro_coverage_closure_test)
 
-    function new(string name = "metro_coverage_closure_test");
+    function new(string name = "metro_coverage_closure_test", uvm_component parent);
         super.new(name, parent);
     endfunction
 
