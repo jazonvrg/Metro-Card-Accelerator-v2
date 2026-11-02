@@ -5,11 +5,13 @@ module testbench;
     import metro_apb_pkg::*;
     import test_pkg::*;
 
-    localparam int ADDR = 8;
-    localparam int DATA = 32;
-    localparam int BIT_COUNT = 4096;
-    localparam int HASH = $clog2(BIT_COUNT);
-    localparam int FALLBACK_DEPTH = METRO_FALLBACK_DEPTH;
+    parameter int ADDR = 8;
+    parameter int DATA = 32;
+    parameter int BIT_COUNT = 4096;
+    parameter int BANK_COUNT = 4;
+    parameter int BANK_BITS = BIT_COUNT / BANK_COUNT;
+    parameter int HASH = $clog2(BANK_BITS);
+    parameter int FALLBACK_DEPTH = METRO_FALLBACK_DEPTH;
 
     logic PCLK = 1'b0;
     always #5 PCLK = ~PCLK;
@@ -46,8 +48,8 @@ module testbench;
 
     initial begin
         uvm_config_db#(virtual metro_apb_if)::set(null, "uvm_test_top", "vif", apb_if);
-        uvm_config_db#(int)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
+		uvm_config_db#(int)::set(null, "uvm_test_top", "bit_count", BIT_COUNT);
         run_test();
     end
-	
+
 endmodule
