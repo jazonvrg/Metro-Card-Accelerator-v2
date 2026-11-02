@@ -1,45 +1,45 @@
 QuestaSim-64 vcover 10.6d_1 Coverage Utility 2018.04 Apr 11 2018
-Start time: 00:16:01 on Nov 02,2026
+Start time: 15:55:16 on Nov 02,2026
 vcover report -totals -codeAll -cvg log/IP_MERGE.ucdb 
 Coverage Report Totals BY FILES: Number of Files 5
 
     Enabled Coverage            Active      Hits    Misses    Weight % Covered
     ----------------            ------      ----    ------    ------ ---------
-    Stmts                           57        57         0         1     100.0
+    Stmts                           60        60         0         1     100.0
     Branches                        29        29         0         1     100.0
     Conditions                                                     1     100.0
         UDP Condition Rows           0         0         0         1     100.0
         FEC Condition Terms          8         8         0         1     100.0
-    Expressions                                                    1     100.0
+    Expressions                                                    1      96.1
         UDP Expression Rows          0         0         0         1     100.0
-        FEC Expression Terms        13        13         0         1     100.0
+        FEC Expression Terms        13        12         1         1      92.3
     FSMs                                                           1     100.0
         States                       0         0         0         1     100.0
         Transitions                  0         0         0         1     100.0
-    Toggle Bins                   1540      1540         0         1     100.0
+    Toggle Bins                   1540      1476        64         1      95.8
 
-Total coverage (Code Coverage Only, filtered view): 100.0%
+Total coverage (Code Coverage Only, filtered view): 97.6%
 
 Coverage Report Totals BY INSTANCES: Number of Instances 13
 
     Enabled Coverage            Active      Hits    Misses    Weight % Covered
     ----------------            ------      ----    ------    ------ ---------
-    Stmts                           57        57         0         1     100.0
+    Stmts                           60        60         0         1     100.0
     Branches                        29        29         0         1     100.0
     Conditions                                                     1     100.0
         UDP Condition Rows           0         0         0         1     100.0
         FEC Condition Terms          8         8         0         1     100.0
-    Expressions                                                    1     100.0
+    Expressions                                                    1      96.1
         UDP Expression Rows          0         0         0         1     100.0
-        FEC Expression Terms        13        13         0         1     100.0
+        FEC Expression Terms        13        12         1         1      92.3
     FSMs                                                           1     100.0
         States                       0         0         0         1     100.0
         Transitions                  0         0         0         1     100.0
-    Toggle Bins                   1362      1362         0         1     100.0
+    Toggle Bins                   1362      1298        64         1      95.3
     Cover Group Types                4        na        na         1     100.0
     Coverpoints/Crosses             12        na        na         1        na
         Covergroup Bins             28        28         0         1     100.0
-Total coverage (filtered view): 100.0%
+Total coverage (filtered view): 97.9%
 
-End time: 00:16:01 on Nov 02,2026, Elapsed time: 0:00:00
+End time: 15:55:16 on Nov 02,2026, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
