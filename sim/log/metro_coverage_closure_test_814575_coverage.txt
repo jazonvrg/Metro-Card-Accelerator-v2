@@ -1,0 +1,909 @@
+QuestaSim-64 vcover 10.6d_1 Coverage Utility 2018.04 Apr 11 2018
+Start time: 00:24:34 on Nov 03,2026
+vcover report -details -codeAll -cvg log/metro_coverage_closure_test_814575.ucdb 
+Coverage Report by file with details
+
+=================================================================================
+=== File: ../rtl/apb_slave.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                            4         4         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/apb_slave.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module apb_slave (
+    4                                                    input  logic PSEL,
+    5                                                    input  logic PWRITE,
+    6                                                    input  logic PENABLE,
+    7                                                    output logic PREADY,
+    8                                                    output logic wr_en,
+    9                                                    output logic rd_en
+    10                                               );
+    11                                               
+    12              1                       2810         always_comb begin
+    13              1                       2810             PREADY = PSEL && PENABLE;
+    14              1                       2810             wr_en = PSEL && PENABLE && PWRITE;
+    15              1                       2810             rd_en = PSEL && PENABLE && !PWRITE;
+    16                                                   end
+    17                                                   
+    18                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         0         0         0     100.0
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             8         8         0     100.0
+
+================================Expression Details================================
+
+Expression Coverage for file ../rtl/apb_slave.sv --
+
+----------------Focused Expression View-----------------
+Line       13 Item    1  (PSEL && PENABLE)
+Expression totals: 2 of 2 input terms covered = 100.0%
+
+----------------Focused Expression View-----------------
+Line       14 Item    1  ((PSEL && PENABLE) && PWRITE)
+Expression totals: 3 of 3 input terms covered = 100.0%
+
+----------------Focused Expression View-----------------
+Line       15 Item    1  ((PSEL && PENABLE) && ~PWRITE)
+Expression totals: 3 of 3 input terms covered = 100.0%
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                     12        12         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/apb_slave.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =          6 
+Toggled Node Count   =          6 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (12 of 12 bins)
+
+=================================================================================
+=== File: ../rtl/fallback_lookup.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           17        17         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/fallback_lookup.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module fallback_lookup #(
+    4                                                    parameter int ADDR = 8,
+    5                                                    parameter int DATA = 32,
+    6                                                    parameter int DEPTH = 16,
+    7                                                    parameter logic [ADDR-1:0] BASE_ADDR = 8'h10
+    8                                                ) (
+    9                                                    input  logic             PCLK,
+    10                                                   input  logic             PRESETN,
+    11                                                   input  logic             wr_en,
+    12                                                   input  logic             rd_en,
+    13                                                   input  logic [ADDR-1:0]  PADDR,
+    14                                                   input  logic [DATA-1:0]  PWDATA,
+    15                                                   input  logic [DATA-1:0]  id_data,
+    16                                                   output logic             hit,
+    17                                                   output logic [DATA-1:0]  read_data
+    18                                               );
+    19                                               	
+    20                                                   logic [DATA-1:0] entries [0:DEPTH-1];
+    21                                                   integer write_slot;
+    22                                                   integer read_slot;
+    23                                               
+    24                                                   function automatic integer slot_from_addr(input logic [ADDR-1:0] addr);
+    25                                                       integer offset;
+    26                                                       begin
+    27              1                       4326                 slot_from_addr = -1;
+    28                                                           if (addr >= BASE_ADDR) begin
+    29              1                        288                     offset = addr - BASE_ADDR;
+    30                                                               if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
+    31              1                        264                         slot_from_addr = offset / 4;
+    32                                                           end
+    33                                                       end
+    34                                                   endfunction
+    35                                               
+    36              1                       2163         always_comb begin
+    37              1                       2163             write_slot = slot_from_addr(PADDR);
+    38              1                       2163             read_slot = slot_from_addr(PADDR);
+    39              1                       2163             hit = 1'b0;
+    40              1                       2163             for (int unsigned k = 0; k < DEPTH; k++) begin
+    40              2                      34608     
+    41                                                           if ((id_data != '0) && (entries[k] == id_data))
+    42              1                          9                     hit = 1'b1;
+    43                                                       end
+    44              1                       2163             read_data = '0;
+    45                                                       if (rd_en && (read_slot >= 0))
+    46              1                         32                 read_data = entries[read_slot];
+    47                                                   end
+    48                                               
+    49              1                       1842         always_ff @(posedge PCLK or negedge PRESETN) begin
+    50                                                       if (!PRESETN) begin
+    51              1                          4                 for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
+    51              2                         64     
+    52              1                         64                     entries[reset_idx] <= '0;
+    53                                                       end else if (wr_en && (write_slot >= 0)) begin
+    54              1                         34                 entries[write_slot] <= PWDATA;
+    55                                                       end
+    56                                                   end
+    57                                               	
+    58                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                        11        11         0     100.0
+
+================================Branch Details================================
+
+Branch Coverage for file ../rtl/fallback_lookup.sv --
+
+------------------------------------IF Branch------------------------------------
+    28                                      4326     Count coming in to IF
+    28              1                        288                 if (addr >= BASE_ADDR) begin
+                                            4038     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    30                                       288     Count coming in to IF
+    30              1                        264                     if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
+                                              24     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    41                                     34608     Count coming in to IF
+    41              1                          9                 if ((id_data != '0) && (entries[k] == id_data))
+                                           34599     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    45                                      2163     Count coming in to IF
+    45              1                         32             if (rd_en && (read_slot >= 0))
+                                            2131     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    50                                      1842     Count coming in to IF
+    50              1                          4             if (!PRESETN) begin
+    53              1                         34             end else if (wr_en && (write_slot >= 0)) begin
+                                            1804     All False Count
+Branch totals: 3 hits of 3 branches = 100.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              8         8         0     100.0
+
+================================Condition Details================================
+
+Condition Coverage for file ../rtl/fallback_lookup.sv --
+
+----------------Focused Condition View-------------------
+Line       30 Item    1  (((offset % 4) == 0) && ((offset / 4) < 16))
+Condition totals: 2 of 2 input terms covered = 100.0%
+
+----------------Focused Condition View-------------------
+Line       41 Item    1  ((id_data != 1'b0) && (entries[k] == id_data))
+Condition totals: 2 of 2 input terms covered = 100.0%
+
+----------------Focused Condition View-------------------
+Line       45 Item    1  (rd_en && (read_slot >= 0))
+Condition totals: 2 of 2 input terms covered = 100.0%
+
+----------------Focused Condition View-------------------
+Line       53 Item    1  (wr_en && (write_slot >= 0))
+Condition totals: 2 of 2 input terms covered = 100.0%
+
+
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    346       346         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/fallback_lookup.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =        173 
+Toggled Node Count   =        173 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (346 of 346 bins)
+
+=================================================================================
+=== File: ../rtl/hash_engine.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                            6         6         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/hash_engine.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module hash_engine #(
+    4                                                    parameter int DATA = 32,
+    5                                                    parameter int HASH = 24,
+    6                                                    parameter int BIT_COUNT = 9_600_000
+    7                                                ) (
+    8                                                    input  logic [DATA-1:0] id_data,
+    9                                                    output logic [HASH-1:0] index1,
+    10                                                   output logic [HASH-1:0] index2,
+    11                                                   output logic [HASH-1:0] index3,
+    12                                                   output logic [HASH-1:0] index4
+    13                                               );
+    14                                                   
+    15                                                   parameter int BANK_COUNT = 4;
+    16                                                   parameter int BANK_BITS  = BIT_COUNT / BANK_COUNT;
+    17                                               
+    18                                                   logic [31:0] mix;
+    19                                                   logic [HASH-1:0] hash1, hash2, hash3, hash4;
+    20                                               
+    21              1                        309         always_comb begin
+    22              1                        309             mix = id_data ^ (id_data >> 16);
+    23              1                        309             hash1 = (mix + (mix << 3) + (mix >> 5) + 32'h1234_5678) % BANK_BITS;
+    24              1                        309             hash2 = (mix ^ (mix << 7) ^ ((mix >> 2) + 32'h8765_4321)) % BANK_BITS;
+    25              1                        309             hash3 = ((mix + (mix << 4)) ^ ((mix >> 9) + 32'h9E37_79B9)) % BANK_BITS;
+    26              1                        309             hash4 = (mix ^ ((mix << 5) + (mix >> 3) + 32'hDEAD_BEEF)) % BANK_BITS;
+    27                                                   end
+    28                                               
+    29              1                        ESP         assign index1 = hash1;
+    30              1                        ESP         assign index2 = hash2;
+    31              1                        ESP         assign index3 = hash3;
+    32              1                        ESP         assign index4 = hash4;
+    33                                                   
+    34                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         0         0         0     100.0
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    288       288         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/hash_engine.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =        144 
+Toggled Node Count   =        144 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (288 of 288 bins)
+
+=================================================================================
+=== File: ../rtl/metro_card_top.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                            0         0         0     100.0
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         0         0         0     100.0
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    380       380         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/metro_card_top.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =        190 
+Toggled Node Count   =        190 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (380 of 380 bins)
+
+=================================================================================
+=== File: ../rtl/register.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           14        13         1      92.8
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/register.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module register #(
+    4                                                    parameter int ADDR = 8,
+    5                                                    parameter int DATA = 32
+    6                                                ) (
+    7                                                    input  logic             PCLK,
+    8                                                    input  logic             PRESETN,
+    9                                                    input  logic             wr_en,
+    10                                                   input  logic             rd_en,
+    11                                                   input  logic [ADDR-1:0]  PADDR,
+    12                                                   input  logic [DATA-1:0]  PWDATA,
+    13                                                   output logic [DATA-1:0]  PRDATA,
+    14                                                   output logic [DATA-1:0]  id_data,
+    15                                                   output logic             start,
+    16                                                   output logic             mode,
+    17                                                   input  logic             match,
+    18                                                   input  logic             fallback_match,
+    19                                                   input  logic             done,
+    20                                                   input  logic [DATA-1:0]  fallback_rdata
+    21                                               );
+    22                                               
+    23                                                   parameter logic [ADDR-1:0] ID_REG = 'h00;
+    24                                                   parameter logic [ADDR-1:0] CTRL_REG = 'h04;
+    25                                                   parameter logic [ADDR-1:0] STAT_REG = 'h08;
+    26                                               
+    27              1                       2341         always_ff @(posedge PCLK or negedge PRESETN) begin
+    28                                                       if (!PRESETN) begin
+    29              1                          4                 id_data <= '0;
+    30              1                          4                 start <= 1'b0;
+    31              1                          4                 mode <= 1'b0;
+    32                                                       end else begin
+    33              1                       2337                 start <= 1'b0;
+    34                                                           if (wr_en) begin
+    35                                                               case (PADDR)
+    36              1                        308                         ID_REG: id_data <= PWDATA;
+    37                                                                   CTRL_REG: begin
+    38              1                        244                             start <= PWDATA[0];
+    39              1                        244                             mode <= PWDATA[1];
+    40                                                                   end
+    41                                                                   default: ;
+    42                                                               endcase
+    43                                                           end
+    44                                                       end
+    45                                                   end
+    46                                               
+    47              1                       2633         always_comb begin
+    48              1                       2633             PRDATA = '0;
+    49                                                       if (rd_en) begin
+    50                                                           case (PADDR)
+    51              1                        345                     ID_REG: PRDATA = id_data;
+    52              1                    ***0***                     CTRL_REG: PRDATA = {{(DATA-2){1'b0}}, mode, start};
+    53              1                        244                     STAT_REG: PRDATA = {{(DATA-3){1'b0}}, fallback_match, match, done};
+    54              1                         53                     default: PRDATA = fallback_rdata;
+    55                                                           endcase
+    56                                                       end
+    57                                                   end
+    58                                               
+    59                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                        13        12         1      92.3
+
+================================Branch Details================================
+
+Branch Coverage for file ../rtl/register.sv --
+
+------------------------------------IF Branch------------------------------------
+    28                                      2341     Count coming in to IF
+    28              1                          4             if (!PRESETN) begin
+    32              1                       2337             end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    34                                      2337     Count coming in to IF
+    34              1                        591                 if (wr_en) begin
+                                            1746     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------CASE Branch------------------------------------
+    35                                       591     Count coming in to CASE
+    36              1                        308                         ID_REG: id_data <= PWDATA;
+    37              1                        244                         CTRL_REG: begin
+    41              1                         39                         default: ;
+Branch totals: 3 hits of 3 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    49                                      2633     Count coming in to IF
+    49              1                        642             if (rd_en) begin
+                                            1991     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------CASE Branch------------------------------------
+    50                                       642     Count coming in to CASE
+    51              1                        345                     ID_REG: PRDATA = id_data;
+    52              1                    ***0***                     CTRL_REG: PRDATA = {{(DATA-2){1'b0}}, mode, start};
+    53              1                        244                     STAT_REG: PRDATA = {{(DATA-3){1'b0}}, fallback_match, match, done};
+    54              1                         53                     default: PRDATA = fallback_rdata;
+Branch totals: 3 hits of 4 branches = 75.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    290       290         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/register.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =        145 
+Toggled Node Count   =        145 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (290 of 290 bins)
+
+=================================================================================
+=== File: ../rtl/sram.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           19        19         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/sram.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module sram #(
+    4                                                    parameter int DATA = 32,
+    5                                                    parameter int HASH = 24,
+    6                                                    parameter int BIT_COUNT = 9_600_000
+    7                                                ) (
+    8                                                    input  logic             PCLK,
+    9                                                    input  logic             PRESETN,
+    10                                                   input  logic             start,
+    11                                                   input  logic             mode,
+    12                                                   input  logic [DATA-1:0]  id_data,
+    13                                                   input  logic [HASH-1:0]  index1,
+    14                                                   input  logic [HASH-1:0]  index2,
+    15                                                   input  logic [HASH-1:0]  index3,
+    16                                                   input  logic [HASH-1:0]  index4,
+    17                                                   input  logic             fallback_hit,
+    18                                                   output logic             match,
+    19                                                   output logic             fallback_match,
+    20                                                   output logic             done
+    21                                               );
+    22                                                   
+    23                                                   parameter int BANK_COUNT = 4;
+    24                                                   parameter int BANK_BITS = BIT_COUNT / BANK_COUNT;
+    25                                                   parameter int BANK_ADDR_WIDTH = $clog2(BANK_BITS);
+    26                                               
+    27                                                   logic bank0 [0:BANK_BITS-1];
+    28                                                   logic bank1 [0:BANK_BITS-1];
+    29                                                   logic bank2 [0:BANK_BITS-1];
+    30                                                   logic bank3 [0:BANK_BITS-1];
+    31                                               
+    32                                                   initial begin
+    33              1                          1             for (int unsigned init_idx = 0; init_idx < BANK_BITS; init_idx++) begin
+    33              2                       1024     
+    34              1                       1024                 bank0[init_idx] = 1'b0;
+    35              1                       1024                 bank1[init_idx] = 1'b0;
+    36              1                       1024                 bank2[init_idx] = 1'b0;
+    37              1                       1024                 bank3[init_idx] = 1'b0;
+    38                                                       end
+    39                                                   end
+    40                                               
+    41              1                        802         always @(posedge PCLK or negedge PRESETN) begin
+    42                                                       if (!PRESETN) begin
+    43              1                          4                 match <= 1'b0;
+    44              1                          4                 fallback_match <= 1'b0;
+    45              1                          4                 done <= 1'b0;
+    46                                                       end else if (start) begin
+    47              1                        244                 done <= 1'b1;
+    48                                                           if (mode) begin
+    49              1                        241                     bank0[index1[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    50              1                        241                     bank1[index2[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    51              1                        241                     bank2[index3[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    52              1                        241                     bank3[index4[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    53              1                        241                     match <= 1'b0;
+    54              1                        241                     fallback_match <= 1'b0;
+    55                                                           end else begin
+    56              1                          3                     fallback_match <= fallback_hit;
+    57              1                          3                     match <= (bank0[index1[BANK_ADDR_WIDTH-1:0]] & bank1[index2[BANK_ADDR_WIDTH-1:0]] & bank2[index3[BANK_ADDR_WIDTH-1:0]] & bank3[index4[BANK_ADDR_WIDTH-1:0]]) | fallback_hit;
+    58                                                           end
+    59                                                       end
+    60                                                   end
+    61                                                   
+    62                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         5         5         0     100.0
+
+================================Branch Details================================
+
+Branch Coverage for file ../rtl/sram.sv --
+
+------------------------------------IF Branch------------------------------------
+    42                                       802     Count coming in to IF
+    42              1                          4             if (!PRESETN) begin
+    46              1                        244             end else if (start) begin
+                                             554     All False Count
+Branch totals: 3 hits of 3 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    48                                       244     Count coming in to IF
+    48              1                        241                 if (mode) begin
+    55              1                          3                 end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             5         1         4      20.0
+
+================================Expression Details================================
+
+Expression Coverage for file ../rtl/sram.sv --
+
+----------------Focused Expression View-----------------
+Line       57 Item    1  ((((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4]) | fallback_hit)
+Expression totals: 1 of 5 input terms covered = 20.0%
+
+     Input Term   Covered  Reason for no coverage   Hint
+    -----------  --------  -----------------------  --------------
+  bank0[index1]         N  '_0' not hit             Hit '_0'
+  bank1[index2]         N  '_0' not hit             Hit '_0'
+  bank2[index3]         N  '_0' not hit             Hit '_0'
+  bank3[index4]         Y
+   fallback_hit         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  bank0[index1]_0       (~fallback_hit && bank3[index4] && bank2[index3] && bank1[index2])
+  Row   2:          1  bank0[index1]_1       (~fallback_hit && bank3[index4] && bank2[index3] && bank1[index2])
+  Row   3:    ***0***  bank1[index2]_0       (~fallback_hit && bank3[index4] && bank2[index3] && bank0[index1])
+  Row   4:          1  bank1[index2]_1       (~fallback_hit && bank3[index4] && bank2[index3] && bank0[index1])
+  Row   5:    ***0***  bank2[index3]_0       (~fallback_hit && bank3[index4] && (bank0[index1] & bank1[index2]))
+  Row   6:          1  bank2[index3]_1       (~fallback_hit && bank3[index4] && (bank0[index1] & bank1[index2]))
+  Row   7:          1  bank3[index4]_0       (~fallback_hit && ((bank0[index1] & bank1[index2]) & bank2[index3]))
+  Row   8:          1  bank3[index4]_1       (~fallback_hit && ((bank0[index1] & bank1[index2]) & bank2[index3]))
+  Row   9:          1  fallback_hit_0        ~(((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4])
+ Row   10:    ***0***  fallback_hit_1        ~(((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4])
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    160       160         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/sram.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =         80 
+Toggled Node Count   =         80 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (160 of 160 bins)
+
+COVERGROUP COVERAGE:
+-----------------------------------------------------------------------------------------------
+Covergroup                                             Metric       Goal    Status               
+                                                                                              
+-----------------------------------------------------------------------------------------------
+ TYPE /env_pkg/metro_scoreboard/operation_mode_cg      100.0%        100    Covered              
+    covered/total bins:                                     2          2                      
+    missing/total bins:                                     0          2                      
+    % Hit:                                             100.0%        100                      
+    Coverpoint operation_mode_cg::cp_operation_mode 
+                                                       100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin query_mode                                      3          1    Covered              
+        bin program_mode                                  241          1    Covered              
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::operation_mode_cg  
+                                                       100.0%        100    Covered              
+    covered/total bins:                                     2          2                      
+    missing/total bins:                                     0          2                      
+    % Hit:                                             100.0%        100                      
+    Coverpoint cp_operation_mode                       100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin query_mode                                      3          1    Covered              
+        bin program_mode                                  241          1    Covered              
+ TYPE /env_pkg/metro_scoreboard/fallback_slot_action_cg 
+                                                        91.6%        100    Uncovered            
+    covered/total bins:                                    13         14                      
+    missing/total bins:                                     1         14                      
+    % Hit:                                              92.8%        100                      
+    Coverpoint fallback_slot_action_cg::cp_slot        100.0%        100    Covered              
+        covered/total bins:                                 3          3                      
+        missing/total bins:                                 0          3                      
+        % Hit:                                         100.0%        100                      
+        bin first_slot                                      2          1    Covered              
+        bin middle_slot                                    30          1    Covered              
+        bin last_slot                                       2          1    Covered              
+    Coverpoint fallback_slot_action_cg::cp_action       66.6%        100    Uncovered            
+        covered/total bins:                                 2          3                      
+        missing/total bins:                                 1          3                      
+        % Hit:                                          66.6%        100                      
+        bin insert_new                                     17          1    Covered              
+        bin overwrite                                       0          1    ZERO                 
+        bin clear                                          17          1    Covered              
+    Coverpoint fallback_slot_action_cg::cp_clear_vs_write 
+                                                       100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin write_or_overwrite                             17          1    Covered              
+        bin clear_slot                                     17          1    Covered              
+    Cross fallback_slot_action_cg::slot_x_action       100.0%        100    Covered              
+        covered/total bins:                                 6          6                      
+        missing/total bins:                                 0          6                      
+        % Hit:                                         100.0%        100                      
+        bin <first_slot,write_or_overwrite>                 1          1    Covered              
+        bin <middle_slot,write_or_overwrite>               15          1    Covered              
+        bin <last_slot,write_or_overwrite>                  1          1    Covered              
+        bin <first_slot,clear_slot>                         1          1    Covered              
+        bin <middle_slot,clear_slot>                       15          1    Covered              
+        bin <last_slot,clear_slot>                          1          1    Covered              
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::fallback_slot_action_cg  
+                                                        91.6%        100    Uncovered            
+    covered/total bins:                                    13         14                      
+    missing/total bins:                                     1         14                      
+    % Hit:                                              92.8%        100                      
+    Coverpoint cp_slot                                 100.0%        100    Covered              
+        covered/total bins:                                 3          3                      
+        missing/total bins:                                 0          3                      
+        % Hit:                                         100.0%        100                      
+        bin first_slot                                      2          1    Covered              
+        bin middle_slot                                    30          1    Covered              
+        bin last_slot                                       2          1    Covered              
+    Coverpoint cp_action                                66.6%        100    Uncovered            
+        covered/total bins:                                 2          3                      
+        missing/total bins:                                 1          3                      
+        % Hit:                                          66.6%        100                      
+        bin insert_new                                     17          1    Covered              
+        bin overwrite                                       0          1    ZERO                 
+        bin clear                                          17          1    Covered              
+    Coverpoint cp_clear_vs_write                       100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin write_or_overwrite                             17          1    Covered              
+        bin clear_slot                                     17          1    Covered              
+    Cross slot_x_action                                100.0%        100    Covered              
+        covered/total bins:                                 6          6                      
+        missing/total bins:                                 0          6                      
+        % Hit:                                         100.0%        100                      
+        bin <first_slot,write_or_overwrite>                 1          1    Covered              
+        bin <middle_slot,write_or_overwrite>               15          1    Covered              
+        bin <last_slot,write_or_overwrite>                  1          1    Covered              
+        bin <first_slot,clear_slot>                         1          1    Covered              
+        bin <middle_slot,clear_slot>                       15          1    Covered              
+        bin <last_slot,clear_slot>                          1          1    Covered              
+ TYPE /env_pkg/metro_scoreboard/query_result_cg         95.8%        100    Uncovered            
+    covered/total bins:                                    10         11                      
+    missing/total bins:                                     1         11                      
+    % Hit:                                              90.9%        100                      
+    Coverpoint query_result_cg::cp_expected_path        75.0%        100    Uncovered            
+        covered/total bins:                                 3          4                      
+        missing/total bins:                                 1          4                      
+        % Hit:                                          75.0%        100                      
+        bin no_match                                        1          1    Covered              
+        bin bloom_only                                      1          1    Covered              
+        bin fallback_only                                   0          1    ZERO                 
+        bin bloom_and_fallback                              1          1    Covered              
+    Coverpoint query_result_cg::cp_actual_match        100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin allowed                                         1          1    Covered              
+        bin blocked                                         2          1    Covered              
+    Coverpoint query_result_cg::cp_actual_fallback     100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin fallback_miss                                   2          1    Covered              
+        bin fallback_hit                                    1          1    Covered              
+    Coverpoint query_result_cg::cp_done                100.0%        100    Covered              
+        covered/total bins:                                 1          1                      
+        missing/total bins:                                 0          1                      
+        % Hit:                                         100.0%        100                      
+        ignore_bin not_done                                 0               ZERO                 
+        bin done                                            3          1    Covered              
+    Coverpoint query_result_cg::cp_match_agreement     100.0%        100    Covered              
+        covered/total bins:                                 1          1                      
+        missing/total bins:                                 0          1                      
+        % Hit:                                         100.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          3          1    Covered              
+    Coverpoint query_result_cg::cp_fallback_agreement 
+                                                       100.0%        100    Covered              
+        covered/total bins:                                 1          1                      
+        missing/total bins:                                 0          1                      
+        % Hit:                                         100.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          3          1    Covered              
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::query_result_cg  
+                                                        95.8%        100    Uncovered            
+    covered/total bins:                                    10         11                      
+    missing/total bins:                                     1         11                      
+    % Hit:                                              90.9%        100                      
+    Coverpoint cp_expected_path                         75.0%        100    Uncovered            
+        covered/total bins:                                 3          4                      
+        missing/total bins:                                 1          4                      
+        % Hit:                                          75.0%        100                      
+        bin no_match                                        1          1    Covered              
+        bin bloom_only                                      1          1    Covered              
+        bin fallback_only                                   0          1    ZERO                 
+        bin bloom_and_fallback                              1          1    Covered              
+    Coverpoint cp_actual_match                         100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin allowed                                         1          1    Covered              
+        bin blocked                                         2          1    Covered              
+    Coverpoint cp_actual_fallback                      100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin fallback_miss                                   2          1    Covered              
+        bin fallback_hit                                    1          1    Covered              
+    Coverpoint cp_done                                 100.0%        100    Covered              
+        covered/total bins:                                 1          1                      
+        missing/total bins:                                 0          1                      
+        % Hit:                                         100.0%        100                      
+        ignore_bin not_done                                 0               ZERO                 
+        bin done                                            3          1    Covered              
+    Coverpoint cp_match_agreement                      100.0%        100    Covered              
+        covered/total bins:                                 1          1                      
+        missing/total bins:                                 0          1                      
+        % Hit:                                         100.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          3          1    Covered              
+    Coverpoint cp_fallback_agreement                   100.0%        100    Covered              
+        covered/total bins:                                 1          1                      
+        missing/total bins:                                 0          1                      
+        % Hit:                                         100.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          3          1    Covered              
+ TYPE /env_pkg/metro_scoreboard/idle_status_cg           0.0%        100    ZERO                 
+    covered/total bins:                                     0          1                      
+    missing/total bins:                                     1          1                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint idle_status_cg::cp_idle_status            0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin nonzero_status                           0               ZERO                 
+        bin zero_status                                     0          1    ZERO                 
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::idle_status_cg  
+                                                         0.0%        100    ZERO                 
+    covered/total bins:                                     0          1                      
+    missing/total bins:                                     1          1                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint cp_idle_status                            0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin nonzero_status                           0               ZERO                 
+        bin zero_status                                     0          1    ZERO                 
+
+TOTAL COVERGROUP COVERAGE: 71.8%  COVERGROUP TYPES: 4
+
+Total Coverage By File (code coverage only, filtered view): 92.8%
+
+End time: 00:24:34 on Nov 03,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

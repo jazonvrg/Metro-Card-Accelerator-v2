@@ -1,5 +1,5 @@
 QuestaSim-64 vcover 10.6d_1 Coverage Utility 2018.04 Apr 11 2018
-Start time: 16:32:32 on Nov 02,2026
+Start time: 00:25:29 on Nov 03,2026
 vcover report -totals -codeAll -cvg log/IP_MERGE.ucdb 
 Coverage Report Totals BY FILES: Number of Files 5
 
@@ -41,5 +41,5 @@ Coverage Report Totals BY INSTANCES: Number of Instances 13
         Covergroup Bins             28        28         0         1     100.0
 Total coverage (filtered view): 100.0%
 
-End time: 16:32:33 on Nov 02,2026, Elapsed time: 0:00:01
+End time: 00:25:29 on Nov 03,2026, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
