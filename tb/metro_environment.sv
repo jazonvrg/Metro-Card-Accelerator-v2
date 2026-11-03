@@ -2,7 +2,6 @@ class metro_environment extends uvm_env;
     `uvm_component_utils(metro_environment)
 
     virtual metro_apb_if vif;
-    int unsigned bit_count;
     int bit_count;
     metro_apb_agent apb_agent;
     metro_scoreboard scoreboard;

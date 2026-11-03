@@ -1,0 +1,1927 @@
+QuestaSim-64 vcover 10.6d_1 Coverage Utility 2018.04 Apr 11 2018
+Start time: 10:16:26 on Nov 03,2026
+vcover report -details -codeAll -cvg log/metro_register_test_668325.ucdb 
+Coverage Report by file with details
+
+=================================================================================
+=== File: ../rtl/apb_slave.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                            4         4         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/apb_slave.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module apb_slave (
+    4                                                    input  logic PSEL,
+    5                                                    input  logic PWRITE,
+    6                                                    input  logic PENABLE,
+    7                                                    output logic PREADY,
+    8                                                    output logic wr_en,
+    9                                                    output logic rd_en
+    10                                               );
+    11                                               
+    12              1                         14         always_comb begin
+    13              1                         14             PREADY = PSEL && PENABLE;
+    14              1                         14             wr_en = PSEL && PENABLE && PWRITE;
+    15              1                         14             rd_en = PSEL && PENABLE && !PWRITE;
+    16                                                   end
+    17                                                   
+    18                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         0         0         0     100.0
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             8         8         0     100.0
+
+================================Expression Details================================
+
+Expression Coverage for file ../rtl/apb_slave.sv --
+
+----------------Focused Expression View-----------------
+Line       13 Item    1  (PSEL && PENABLE)
+Expression totals: 2 of 2 input terms covered = 100.0%
+
+----------------Focused Expression View-----------------
+Line       14 Item    1  ((PSEL && PENABLE) && PWRITE)
+Expression totals: 3 of 3 input terms covered = 100.0%
+
+----------------Focused Expression View-----------------
+Line       15 Item    1  ((PSEL && PENABLE) && ~PWRITE)
+Expression totals: 3 of 3 input terms covered = 100.0%
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                     12        12         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/apb_slave.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+
+Total Node Count     =          6 
+Toggled Node Count   =          6 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (12 of 12 bins)
+
+=================================================================================
+=== File: ../rtl/fallback_lookup.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           21        12         9      57.1
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/fallback_lookup.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module fallback_lookup #(
+    4                                                    parameter int ADDR = 8,
+    5                                                    parameter int DATA = 32,
+    6                                                    parameter int DEPTH = 16,
+    7                                                    parameter logic [ADDR-1:0] BASE_ADDR = 8'h10
+    8                                                ) (
+    9                                                    input  logic             PCLK,
+    10                                                   input  logic             PRESETN,
+    11                                                   input  logic             wr_en,
+    12                                                   input  logic             rd_en,
+    13                                                   input  logic             program_done,
+    14                                                   input  logic [ADDR-1:0]  PADDR,
+    15                                                   input  logic [DATA-1:0]  PWDATA,
+    16                                                   input  logic [DATA-1:0]  id_data,
+    17                                                   input  logic [DATA-1:0]  programmed_id,
+    18                                                   output logic             hit,
+    19                                                   output logic [DATA-1:0]  read_data
+    20                                               );
+    21                                               	
+    22                                                   logic [DATA-1:0] entries [0:DEPTH-1];
+    23                                                   integer write_slot;
+    24                                                   integer read_slot;
+    25                                               
+    26                                                   function automatic integer slot_from_addr(input logic [ADDR-1:0] addr);
+    27                                                       integer offset;
+    28                                                       begin
+    29              1                         26                 slot_from_addr = -1;
+    30                                                           if (addr >= BASE_ADDR) begin
+    31              1                    ***0***                     offset = addr - BASE_ADDR;
+    32                                                               if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
+    33              1                    ***0***                         slot_from_addr = offset / 4;
+    34                                                           end
+    35                                                       end
+    36                                                   endfunction
+    37                                               
+    38              1                         13         always_comb begin
+    39              1                         13             write_slot = slot_from_addr(PADDR);
+    40              1                         13             read_slot = slot_from_addr(PADDR);
+    41              1                         13             hit = 1'b0;
+    42              1                         13             for (int unsigned k = 0; k < DEPTH; k++) begin
+    42              2                        208     
+    43                                                           if ((id_data != '0) && (entries[k] == id_data))
+    44              1                    ***0***                     hit = 1'b1;
+    45                                                       end
+    46              1                         13             read_data = '0;
+    47                                                       if (rd_en && (read_slot >= 0))
+    48              1                    ***0***                 read_data = entries[read_slot];
+    49                                                   end
+    50                                               
+    51              1                          9         always_ff @(posedge PCLK or negedge PRESETN) begin
+    52                                                       if (!PRESETN) begin
+    53              1                          2                 for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
+    53              2                         32     
+    54              1                         32                     entries[reset_idx] <= '0;
+    55                                                       end else begin
+    56                                                           if (program_done && (programmed_id != '0)) begin
+    57              1                    ***0***                     for (int clear_idx = 0; clear_idx < DEPTH; clear_idx++) begin
+    57              2                    ***0***     
+    58                                                                   if (entries[clear_idx] == programmed_id)
+    59              1                    ***0***                             entries[clear_idx] <= '0;
+    60                                                               end
+    61                                                           end
+    62                                                           if (wr_en && (write_slot >= 0)) begin
+    63                                                               if (PWDATA == '0) begin
+    64              1                    ***0***                         entries[write_slot] <= '0;
+    65                                                               end else begin
+    66              1                    ***0***                         entries[write_slot] <= PWDATA;
+    67                                                               end
+    68                                                           end
+    69                                                       end
+    70                                                   end
+    71                                               	
+    72                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                        18         7        11      38.8
+
+================================Branch Details================================
+
+Branch Coverage for file ../rtl/fallback_lookup.sv --
+
+------------------------------------IF Branch------------------------------------
+    30                                        26     Count coming in to IF
+    30              1                    ***0***                 if (addr >= BASE_ADDR) begin
+                                              26     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    32                                   ***0***     Count coming in to IF
+    32              1                    ***0***                     if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
+                                         ***0***     All False Count
+Branch totals: 0 hits of 2 branches = 0.0%
+
+------------------------------------IF Branch------------------------------------
+    43                                       208     Count coming in to IF
+    43              1                    ***0***                 if ((id_data != '0) && (entries[k] == id_data))
+                                             208     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    47                                        13     Count coming in to IF
+    47              1                    ***0***             if (rd_en && (read_slot >= 0))
+                                              13     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    52                                         9     Count coming in to IF
+    52              1                          2             if (!PRESETN) begin
+    55              1                          7             end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    56                                         7     Count coming in to IF
+    56              1                    ***0***                 if (program_done && (programmed_id != '0)) begin
+                                               7     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    58                                   ***0***     Count coming in to IF
+    58              1                    ***0***                         if (entries[clear_idx] == programmed_id)
+                                         ***0***     All False Count
+Branch totals: 0 hits of 2 branches = 0.0%
+
+------------------------------------IF Branch------------------------------------
+    62                                         7     Count coming in to IF
+    62              1                    ***0***                 if (wr_en && (write_slot >= 0)) begin
+                                               7     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    63                                   ***0***     Count coming in to IF
+    63              1                    ***0***                     if (PWDATA == '0) begin
+    65              1                    ***0***                     end else begin
+Branch totals: 0 hits of 2 branches = 0.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms             10         0        10       0.0
+
+================================Condition Details================================
+
+Condition Coverage for file ../rtl/fallback_lookup.sv --
+
+----------------Focused Condition View-------------------
+Line       32 Item    1  (((offset % 4) == 0) && ((offset / 4) < 16))
+Condition totals: 0 of 2 input terms covered = 0.0%
+
+           Input Term   Covered  Reason for no coverage   Hint
+          -----------  --------  -----------------------  --------------
+  ((offset % 4) == 0)         N  No hits                  Hit '_0' and '_1'
+  ((offset / 4) < 16)         N  No hits                  Hit '_0' and '_1'
+
+     Rows:       Hits  FEC Target             Non-masking condition(s)      
+ ---------  ---------  --------------------   -------------------------     
+  Row   1:    ***0***  ((offset % 4) == 0)_0  -                             
+  Row   2:    ***0***  ((offset % 4) == 0)_1  ((offset / 4) < 16)           
+  Row   3:    ***0***  ((offset / 4) < 16)_0  ((offset % 4) == 0)           
+  Row   4:    ***0***  ((offset / 4) < 16)_1  ((offset % 4) == 0)           
+
+----------------Focused Condition View-------------------
+Line       43 Item    1  ((id_data != 1'b0) && (entries[k] == id_data))
+Condition totals: 0 of 2 input terms covered = 0.0%
+
+               Input Term   Covered  Reason for no coverage   Hint
+              -----------  --------  -----------------------  --------------
+        (id_data != 1'b0)         N  '_1' not hit             Hit '_1'
+  (entries[k] == id_data)         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target                 Non-masking condition(s)      
+ ---------  ---------  --------------------       -------------------------     
+  Row   1:          1  (id_data != 1'b0)_0        -                             
+  Row   2:    ***0***  (id_data != 1'b0)_1        (entries[k] == id_data)       
+  Row   3:          1  (entries[k] == id_data)_0  (id_data != 1'b0)             
+  Row   4:    ***0***  (entries[k] == id_data)_1  (id_data != 1'b0)             
+
+----------------Focused Condition View-------------------
+Line       47 Item    1  (rd_en && (read_slot >= 0))
+Condition totals: 0 of 2 input terms covered = 0.0%
+
+        Input Term   Covered  Reason for no coverage   Hint
+       -----------  --------  -----------------------  --------------
+             rd_en         N  '_1' not hit             Hit '_1'
+  (read_slot >= 0)         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  rd_en_0               -                             
+  Row   2:    ***0***  rd_en_1               (read_slot >= 0)              
+  Row   3:          1  (read_slot >= 0)_0    rd_en                         
+  Row   4:    ***0***  (read_slot >= 0)_1    rd_en                         
+
+----------------Focused Condition View-------------------
+Line       56 Item    1  (program_done && (programmed_id != 1'b0))
+Condition totals: 0 of 2 input terms covered = 0.0%
+
+               Input Term   Covered  Reason for no coverage   Hint
+              -----------  --------  -----------------------  --------------
+             program_done         N  '_1' not hit             Hit '_1'
+  (programmed_id != 1'b0)         N  No hits                  Hit '_0' and '_1'
+
+     Rows:       Hits  FEC Target                 Non-masking condition(s)      
+ ---------  ---------  --------------------       -------------------------     
+  Row   1:          1  program_done_0             -                             
+  Row   2:    ***0***  program_done_1             (programmed_id != 1'b0)       
+  Row   3:    ***0***  (programmed_id != 1'b0)_0  program_done                  
+  Row   4:    ***0***  (programmed_id != 1'b0)_1  program_done                  
+
+----------------Focused Condition View-------------------
+Line       62 Item    1  (wr_en && (write_slot >= 0))
+Condition totals: 0 of 2 input terms covered = 0.0%
+
+         Input Term   Covered  Reason for no coverage   Hint
+        -----------  --------  -----------------------  --------------
+              wr_en         N  '_1' not hit             Hit '_1'
+  (write_slot >= 0)         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  wr_en_0               -                             
+  Row   2:    ***0***  wr_en_1               (write_slot >= 0)             
+  Row   3:          1  (write_slot >= 0)_0   wr_en                         
+  Row   4:    ***0***  (write_slot >= 0)_1   wr_en                         
+
+
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    412        50       362      12.1
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/fallback_lookup.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+         10                                PRESETN           0           1       50.00 
+         13                           program_done           0           0        0.00 
+         14                               PADDR[7]           0           0        0.00 
+         14                               PADDR[6]           0           0        0.00 
+         14                               PADDR[5]           0           0        0.00 
+         14                               PADDR[4]           0           0        0.00 
+         14                               PADDR[3]           0           0        0.00 
+         14                               PADDR[1]           0           0        0.00 
+         14                               PADDR[0]           0           0        0.00 
+         15                              PWDATA[9]           0           0        0.00 
+         15                              PWDATA[8]           0           0        0.00 
+         15                              PWDATA[7]           0           0        0.00 
+         15                              PWDATA[4]           0           0        0.00 
+         15                             PWDATA[31]           0           0        0.00 
+         15                             PWDATA[30]           0           0        0.00 
+         15                              PWDATA[2]           0           0        0.00 
+         15                             PWDATA[29]           0           0        0.00 
+         15                             PWDATA[27]           0           0        0.00 
+         15                             PWDATA[26]           0           0        0.00 
+         15                             PWDATA[23]           0           0        0.00 
+         15                             PWDATA[21]           0           0        0.00 
+         15                             PWDATA[19]           0           0        0.00 
+         15                             PWDATA[15]           0           0        0.00 
+         15                             PWDATA[14]           0           0        0.00 
+         15                             PWDATA[12]           0           0        0.00 
+         15                             PWDATA[11]           0           0        0.00 
+         15                              PWDATA[0]           0           0        0.00 
+         16                             id_data[9]           0           0        0.00 
+         16                             id_data[8]           0           0        0.00 
+         16                             id_data[7]           0           0        0.00 
+         16                             id_data[6]           0           1       50.00 
+         16                             id_data[5]           0           1       50.00 
+         16                             id_data[4]           0           0        0.00 
+         16                             id_data[3]           0           1       50.00 
+         16                            id_data[31]           0           0        0.00 
+         16                            id_data[30]           0           0        0.00 
+         16                             id_data[2]           0           0        0.00 
+         16                            id_data[29]           0           0        0.00 
+         16                            id_data[28]           0           1       50.00 
+         16                            id_data[27]           0           0        0.00 
+         16                            id_data[26]           0           0        0.00 
+         16                            id_data[25]           0           1       50.00 
+         16                            id_data[24]           0           1       50.00 
+         16                            id_data[23]           0           0        0.00 
+         16                            id_data[22]           0           1       50.00 
+         16                            id_data[21]           0           0        0.00 
+         16                            id_data[20]           0           1       50.00 
+         16                             id_data[1]           0           0        0.00 
+         16                            id_data[19]           0           0        0.00 
+         16                            id_data[18]           0           1       50.00 
+         16                            id_data[17]           0           1       50.00 
+         16                            id_data[16]           0           1       50.00 
+         16                            id_data[15]           0           0        0.00 
+         16                            id_data[14]           0           0        0.00 
+         16                            id_data[13]           0           1       50.00 
+         16                            id_data[12]           0           0        0.00 
+         16                            id_data[11]           0           0        0.00 
+         16                            id_data[10]           0           1       50.00 
+         16                             id_data[0]           0           0        0.00 
+         17                       programmed_id[9]           0           0        0.00 
+         17                       programmed_id[8]           0           0        0.00 
+         17                       programmed_id[7]           0           0        0.00 
+         17                       programmed_id[6]           0           0        0.00 
+         17                       programmed_id[5]           0           0        0.00 
+         17                       programmed_id[4]           0           0        0.00 
+         17                       programmed_id[3]           0           0        0.00 
+         17                      programmed_id[31]           0           0        0.00 
+         17                      programmed_id[30]           0           0        0.00 
+         17                       programmed_id[2]           0           0        0.00 
+         17                      programmed_id[29]           0           0        0.00 
+         17                      programmed_id[28]           0           0        0.00 
+         17                      programmed_id[27]           0           0        0.00 
+         17                      programmed_id[26]           0           0        0.00 
+         17                      programmed_id[25]           0           0        0.00 
+         17                      programmed_id[24]           0           0        0.00 
+         17                      programmed_id[23]           0           0        0.00 
+         17                      programmed_id[22]           0           0        0.00 
+         17                      programmed_id[21]           0           0        0.00 
+         17                      programmed_id[20]           0           0        0.00 
+         17                       programmed_id[1]           0           0        0.00 
+         17                      programmed_id[19]           0           0        0.00 
+         17                      programmed_id[18]           0           0        0.00 
+         17                      programmed_id[17]           0           0        0.00 
+         17                      programmed_id[16]           0           0        0.00 
+         17                      programmed_id[15]           0           0        0.00 
+         17                      programmed_id[14]           0           0        0.00 
+         17                      programmed_id[13]           0           0        0.00 
+         17                      programmed_id[12]           0           0        0.00 
+         17                      programmed_id[11]           0           0        0.00 
+         17                      programmed_id[10]           0           0        0.00 
+         17                       programmed_id[0]           0           0        0.00 
+         18                                    hit           0           0        0.00 
+         19                           read_data[9]           0           0        0.00 
+         19                           read_data[8]           0           0        0.00 
+         19                           read_data[7]           0           0        0.00 
+         19                           read_data[6]           0           0        0.00 
+         19                           read_data[5]           0           0        0.00 
+         19                           read_data[4]           0           0        0.00 
+         19                           read_data[3]           0           0        0.00 
+         19                          read_data[31]           0           0        0.00 
+         19                          read_data[30]           0           0        0.00 
+         19                           read_data[2]           0           0        0.00 
+         19                          read_data[29]           0           0        0.00 
+         19                          read_data[28]           0           0        0.00 
+         19                          read_data[27]           0           0        0.00 
+         19                          read_data[26]           0           0        0.00 
+         19                          read_data[25]           0           0        0.00 
+         19                          read_data[24]           0           0        0.00 
+         19                          read_data[23]           0           0        0.00 
+         19                          read_data[22]           0           0        0.00 
+         19                          read_data[21]           0           0        0.00 
+         19                          read_data[20]           0           0        0.00 
+         19                           read_data[1]           0           0        0.00 
+         19                          read_data[19]           0           0        0.00 
+         19                          read_data[18]           0           0        0.00 
+         19                          read_data[17]           0           0        0.00 
+         19                          read_data[16]           0           0        0.00 
+         19                          read_data[15]           0           0        0.00 
+         19                          read_data[14]           0           0        0.00 
+         19                          read_data[13]           0           0        0.00 
+         19                          read_data[12]           0           0        0.00 
+         19                          read_data[11]           0           0        0.00 
+         19                          read_data[10]           0           0        0.00 
+         19                           read_data[0]           0           0        0.00 
+         23                          write_slot[9]           0           0        0.00 
+         23                          write_slot[8]           0           0        0.00 
+         23                          write_slot[7]           0           0        0.00 
+         23                          write_slot[6]           0           0        0.00 
+         23                          write_slot[5]           0           0        0.00 
+         23                          write_slot[4]           0           0        0.00 
+         23                          write_slot[3]           0           0        0.00 
+         23                         write_slot[31]           0           0        0.00 
+         23                         write_slot[30]           0           0        0.00 
+         23                          write_slot[2]           0           0        0.00 
+         23                         write_slot[29]           0           0        0.00 
+         23                         write_slot[28]           0           0        0.00 
+         23                         write_slot[27]           0           0        0.00 
+         23                         write_slot[26]           0           0        0.00 
+         23                         write_slot[25]           0           0        0.00 
+         23                         write_slot[24]           0           0        0.00 
+         23                         write_slot[23]           0           0        0.00 
+         23                         write_slot[22]           0           0        0.00 
+         23                         write_slot[21]           0           0        0.00 
+         23                         write_slot[20]           0           0        0.00 
+         23                          write_slot[1]           0           0        0.00 
+         23                         write_slot[19]           0           0        0.00 
+         23                         write_slot[18]           0           0        0.00 
+         23                         write_slot[17]           0           0        0.00 
+         23                         write_slot[16]           0           0        0.00 
+         23                         write_slot[15]           0           0        0.00 
+         23                         write_slot[14]           0           0        0.00 
+         23                         write_slot[13]           0           0        0.00 
+         23                         write_slot[12]           0           0        0.00 
+         23                         write_slot[11]           0           0        0.00 
+         23                         write_slot[10]           0           0        0.00 
+         23                          write_slot[0]           0           0        0.00 
+         24                           read_slot[9]           0           0        0.00 
+         24                           read_slot[8]           0           0        0.00 
+         24                           read_slot[7]           0           0        0.00 
+         24                           read_slot[6]           0           0        0.00 
+         24                           read_slot[5]           0           0        0.00 
+         24                           read_slot[4]           0           0        0.00 
+         24                           read_slot[3]           0           0        0.00 
+         24                          read_slot[31]           0           0        0.00 
+         24                          read_slot[30]           0           0        0.00 
+         24                           read_slot[2]           0           0        0.00 
+         24                          read_slot[29]           0           0        0.00 
+         24                          read_slot[28]           0           0        0.00 
+         24                          read_slot[27]           0           0        0.00 
+         24                          read_slot[26]           0           0        0.00 
+         24                          read_slot[25]           0           0        0.00 
+         24                          read_slot[24]           0           0        0.00 
+         24                          read_slot[23]           0           0        0.00 
+         24                          read_slot[22]           0           0        0.00 
+         24                          read_slot[21]           0           0        0.00 
+         24                          read_slot[20]           0           0        0.00 
+         24                           read_slot[1]           0           0        0.00 
+         24                          read_slot[19]           0           0        0.00 
+         24                          read_slot[18]           0           0        0.00 
+         24                          read_slot[17]           0           0        0.00 
+         24                          read_slot[16]           0           0        0.00 
+         24                          read_slot[15]           0           0        0.00 
+         24                          read_slot[14]           0           0        0.00 
+         24                          read_slot[13]           0           0        0.00 
+         24                          read_slot[12]           0           0        0.00 
+         24                          read_slot[11]           0           0        0.00 
+         24                          read_slot[10]           0           0        0.00 
+         24                           read_slot[0]           0           0        0.00 
+
+Total Node Count     =        206 
+Toggled Node Count   =         18 
+Untoggled Node Count =        188 
+
+Toggle Coverage      =       12.1% (50 of 412 bins)
+
+=================================================================================
+=== File: ../rtl/hash_engine.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                            6         6         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/hash_engine.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module hash_engine #(
+    4                                                    parameter int DATA = 32,
+    5                                                    parameter int HASH = 24,
+    6                                                    parameter int BIT_COUNT = 9_600_000
+    7                                                ) (
+    8                                                    input  logic [DATA-1:0] id_data,
+    9                                                    output logic [HASH-1:0] index1,
+    10                                                   output logic [HASH-1:0] index2,
+    11                                                   output logic [HASH-1:0] index3,
+    12                                                   output logic [HASH-1:0] index4
+    13                                               );
+    14                                                   
+    15                                                   parameter int BANK_COUNT = 4;
+    16                                                   parameter int BANK_BITS  = BIT_COUNT / BANK_COUNT;
+    17                                               
+    18                                                   logic [31:0] mix;
+    19                                                   logic [HASH-1:0] hash1, hash2, hash3, hash4;
+    20                                               
+    21              1                          3         always_comb begin
+    22              1                          3             mix = id_data ^ (id_data >> 16);
+    23              1                          3             hash1 = (mix + (mix << 3) + (mix >> 5) + 32'h1234_5678) % BANK_BITS;
+    24              1                          3             hash2 = (mix ^ (mix << 7) ^ ((mix >> 2) + 32'h8765_4321)) % BANK_BITS;
+    25              1                          3             hash3 = ((mix + (mix << 4)) ^ ((mix >> 9) + 32'h9E37_79B9)) % BANK_BITS;
+    26              1                          3             hash4 = (mix ^ ((mix << 5) + (mix >> 3) + 32'hDEAD_BEEF)) % BANK_BITS;
+    27                                                   end
+    28                                               
+    29              1                        ESP         assign index1 = hash1;
+    30              1                        ESP         assign index2 = hash2;
+    31              1                        ESP         assign index3 = hash3;
+    32              1                        ESP         assign index4 = hash4;
+    33                                                   
+    34                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         0         0         0     100.0
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    288        70       218      24.3
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/hash_engine.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+          8                             id_data[9]           0           0        0.00 
+          8                             id_data[8]           0           0        0.00 
+          8                             id_data[7]           0           0        0.00 
+          8                             id_data[6]           0           1       50.00 
+          8                             id_data[5]           0           1       50.00 
+          8                             id_data[4]           0           0        0.00 
+          8                             id_data[3]           0           1       50.00 
+          8                            id_data[31]           0           0        0.00 
+          8                            id_data[30]           0           0        0.00 
+          8                             id_data[2]           0           0        0.00 
+          8                            id_data[29]           0           0        0.00 
+          8                            id_data[28]           0           1       50.00 
+          8                            id_data[27]           0           0        0.00 
+          8                            id_data[26]           0           0        0.00 
+          8                            id_data[25]           0           1       50.00 
+          8                            id_data[24]           0           1       50.00 
+          8                            id_data[23]           0           0        0.00 
+          8                            id_data[22]           0           1       50.00 
+          8                            id_data[21]           0           0        0.00 
+          8                            id_data[20]           0           1       50.00 
+          8                             id_data[1]           0           0        0.00 
+          8                            id_data[19]           0           0        0.00 
+          8                            id_data[18]           0           1       50.00 
+          8                            id_data[17]           0           1       50.00 
+          8                            id_data[16]           0           1       50.00 
+          8                            id_data[15]           0           0        0.00 
+          8                            id_data[14]           0           0        0.00 
+          8                            id_data[13]           0           1       50.00 
+          8                            id_data[12]           0           0        0.00 
+          8                            id_data[11]           0           0        0.00 
+          8                            id_data[10]           0           1       50.00 
+          8                             id_data[0]           0           0        0.00 
+          9                              index1[9]           1           0       50.00 
+          9                              index1[8]           0           1       50.00 
+          9                              index1[7]           0           0        0.00 
+          9                              index1[6]           0           0        0.00 
+          9                              index1[5]           0           0        0.00 
+          9                              index1[4]           1           0       50.00 
+          9                              index1[3]           0           0        0.00 
+          9                              index1[2]           0           0        0.00 
+          9                              index1[1]           0           0        0.00 
+          9                              index1[0]           0           0        0.00 
+         10                              index2[9]           1           0       50.00 
+         10                              index2[8]           1           0       50.00 
+         10                              index2[7]           0           0        0.00 
+         10                              index2[6]           0           1       50.00 
+         10                              index2[5]           1           0       50.00 
+         10                              index2[4]           0           0        0.00 
+         10                              index2[3]           0           1       50.00 
+         10                              index2[2]           0           1       50.00 
+         10                              index2[1]           0           1       50.00 
+         10                              index2[0]           0           0        0.00 
+         11                              index3[9]           0           1       50.00 
+         11                              index3[8]           1           0       50.00 
+         11                              index3[7]           1           0       50.00 
+         11                              index3[6]           0           1       50.00 
+         11                              index3[5]           0           0        0.00 
+         11                              index3[4]           0           0        0.00 
+         11                              index3[3]           0           0        0.00 
+         11                              index3[2]           0           0        0.00 
+         11                              index3[1]           0           1       50.00 
+         11                              index3[0]           0           0        0.00 
+         12                              index4[9]           0           0        0.00 
+         12                              index4[8]           0           0        0.00 
+         12                              index4[7]           0           0        0.00 
+         12                              index4[6]           1           0       50.00 
+         12                              index4[5]           1           0       50.00 
+         12                              index4[4]           0           0        0.00 
+         12                              index4[3]           0           0        0.00 
+         12                              index4[2]           1           0       50.00 
+         12                              index4[1]           1           0       50.00 
+         12                              index4[0]           0           0        0.00 
+         18                                 mix[9]           0           1       50.00 
+         18                                 mix[8]           0           1       50.00 
+         18                                 mix[7]           0           0        0.00 
+         18                                 mix[6]           0           0        0.00 
+         18                                 mix[5]           0           1       50.00 
+         18                                 mix[4]           0           1       50.00 
+         18                                 mix[3]           0           1       50.00 
+         18                                mix[31]           0           0        0.00 
+         18                                mix[30]           0           0        0.00 
+         18                                 mix[2]           0           1       50.00 
+         18                                mix[29]           0           0        0.00 
+         18                                mix[28]           0           1       50.00 
+         18                                mix[27]           0           0        0.00 
+         18                                mix[26]           0           0        0.00 
+         18                                mix[25]           0           1       50.00 
+         18                                mix[24]           0           1       50.00 
+         18                                mix[23]           0           0        0.00 
+         18                                mix[22]           0           1       50.00 
+         18                                mix[21]           0           0        0.00 
+         18                                mix[20]           0           1       50.00 
+         18                                 mix[1]           0           1       50.00 
+         18                                mix[19]           0           0        0.00 
+         18                                mix[18]           0           1       50.00 
+         18                                mix[17]           0           1       50.00 
+         18                                mix[16]           0           1       50.00 
+         18                                mix[15]           0           0        0.00 
+         18                                mix[14]           0           0        0.00 
+         18                                mix[13]           0           1       50.00 
+         18                                mix[12]           0           1       50.00 
+         18                                mix[11]           0           0        0.00 
+         18                                mix[10]           0           1       50.00 
+         18                                 mix[0]           0           1       50.00 
+         19                               hash4[9]           0           0        0.00 
+         19                               hash4[8]           0           0        0.00 
+         19                               hash4[7]           0           0        0.00 
+         19                               hash4[6]           1           0       50.00 
+         19                               hash4[5]           1           0       50.00 
+         19                               hash4[4]           0           0        0.00 
+         19                               hash4[3]           0           0        0.00 
+         19                               hash4[2]           1           0       50.00 
+         19                               hash4[1]           1           0       50.00 
+         19                               hash4[0]           0           0        0.00 
+         19                               hash3[9]           0           1       50.00 
+         19                               hash3[8]           1           0       50.00 
+         19                               hash3[7]           1           0       50.00 
+         19                               hash3[6]           0           1       50.00 
+         19                               hash3[5]           0           0        0.00 
+         19                               hash3[4]           0           0        0.00 
+         19                               hash3[3]           0           0        0.00 
+         19                               hash3[2]           0           0        0.00 
+         19                               hash3[1]           0           1       50.00 
+         19                               hash3[0]           0           0        0.00 
+         19                               hash2[9]           1           0       50.00 
+         19                               hash2[8]           1           0       50.00 
+         19                               hash2[7]           0           0        0.00 
+         19                               hash2[6]           0           1       50.00 
+         19                               hash2[5]           1           0       50.00 
+         19                               hash2[4]           0           0        0.00 
+         19                               hash2[3]           0           1       50.00 
+         19                               hash2[2]           0           1       50.00 
+         19                               hash2[1]           0           1       50.00 
+         19                               hash2[0]           0           0        0.00 
+         19                               hash1[9]           1           0       50.00 
+         19                               hash1[8]           0           1       50.00 
+         19                               hash1[7]           0           0        0.00 
+         19                               hash1[6]           0           0        0.00 
+         19                               hash1[5]           0           0        0.00 
+         19                               hash1[4]           1           0       50.00 
+         19                               hash1[3]           0           0        0.00 
+         19                               hash1[2]           0           0        0.00 
+         19                               hash1[1]           0           0        0.00 
+         19                               hash1[0]           0           0        0.00 
+
+Total Node Count     =        144 
+Toggled Node Count   =          0 
+Untoggled Node Count =        144 
+
+Toggle Coverage      =       24.3% (70 of 288 bins)
+
+=================================================================================
+=== File: ../rtl/metro_card_top.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                            1         1         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/metro_card_top.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module metro_card_top #(
+    4                                                    parameter int ADDR = 8,
+    5                                                    parameter int DATA = 32,
+    6                                                    parameter int HASH = 24,
+    7                                                    parameter int BIT_COUNT = 9_600_000,
+    8                                                    parameter int FALLBACK_DEPTH = 16,
+    9                                                    parameter logic [ADDR-1:0] FALLBACK_BASE_ADDR = 8'h10
+    10                                               ) (
+    11                                                   input  logic             PCLK,
+    12                                                   input  logic             PRESETN,
+    13                                                   input  logic             PSEL,
+    14                                                   input  logic             PWRITE,
+    15                                                   input  logic             PENABLE,
+    16                                                   input  logic [ADDR-1:0]  PADDR,
+    17                                                   input  logic [DATA-1:0]  PWDATA,
+    18                                                   output logic [DATA-1:0]  PRDATA,
+    19                                                   output logic             PREADY
+    20                                               );
+    21                                               	
+    22                                                   logic [DATA-1:0] id_data;
+    23                                                   logic start, mode, match, fallback_hit, fallback_match, done;
+    24                                                   logic program_done, clear_done;
+    25                                                   logic [DATA-1:0] programmed_id;
+    26                                                   logic [DATA-1:0] fallback_rdata;
+    27                                                   logic [HASH-1:0] index1, index2, index3, index4;
+    28                                                   logic wr_en, rd_en;
+    29                                               
+    30              1                         12         assign clear_done = wr_en && (PADDR == 8'h04) && PWDATA[0];
+    31                                               
+    32                                                   apb_slave apb_dut (
+    33                                                       .PSEL			(PSEL),
+    34                                               		.PWRITE			(PWRITE),
+    35                                               		.PENABLE		(PENABLE),
+    36                                               		.PREADY		(PREADY),
+    37                                                       .wr_en			(wr_en),
+    38                                               		.rd_en			(rd_en)
+    39                                                   );
+    40                                               
+    41                                                   hash_engine #( 
+    42                                               		.DATA			(DATA),
+    43                                               		.HASH			(HASH),
+    44                                               		.BIT_COUNT		(BIT_COUNT)
+    45                                               	) hash_engine_dut (
+    46                                                       .id_data		(id_data),
+    47                                               		.index1			(index1),
+    48                                               		.index2			(index2),
+    49                                                       .index3			(index3),
+    50                                               		.index4			(index4)
+    51                                                   );
+    52                                               
+    53                                                   fallback_lookup #(
+    54                                                       .ADDR			(ADDR),
+    55                                               		.DATA			(DATA),
+    56                                               		.DEPTH			(FALLBACK_DEPTH),
+    57                                               		.BASE_ADDR		(FALLBACK_BASE_ADDR)
+    58                                                   ) fallback_lookup_dut (
+    59                                                       .PCLK			(PCLK),
+    60                                               		.PRESETN		(PRESETN),
+    61                                               		.wr_en			(wr_en),
+    62                                               		.rd_en			(rd_en),
+    63                                                       .program_done	(program_done),
+    64                                                       .PADDR			(PADDR),
+    65                                               		.PWDATA			(PWDATA),
+    66                                               		.id_data		(id_data),
+    67                                                       .programmed_id	(programmed_id),
+    68                                               		.hit			(fallback_hit),
+    69                                               		.read_data		(fallback_rdata)
+    70                                                   );
+    71                                               
+    72                                                   register #(
+    73                                               		.ADDR			(ADDR),
+    74                                               		.DATA			(DATA)
+    75                                               	) reg_dut (
+    76                                                       .PCLK			(PCLK),
+    77                                               		.PRESETN		(PRESETN),
+    78                                               		.wr_en			(wr_en),
+    79                                               		.rd_en			(rd_en),
+    80                                                       .PADDR			(PADDR),
+    81                                               		.PWDATA			(PWDATA),
+    82                                               		.PRDATA			(PRDATA),
+    83                                               		.id_data		(id_data),
+    84                                                       .start			(start),
+    85                                               		.mode			(mode),
+    86                                               		.match			(match),
+    87                                               		.fallback_match	(fallback_match),
+    88                                                       .done			(done),
+    89                                               		.fallback_rdata	(fallback_rdata)
+    90                                                   );
+    91                                               
+    92                                                   sram #(
+    93                                               		.DATA			(DATA),
+    94                                               		.HASH			(HASH),
+    95                                               		.BIT_COUNT		(BIT_COUNT)
+    96                                               	) sram_dut (
+    97                                                       .PCLK			(PCLK),
+    98                                               		.PRESETN		(PRESETN),
+    99                                               		.start			(start),
+    100                                              		.mode			(mode),
+    101                                                      .id_data		(id_data),
+    102                                              		.index1			(index1),
+    103                                              		.index2			(index2),
+    104                                                      .index3			(index3),
+    105                                              		.index4			(index4),
+    106                                              		.fallback_hit	(fallback_hit),
+    107                                                      .clear_done		(clear_done),
+    108                                              		.match			(match),
+    109                                              		.fallback_match	(fallback_match),
+    110                                              		.done			(done),
+    111                                                      .program_done	(program_done),
+    112                                                      .programmed_id	(programmed_id)
+    113                                                  );
+    114                                              	
+    115                                              endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         0         0         0     100.0
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             3         0         3       0.0
+
+================================Expression Details================================
+
+Expression Coverage for file ../rtl/metro_card_top.sv --
+
+----------------Focused Expression View-----------------
+Line       30 Item    1  ((wr_en && (PADDR == 4)) && PWDATA[0])
+Expression totals: 0 of 3 input terms covered = 0.0%
+
+    Input Term   Covered  Reason for no coverage   Hint
+   -----------  --------  -----------------------  --------------
+         wr_en         N  '_1' not hit             Hit '_1'
+  (PADDR == 4)         N  '_1' not hit             Hit '_1'
+     PWDATA[0]         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  wr_en_0               -                             
+  Row   2:    ***0***  wr_en_1               (PWDATA[0] && (PADDR == 4))   
+  Row   3:          1  (PADDR == 4)_0        wr_en                         
+  Row   4:    ***0***  (PADDR == 4)_1        (PWDATA[0] && wr_en)          
+  Row   5:          1  PWDATA[0]_0           (wr_en && (PADDR == 4))       
+  Row   6:    ***0***  PWDATA[0]_1           (wr_en && (PADDR == 4))       
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    448       105       343      23.4
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/metro_card_top.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+         12                                PRESETN           0           1       50.00 
+         16                               PADDR[7]           0           0        0.00 
+         16                               PADDR[6]           0           0        0.00 
+         16                               PADDR[5]           0           0        0.00 
+         16                               PADDR[4]           0           0        0.00 
+         16                               PADDR[3]           0           0        0.00 
+         16                               PADDR[1]           0           0        0.00 
+         16                               PADDR[0]           0           0        0.00 
+         17                              PWDATA[9]           0           0        0.00 
+         17                              PWDATA[8]           0           0        0.00 
+         17                              PWDATA[7]           0           0        0.00 
+         17                              PWDATA[4]           0           0        0.00 
+         17                             PWDATA[31]           0           0        0.00 
+         17                             PWDATA[30]           0           0        0.00 
+         17                              PWDATA[2]           0           0        0.00 
+         17                             PWDATA[29]           0           0        0.00 
+         17                             PWDATA[27]           0           0        0.00 
+         17                             PWDATA[26]           0           0        0.00 
+         17                             PWDATA[23]           0           0        0.00 
+         17                             PWDATA[21]           0           0        0.00 
+         17                             PWDATA[19]           0           0        0.00 
+         17                             PWDATA[15]           0           0        0.00 
+         17                             PWDATA[14]           0           0        0.00 
+         17                             PWDATA[12]           0           0        0.00 
+         17                             PWDATA[11]           0           0        0.00 
+         17                              PWDATA[0]           0           0        0.00 
+         18                              PRDATA[9]           0           0        0.00 
+         18                              PRDATA[8]           0           0        0.00 
+         18                              PRDATA[7]           0           0        0.00 
+         18                              PRDATA[4]           0           0        0.00 
+         18                             PRDATA[31]           0           0        0.00 
+         18                             PRDATA[30]           0           0        0.00 
+         18                              PRDATA[2]           0           0        0.00 
+         18                             PRDATA[29]           0           0        0.00 
+         18                             PRDATA[27]           0           0        0.00 
+         18                             PRDATA[26]           0           0        0.00 
+         18                             PRDATA[23]           0           0        0.00 
+         18                             PRDATA[21]           0           0        0.00 
+         18                              PRDATA[1]           0           1       50.00 
+         18                             PRDATA[19]           0           0        0.00 
+         18                             PRDATA[15]           0           0        0.00 
+         18                             PRDATA[14]           0           0        0.00 
+         18                             PRDATA[12]           0           0        0.00 
+         18                             PRDATA[11]           0           0        0.00 
+         18                              PRDATA[0]           0           0        0.00 
+         22                             id_data[9]           0           0        0.00 
+         22                             id_data[8]           0           0        0.00 
+         22                             id_data[7]           0           0        0.00 
+         22                             id_data[6]           0           1       50.00 
+         22                             id_data[5]           0           1       50.00 
+         22                             id_data[4]           0           0        0.00 
+         22                             id_data[3]           0           1       50.00 
+         22                            id_data[31]           0           0        0.00 
+         22                            id_data[30]           0           0        0.00 
+         22                             id_data[2]           0           0        0.00 
+         22                            id_data[29]           0           0        0.00 
+         22                            id_data[28]           0           1       50.00 
+         22                            id_data[27]           0           0        0.00 
+         22                            id_data[26]           0           0        0.00 
+         22                            id_data[25]           0           1       50.00 
+         22                            id_data[24]           0           1       50.00 
+         22                            id_data[23]           0           0        0.00 
+         22                            id_data[22]           0           1       50.00 
+         22                            id_data[21]           0           0        0.00 
+         22                            id_data[20]           0           1       50.00 
+         22                             id_data[1]           0           0        0.00 
+         22                            id_data[19]           0           0        0.00 
+         22                            id_data[18]           0           1       50.00 
+         22                            id_data[17]           0           1       50.00 
+         22                            id_data[16]           0           1       50.00 
+         22                            id_data[15]           0           0        0.00 
+         22                            id_data[14]           0           0        0.00 
+         22                            id_data[13]           0           1       50.00 
+         22                            id_data[12]           0           0        0.00 
+         22                            id_data[11]           0           0        0.00 
+         22                            id_data[10]           0           1       50.00 
+         22                             id_data[0]           0           0        0.00 
+         23                                  start           0           0        0.00 
+         23                                   mode           0           1       50.00 
+         23                                  match           0           0        0.00 
+         23                         fallback_match           0           0        0.00 
+         23                           fallback_hit           0           0        0.00 
+         23                                   done           0           0        0.00 
+         24                           program_done           0           0        0.00 
+         24                             clear_done           0           0        0.00 
+         25                       programmed_id[9]           0           0        0.00 
+         25                       programmed_id[8]           0           0        0.00 
+         25                       programmed_id[7]           0           0        0.00 
+         25                       programmed_id[6]           0           0        0.00 
+         25                       programmed_id[5]           0           0        0.00 
+         25                       programmed_id[4]           0           0        0.00 
+         25                       programmed_id[3]           0           0        0.00 
+         25                      programmed_id[31]           0           0        0.00 
+         25                      programmed_id[30]           0           0        0.00 
+         25                       programmed_id[2]           0           0        0.00 
+         25                      programmed_id[29]           0           0        0.00 
+         25                      programmed_id[28]           0           0        0.00 
+         25                      programmed_id[27]           0           0        0.00 
+         25                      programmed_id[26]           0           0        0.00 
+         25                      programmed_id[25]           0           0        0.00 
+         25                      programmed_id[24]           0           0        0.00 
+         25                      programmed_id[23]           0           0        0.00 
+         25                      programmed_id[22]           0           0        0.00 
+         25                      programmed_id[21]           0           0        0.00 
+         25                      programmed_id[20]           0           0        0.00 
+         25                       programmed_id[1]           0           0        0.00 
+         25                      programmed_id[19]           0           0        0.00 
+         25                      programmed_id[18]           0           0        0.00 
+         25                      programmed_id[17]           0           0        0.00 
+         25                      programmed_id[16]           0           0        0.00 
+         25                      programmed_id[15]           0           0        0.00 
+         25                      programmed_id[14]           0           0        0.00 
+         25                      programmed_id[13]           0           0        0.00 
+         25                      programmed_id[12]           0           0        0.00 
+         25                      programmed_id[11]           0           0        0.00 
+         25                      programmed_id[10]           0           0        0.00 
+         25                       programmed_id[0]           0           0        0.00 
+         26                      fallback_rdata[9]           0           0        0.00 
+         26                      fallback_rdata[8]           0           0        0.00 
+         26                      fallback_rdata[7]           0           0        0.00 
+         26                      fallback_rdata[6]           0           0        0.00 
+         26                      fallback_rdata[5]           0           0        0.00 
+         26                      fallback_rdata[4]           0           0        0.00 
+         26                      fallback_rdata[3]           0           0        0.00 
+         26                     fallback_rdata[31]           0           0        0.00 
+         26                     fallback_rdata[30]           0           0        0.00 
+         26                      fallback_rdata[2]           0           0        0.00 
+         26                     fallback_rdata[29]           0           0        0.00 
+         26                     fallback_rdata[28]           0           0        0.00 
+         26                     fallback_rdata[27]           0           0        0.00 
+         26                     fallback_rdata[26]           0           0        0.00 
+         26                     fallback_rdata[25]           0           0        0.00 
+         26                     fallback_rdata[24]           0           0        0.00 
+         26                     fallback_rdata[23]           0           0        0.00 
+         26                     fallback_rdata[22]           0           0        0.00 
+         26                     fallback_rdata[21]           0           0        0.00 
+         26                     fallback_rdata[20]           0           0        0.00 
+         26                      fallback_rdata[1]           0           0        0.00 
+         26                     fallback_rdata[19]           0           0        0.00 
+         26                     fallback_rdata[18]           0           0        0.00 
+         26                     fallback_rdata[17]           0           0        0.00 
+         26                     fallback_rdata[16]           0           0        0.00 
+         26                     fallback_rdata[15]           0           0        0.00 
+         26                     fallback_rdata[14]           0           0        0.00 
+         26                     fallback_rdata[13]           0           0        0.00 
+         26                     fallback_rdata[12]           0           0        0.00 
+         26                     fallback_rdata[11]           0           0        0.00 
+         26                     fallback_rdata[10]           0           0        0.00 
+         26                      fallback_rdata[0]           0           0        0.00 
+         27                              index4[9]           0           0        0.00 
+         27                              index4[8]           0           0        0.00 
+         27                              index4[7]           0           0        0.00 
+         27                              index4[6]           1           0       50.00 
+         27                              index4[5]           1           0       50.00 
+         27                              index4[4]           0           0        0.00 
+         27                              index4[3]           0           0        0.00 
+         27                              index4[2]           1           0       50.00 
+         27                              index4[1]           1           0       50.00 
+         27                              index4[0]           0           0        0.00 
+         27                              index3[9]           0           1       50.00 
+         27                              index3[8]           1           0       50.00 
+         27                              index3[7]           1           0       50.00 
+         27                              index3[6]           0           1       50.00 
+         27                              index3[5]           0           0        0.00 
+         27                              index3[4]           0           0        0.00 
+         27                              index3[3]           0           0        0.00 
+         27                              index3[2]           0           0        0.00 
+         27                              index3[1]           0           1       50.00 
+         27                              index3[0]           0           0        0.00 
+         27                              index2[9]           1           0       50.00 
+         27                              index2[8]           1           0       50.00 
+         27                              index2[7]           0           0        0.00 
+         27                              index2[6]           0           1       50.00 
+         27                              index2[5]           1           0       50.00 
+         27                              index2[4]           0           0        0.00 
+         27                              index2[3]           0           1       50.00 
+         27                              index2[2]           0           1       50.00 
+         27                              index2[1]           0           1       50.00 
+         27                              index2[0]           0           0        0.00 
+         27                              index1[9]           1           0       50.00 
+         27                              index1[8]           0           1       50.00 
+         27                              index1[7]           0           0        0.00 
+         27                              index1[6]           0           0        0.00 
+         27                              index1[5]           0           0        0.00 
+         27                              index1[4]           1           0       50.00 
+         27                              index1[3]           0           0        0.00 
+         27                              index1[2]           0           0        0.00 
+         27                              index1[1]           0           0        0.00 
+         27                              index1[0]           0           0        0.00 
+
+Total Node Count     =        224 
+Toggled Node Count   =         35 
+Untoggled Node Count =        189 
+
+Toggle Coverage      =       23.4% (105 of 448 bins)
+
+=================================================================================
+=== File: ../rtl/register.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           14        12         2      85.7
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/register.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module register #(
+    4                                                    parameter int ADDR = 8,
+    5                                                    parameter int DATA = 32
+    6                                                ) (
+    7                                                    input  logic             PCLK,
+    8                                                    input  logic             PRESETN,
+    9                                                    input  logic             wr_en,
+    10                                                   input  logic             rd_en,
+    11                                                   input  logic [ADDR-1:0]  PADDR,
+    12                                                   input  logic [DATA-1:0]  PWDATA,
+    13                                                   output logic [DATA-1:0]  PRDATA,
+    14                                                   output logic [DATA-1:0]  id_data,
+    15                                                   output logic             start,
+    16                                                   output logic             mode,
+    17                                                   input  logic             match,
+    18                                                   input  logic             fallback_match,
+    19                                                   input  logic             done,
+    20                                                   input  logic [DATA-1:0]  fallback_rdata
+    21                                               );
+    22                                               
+    23                                                   parameter logic [ADDR-1:0] ID_REG = 'h00;
+    24                                                   parameter logic [ADDR-1:0] CTRL_REG = 'h04;
+    25                                                   parameter logic [ADDR-1:0] STAT_REG = 'h08;
+    26                                               
+    27              1                         10         always_ff @(posedge PCLK or negedge PRESETN) begin
+    28                                                       if (!PRESETN) begin
+    29              1                          2                 id_data <= '0;
+    30              1                          2                 start <= 1'b0;
+    31              1                          2                 mode <= 1'b0;
+    32                                                       end else begin
+    33              1                          8                 start <= 1'b0;
+    34                                                           if (wr_en) begin
+    35                                                               case (PADDR)
+    36              1                          1                         ID_REG: id_data <= PWDATA;
+    37                                                                   CTRL_REG: begin
+    38              1                          1                             start <= PWDATA[0];
+    39              1                          1                             mode <= PWDATA[1];
+    40                                                                   end
+    41                                                                   default: ;
+    42                                                               endcase
+    43                                                           end
+    44                                                       end
+    45                                                   end
+    46                                               
+    47              1                         14         always_comb begin
+    48              1                         14             PRDATA = '0;
+    49                                                       if (rd_en) begin
+    50                                                           case (PADDR)
+    51              1                          2                     ID_REG: PRDATA = id_data;
+    52              1                          1                     CTRL_REG: PRDATA = {{(DATA-2){1'b0}}, mode, start};
+    53              1                    ***0***                     STAT_REG: PRDATA = {{(DATA-3){1'b0}}, fallback_match, match, done};
+    54              1                    ***0***                     default: PRDATA = fallback_rdata;
+    55                                                           endcase
+    56                                                       end
+    57                                                   end
+    58                                               
+    59                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                        13        10         3      76.9
+
+================================Branch Details================================
+
+Branch Coverage for file ../rtl/register.sv --
+
+------------------------------------IF Branch------------------------------------
+    28                                        10     Count coming in to IF
+    28              1                          2             if (!PRESETN) begin
+    32              1                          8             end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    34                                         8     Count coming in to IF
+    34              1                          2                 if (wr_en) begin
+                                               6     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------CASE Branch------------------------------------
+    35                                         2     Count coming in to CASE
+    36              1                          1                         ID_REG: id_data <= PWDATA;
+    37              1                          1                         CTRL_REG: begin
+    41              1                    ***0***                         default: ;
+Branch totals: 2 hits of 3 branches = 66.6%
+
+------------------------------------IF Branch------------------------------------
+    49                                        14     Count coming in to IF
+    49              1                          3             if (rd_en) begin
+                                              11     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------CASE Branch------------------------------------
+    50                                         3     Count coming in to CASE
+    51              1                          2                     ID_REG: PRDATA = id_data;
+    52              1                          1                     CTRL_REG: PRDATA = {{(DATA-2){1'b0}}, mode, start};
+    53              1                    ***0***                     STAT_REG: PRDATA = {{(DATA-3){1'b0}}, fallback_match, match, done};
+    54              1                    ***0***                     default: PRDATA = fallback_rdata;
+Branch totals: 2 hits of 4 branches = 50.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             0         0         0     100.0
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    290        78       212      26.8
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/register.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+          8                                PRESETN           0           1       50.00 
+         11                               PADDR[7]           0           0        0.00 
+         11                               PADDR[6]           0           0        0.00 
+         11                               PADDR[5]           0           0        0.00 
+         11                               PADDR[4]           0           0        0.00 
+         11                               PADDR[3]           0           0        0.00 
+         11                               PADDR[1]           0           0        0.00 
+         11                               PADDR[0]           0           0        0.00 
+         12                              PWDATA[9]           0           0        0.00 
+         12                              PWDATA[8]           0           0        0.00 
+         12                              PWDATA[7]           0           0        0.00 
+         12                              PWDATA[4]           0           0        0.00 
+         12                             PWDATA[31]           0           0        0.00 
+         12                             PWDATA[30]           0           0        0.00 
+         12                              PWDATA[2]           0           0        0.00 
+         12                             PWDATA[29]           0           0        0.00 
+         12                             PWDATA[27]           0           0        0.00 
+         12                             PWDATA[26]           0           0        0.00 
+         12                             PWDATA[23]           0           0        0.00 
+         12                             PWDATA[21]           0           0        0.00 
+         12                             PWDATA[19]           0           0        0.00 
+         12                             PWDATA[15]           0           0        0.00 
+         12                             PWDATA[14]           0           0        0.00 
+         12                             PWDATA[12]           0           0        0.00 
+         12                             PWDATA[11]           0           0        0.00 
+         12                              PWDATA[0]           0           0        0.00 
+         13                              PRDATA[9]           0           0        0.00 
+         13                              PRDATA[8]           0           0        0.00 
+         13                              PRDATA[7]           0           0        0.00 
+         13                              PRDATA[4]           0           0        0.00 
+         13                             PRDATA[31]           0           0        0.00 
+         13                             PRDATA[30]           0           0        0.00 
+         13                              PRDATA[2]           0           0        0.00 
+         13                             PRDATA[29]           0           0        0.00 
+         13                             PRDATA[27]           0           0        0.00 
+         13                             PRDATA[26]           0           0        0.00 
+         13                             PRDATA[23]           0           0        0.00 
+         13                             PRDATA[21]           0           0        0.00 
+         13                              PRDATA[1]           0           1       50.00 
+         13                             PRDATA[19]           0           0        0.00 
+         13                             PRDATA[15]           0           0        0.00 
+         13                             PRDATA[14]           0           0        0.00 
+         13                             PRDATA[12]           0           0        0.00 
+         13                             PRDATA[11]           0           0        0.00 
+         13                              PRDATA[0]           0           0        0.00 
+         14                             id_data[9]           0           0        0.00 
+         14                             id_data[8]           0           0        0.00 
+         14                             id_data[7]           0           0        0.00 
+         14                             id_data[6]           0           1       50.00 
+         14                             id_data[5]           0           1       50.00 
+         14                             id_data[4]           0           0        0.00 
+         14                             id_data[3]           0           1       50.00 
+         14                            id_data[31]           0           0        0.00 
+         14                            id_data[30]           0           0        0.00 
+         14                             id_data[2]           0           0        0.00 
+         14                            id_data[29]           0           0        0.00 
+         14                            id_data[28]           0           1       50.00 
+         14                            id_data[27]           0           0        0.00 
+         14                            id_data[26]           0           0        0.00 
+         14                            id_data[25]           0           1       50.00 
+         14                            id_data[24]           0           1       50.00 
+         14                            id_data[23]           0           0        0.00 
+         14                            id_data[22]           0           1       50.00 
+         14                            id_data[21]           0           0        0.00 
+         14                            id_data[20]           0           1       50.00 
+         14                             id_data[1]           0           0        0.00 
+         14                            id_data[19]           0           0        0.00 
+         14                            id_data[18]           0           1       50.00 
+         14                            id_data[17]           0           1       50.00 
+         14                            id_data[16]           0           1       50.00 
+         14                            id_data[15]           0           0        0.00 
+         14                            id_data[14]           0           0        0.00 
+         14                            id_data[13]           0           1       50.00 
+         14                            id_data[12]           0           0        0.00 
+         14                            id_data[11]           0           0        0.00 
+         14                            id_data[10]           0           1       50.00 
+         14                             id_data[0]           0           0        0.00 
+         15                                  start           0           0        0.00 
+         16                                   mode           0           1       50.00 
+         17                                  match           0           0        0.00 
+         18                         fallback_match           0           0        0.00 
+         19                                   done           0           0        0.00 
+         20                      fallback_rdata[9]           0           0        0.00 
+         20                      fallback_rdata[8]           0           0        0.00 
+         20                      fallback_rdata[7]           0           0        0.00 
+         20                      fallback_rdata[6]           0           0        0.00 
+         20                      fallback_rdata[5]           0           0        0.00 
+         20                      fallback_rdata[4]           0           0        0.00 
+         20                      fallback_rdata[3]           0           0        0.00 
+         20                     fallback_rdata[31]           0           0        0.00 
+         20                     fallback_rdata[30]           0           0        0.00 
+         20                      fallback_rdata[2]           0           0        0.00 
+         20                     fallback_rdata[29]           0           0        0.00 
+         20                     fallback_rdata[28]           0           0        0.00 
+         20                     fallback_rdata[27]           0           0        0.00 
+         20                     fallback_rdata[26]           0           0        0.00 
+         20                     fallback_rdata[25]           0           0        0.00 
+         20                     fallback_rdata[24]           0           0        0.00 
+         20                     fallback_rdata[23]           0           0        0.00 
+         20                     fallback_rdata[22]           0           0        0.00 
+         20                     fallback_rdata[21]           0           0        0.00 
+         20                     fallback_rdata[20]           0           0        0.00 
+         20                      fallback_rdata[1]           0           0        0.00 
+         20                     fallback_rdata[19]           0           0        0.00 
+         20                     fallback_rdata[18]           0           0        0.00 
+         20                     fallback_rdata[17]           0           0        0.00 
+         20                     fallback_rdata[16]           0           0        0.00 
+         20                     fallback_rdata[15]           0           0        0.00 
+         20                     fallback_rdata[14]           0           0        0.00 
+         20                     fallback_rdata[13]           0           0        0.00 
+         20                     fallback_rdata[12]           0           0        0.00 
+         20                     fallback_rdata[11]           0           0        0.00 
+         20                     fallback_rdata[10]           0           0        0.00 
+         20                      fallback_rdata[0]           0           0        0.00 
+
+Total Node Count     =        145 
+Toggled Node Count   =         31 
+Untoggled Node Count =        114 
+
+Toggle Coverage      =       26.8% (78 of 290 bins)
+
+=================================================================================
+=== File: ../rtl/sram.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           25        13        12      52.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/sram.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module sram #(
+    4                                                    parameter int DATA = 32,
+    5                                                    parameter int HASH = 24,
+    6                                                    parameter int BIT_COUNT = 9_600_000
+    7                                                ) (
+    8                                                    input  logic             PCLK,
+    9                                                    input  logic             PRESETN,
+    10                                                   input  logic             start,
+    11                                                   input  logic             mode,
+    12                                                   input  logic [DATA-1:0]  id_data,
+    13                                                   input  logic [HASH-1:0]  index1,
+    14                                                   input  logic [HASH-1:0]  index2,
+    15                                                   input  logic [HASH-1:0]  index3,
+    16                                                   input  logic [HASH-1:0]  index4,
+    17                                                   input  logic             fallback_hit,
+    18                                                   input  logic             clear_done,
+    19                                                   output logic             match,
+    20                                                   output logic             fallback_match,
+    21                                                   output logic             done,
+    22                                                   output logic             program_done,
+    23                                                   output logic [DATA-1:0]  programmed_id
+    24                                               );
+    25                                                   
+    26                                                   parameter int unsigned BANK_COUNT = 4;
+    27                                                   parameter int unsigned BANK_BITS = BIT_COUNT / BANK_COUNT;
+    28                                                   parameter int unsigned BANK_ADDR_WIDTH = $clog2(BANK_BITS);
+    29                                               
+    30                                                   logic bank0 [0:BANK_BITS-1];
+    31                                                   logic bank1 [0:BANK_BITS-1];
+    32                                                   logic bank2 [0:BANK_BITS-1];
+    33                                                   logic bank3 [0:BANK_BITS-1];
+    34                                               
+    35                                                   initial begin
+    36              1                          1             for (int unsigned init_idx = 0; init_idx < BANK_BITS; init_idx++) begin
+    36              2                       1024     
+    37              1                       1024                 bank0[init_idx] = 1'b0;
+    38              1                       1024                 bank1[init_idx] = 1'b0;
+    39              1                       1024                 bank2[init_idx] = 1'b0;
+    40              1                       1024                 bank3[init_idx] = 1'b0;
+    41                                                       end
+    42                                                   end
+    43                                               
+    44              1                          5         always @(posedge PCLK or negedge PRESETN) begin
+    45                                                       if (!PRESETN) begin
+    46              1                          2                 match <= 1'b0;
+    47              1                          2                 fallback_match <= 1'b0;
+    48              1                          2                 done <= 1'b0;
+    49              1                          2                 program_done <= 1'b0;
+    50              1                          2                 programmed_id <= '0;
+    51                                                       end else begin
+    52                                                           if (clear_done)
+    53              1                    ***0***                     done <= 1'b0;
+    54              1                          3                 program_done <= 1'b0;
+    55                                                           if (start) begin
+    56              1                    ***0***                     done <= 1'b1;
+    57                                                               if (mode) begin
+    58              1                    ***0***                         bank0[index1[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    59              1                    ***0***                         bank1[index2[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    60              1                    ***0***                         bank2[index3[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    61              1                    ***0***                         bank3[index4[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    62              1                    ***0***                         match <= 1'b0;
+    63              1                    ***0***                         fallback_match <= 1'b0;
+    64              1                    ***0***                         program_done <= 1'b1;
+    65              1                    ***0***                         programmed_id <= id_data;
+    66                                                               end else begin
+    67              1                    ***0***                         fallback_match <= fallback_hit;
+    68              1                    ***0***                         match <= (bank0[index1[BANK_ADDR_WIDTH-1:0]] & bank1[index2[BANK_ADDR_WIDTH-1:0]] & bank2[index3[BANK_ADDR_WIDTH-1:0]] & bank3[index4[BANK_ADDR_WIDTH-1:0]]) | fallback_hit;
+    69                                                               end
+    70                                                           end
+    71                                                       end
+    72                                                   end
+    73                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         8         4         4      50.0
+
+================================Branch Details================================
+
+Branch Coverage for file ../rtl/sram.sv --
+
+------------------------------------IF Branch------------------------------------
+    45                                         5     Count coming in to IF
+    45              1                          2             if (!PRESETN) begin
+    51              1                          3             end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    52                                         3     Count coming in to IF
+    52              1                    ***0***                 if (clear_done)
+                                               3     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    55                                         3     Count coming in to IF
+    55              1                    ***0***                 if (start) begin
+                                               3     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    57                                   ***0***     Count coming in to IF
+    57              1                    ***0***                     if (mode) begin
+    66              1                    ***0***                     end else begin
+Branch totals: 0 hits of 2 branches = 0.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             5         0         5       0.0
+
+================================Expression Details================================
+
+Expression Coverage for file ../rtl/sram.sv --
+
+----------------Focused Expression View-----------------
+Line       68 Item    1  ((((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4]) | fallback_hit)
+Expression totals: 0 of 5 input terms covered = 0.0%
+
+     Input Term   Covered  Reason for no coverage   Hint
+    -----------  --------  -----------------------  --------------
+  bank0[index1]         N  No hits                  Hit '_0' and '_1'
+  bank1[index2]         N  No hits                  Hit '_0' and '_1'
+  bank2[index3]         N  No hits                  Hit '_0' and '_1'
+  bank3[index4]         N  No hits                  Hit '_0' and '_1'
+   fallback_hit         N  No hits                  Hit '_0' and '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  bank0[index1]_0       (~fallback_hit && bank3[index4] && bank2[index3] && bank1[index2])
+  Row   2:    ***0***  bank0[index1]_1       (~fallback_hit && bank3[index4] && bank2[index3] && bank1[index2])
+  Row   3:    ***0***  bank1[index2]_0       (~fallback_hit && bank3[index4] && bank2[index3] && bank0[index1])
+  Row   4:    ***0***  bank1[index2]_1       (~fallback_hit && bank3[index4] && bank2[index3] && bank0[index1])
+  Row   5:    ***0***  bank2[index3]_0       (~fallback_hit && bank3[index4] && (bank0[index1] & bank1[index2]))
+  Row   6:    ***0***  bank2[index3]_1       (~fallback_hit && bank3[index4] && (bank0[index1] & bank1[index2]))
+  Row   7:    ***0***  bank3[index4]_0       (~fallback_hit && ((bank0[index1] & bank1[index2]) & bank2[index3]))
+  Row   8:    ***0***  bank3[index4]_1       (~fallback_hit && ((bank0[index1] & bank1[index2]) & bank2[index3]))
+  Row   9:    ***0***  fallback_hit_0        ~(((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4])
+ Row   10:    ***0***  fallback_hit_1        ~(((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4])
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                    228        36       192      15.7
+
+================================Toggle Details================================
+
+Toggle Coverage for File ../rtl/sram.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+          9                                PRESETN           0           1       50.00 
+         10                                  start           0           0        0.00 
+         11                                   mode           0           1       50.00 
+         12                             id_data[9]           0           0        0.00 
+         12                             id_data[8]           0           0        0.00 
+         12                             id_data[7]           0           0        0.00 
+         12                             id_data[6]           0           1       50.00 
+         12                             id_data[5]           0           1       50.00 
+         12                             id_data[4]           0           0        0.00 
+         12                             id_data[3]           0           1       50.00 
+         12                            id_data[31]           0           0        0.00 
+         12                            id_data[30]           0           0        0.00 
+         12                             id_data[2]           0           0        0.00 
+         12                            id_data[29]           0           0        0.00 
+         12                            id_data[28]           0           1       50.00 
+         12                            id_data[27]           0           0        0.00 
+         12                            id_data[26]           0           0        0.00 
+         12                            id_data[25]           0           1       50.00 
+         12                            id_data[24]           0           1       50.00 
+         12                            id_data[23]           0           0        0.00 
+         12                            id_data[22]           0           1       50.00 
+         12                            id_data[21]           0           0        0.00 
+         12                            id_data[20]           0           1       50.00 
+         12                             id_data[1]           0           0        0.00 
+         12                            id_data[19]           0           0        0.00 
+         12                            id_data[18]           0           1       50.00 
+         12                            id_data[17]           0           1       50.00 
+         12                            id_data[16]           0           1       50.00 
+         12                            id_data[15]           0           0        0.00 
+         12                            id_data[14]           0           0        0.00 
+         12                            id_data[13]           0           1       50.00 
+         12                            id_data[12]           0           0        0.00 
+         12                            id_data[11]           0           0        0.00 
+         12                            id_data[10]           0           1       50.00 
+         12                             id_data[0]           0           0        0.00 
+         13                              index1[9]           1           0       50.00 
+         13                              index1[8]           0           1       50.00 
+         13                              index1[7]           0           0        0.00 
+         13                              index1[6]           0           0        0.00 
+         13                              index1[5]           0           0        0.00 
+         13                              index1[4]           1           0       50.00 
+         13                              index1[3]           0           0        0.00 
+         13                              index1[2]           0           0        0.00 
+         13                              index1[1]           0           0        0.00 
+         13                              index1[0]           0           0        0.00 
+         14                              index2[9]           1           0       50.00 
+         14                              index2[8]           1           0       50.00 
+         14                              index2[7]           0           0        0.00 
+         14                              index2[6]           0           1       50.00 
+         14                              index2[5]           1           0       50.00 
+         14                              index2[4]           0           0        0.00 
+         14                              index2[3]           0           1       50.00 
+         14                              index2[2]           0           1       50.00 
+         14                              index2[1]           0           1       50.00 
+         14                              index2[0]           0           0        0.00 
+         15                              index3[9]           0           1       50.00 
+         15                              index3[8]           1           0       50.00 
+         15                              index3[7]           1           0       50.00 
+         15                              index3[6]           0           1       50.00 
+         15                              index3[5]           0           0        0.00 
+         15                              index3[4]           0           0        0.00 
+         15                              index3[3]           0           0        0.00 
+         15                              index3[2]           0           0        0.00 
+         15                              index3[1]           0           1       50.00 
+         15                              index3[0]           0           0        0.00 
+         16                              index4[9]           0           0        0.00 
+         16                              index4[8]           0           0        0.00 
+         16                              index4[7]           0           0        0.00 
+         16                              index4[6]           1           0       50.00 
+         16                              index4[5]           1           0       50.00 
+         16                              index4[4]           0           0        0.00 
+         16                              index4[3]           0           0        0.00 
+         16                              index4[2]           1           0       50.00 
+         16                              index4[1]           1           0       50.00 
+         16                              index4[0]           0           0        0.00 
+         17                           fallback_hit           0           0        0.00 
+         18                             clear_done           0           0        0.00 
+         19                                  match           0           0        0.00 
+         20                         fallback_match           0           0        0.00 
+         21                                   done           0           0        0.00 
+         22                           program_done           0           0        0.00 
+         23                       programmed_id[9]           0           0        0.00 
+         23                       programmed_id[8]           0           0        0.00 
+         23                       programmed_id[7]           0           0        0.00 
+         23                       programmed_id[6]           0           0        0.00 
+         23                       programmed_id[5]           0           0        0.00 
+         23                       programmed_id[4]           0           0        0.00 
+         23                       programmed_id[3]           0           0        0.00 
+         23                      programmed_id[31]           0           0        0.00 
+         23                      programmed_id[30]           0           0        0.00 
+         23                       programmed_id[2]           0           0        0.00 
+         23                      programmed_id[29]           0           0        0.00 
+         23                      programmed_id[28]           0           0        0.00 
+         23                      programmed_id[27]           0           0        0.00 
+         23                      programmed_id[26]           0           0        0.00 
+         23                      programmed_id[25]           0           0        0.00 
+         23                      programmed_id[24]           0           0        0.00 
+         23                      programmed_id[23]           0           0        0.00 
+         23                      programmed_id[22]           0           0        0.00 
+         23                      programmed_id[21]           0           0        0.00 
+         23                      programmed_id[20]           0           0        0.00 
+         23                       programmed_id[1]           0           0        0.00 
+         23                      programmed_id[19]           0           0        0.00 
+         23                      programmed_id[18]           0           0        0.00 
+         23                      programmed_id[17]           0           0        0.00 
+         23                      programmed_id[16]           0           0        0.00 
+         23                      programmed_id[15]           0           0        0.00 
+         23                      programmed_id[14]           0           0        0.00 
+         23                      programmed_id[13]           0           0        0.00 
+         23                      programmed_id[12]           0           0        0.00 
+         23                      programmed_id[11]           0           0        0.00 
+         23                      programmed_id[10]           0           0        0.00 
+         23                       programmed_id[0]           0           0        0.00 
+
+Total Node Count     =        114 
+Toggled Node Count   =          1 
+Untoggled Node Count =        113 
+
+Toggle Coverage      =       15.7% (36 of 228 bins)
+
+COVERGROUP COVERAGE:
+-----------------------------------------------------------------------------------------------
+Covergroup                                             Metric       Goal    Status               
+                                                                                              
+-----------------------------------------------------------------------------------------------
+ TYPE /env_pkg/metro_scoreboard/operation_mode_cg        0.0%        100    ZERO                 
+    covered/total bins:                                     0          2                      
+    missing/total bins:                                     2          2                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint operation_mode_cg::cp_operation_mode 
+                                                         0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin query_mode                                      0          1    ZERO                 
+        bin program_mode                                    0          1    ZERO                 
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::operation_mode_cg  
+                                                         0.0%        100    ZERO                 
+    covered/total bins:                                     0          2                      
+    missing/total bins:                                     2          2                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint cp_operation_mode                         0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin query_mode                                      0          1    ZERO                 
+        bin program_mode                                    0          1    ZERO                 
+ TYPE /env_pkg/metro_scoreboard/fallback_slot_action_cg 
+                                                         0.0%        100    ZERO                 
+    covered/total bins:                                     0         14                      
+    missing/total bins:                                    14         14                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint fallback_slot_action_cg::cp_slot          0.0%        100    ZERO                 
+        covered/total bins:                                 0          3                      
+        missing/total bins:                                 3          3                      
+        % Hit:                                           0.0%        100                      
+        bin first_slot                                      0          1    ZERO                 
+        bin middle_slot                                     0          1    ZERO                 
+        bin last_slot                                       0          1    ZERO                 
+    Coverpoint fallback_slot_action_cg::cp_action        0.0%        100    ZERO                 
+        covered/total bins:                                 0          3                      
+        missing/total bins:                                 3          3                      
+        % Hit:                                           0.0%        100                      
+        bin insert_new                                      0          1    ZERO                 
+        bin overwrite                                       0          1    ZERO                 
+        bin clear                                           0          1    ZERO                 
+    Coverpoint fallback_slot_action_cg::cp_clear_vs_write 
+                                                         0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin write_or_overwrite                              0          1    ZERO                 
+        bin clear_slot                                      0          1    ZERO                 
+    Cross fallback_slot_action_cg::slot_x_action         0.0%        100    ZERO                 
+        covered/total bins:                                 0          6                      
+        missing/total bins:                                 6          6                      
+        % Hit:                                           0.0%        100                      
+        bin <first_slot,write_or_overwrite>                 0          1    ZERO                 
+        bin <middle_slot,write_or_overwrite>                0          1    ZERO                 
+        bin <last_slot,write_or_overwrite>                  0          1    ZERO                 
+        bin <first_slot,clear_slot>                         0          1    ZERO                 
+        bin <middle_slot,clear_slot>                        0          1    ZERO                 
+        bin <last_slot,clear_slot>                          0          1    ZERO                 
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::fallback_slot_action_cg  
+                                                         0.0%        100    ZERO                 
+    covered/total bins:                                     0         14                      
+    missing/total bins:                                    14         14                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint cp_slot                                   0.0%        100    ZERO                 
+        covered/total bins:                                 0          3                      
+        missing/total bins:                                 3          3                      
+        % Hit:                                           0.0%        100                      
+        bin first_slot                                      0          1    ZERO                 
+        bin middle_slot                                     0          1    ZERO                 
+        bin last_slot                                       0          1    ZERO                 
+    Coverpoint cp_action                                 0.0%        100    ZERO                 
+        covered/total bins:                                 0          3                      
+        missing/total bins:                                 3          3                      
+        % Hit:                                           0.0%        100                      
+        bin insert_new                                      0          1    ZERO                 
+        bin overwrite                                       0          1    ZERO                 
+        bin clear                                           0          1    ZERO                 
+    Coverpoint cp_clear_vs_write                         0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin write_or_overwrite                              0          1    ZERO                 
+        bin clear_slot                                      0          1    ZERO                 
+    Cross slot_x_action                                  0.0%        100    ZERO                 
+        covered/total bins:                                 0          6                      
+        missing/total bins:                                 6          6                      
+        % Hit:                                           0.0%        100                      
+        bin <first_slot,write_or_overwrite>                 0          1    ZERO                 
+        bin <middle_slot,write_or_overwrite>                0          1    ZERO                 
+        bin <last_slot,write_or_overwrite>                  0          1    ZERO                 
+        bin <first_slot,clear_slot>                         0          1    ZERO                 
+        bin <middle_slot,clear_slot>                        0          1    ZERO                 
+        bin <last_slot,clear_slot>                          0          1    ZERO                 
+ TYPE /env_pkg/metro_scoreboard/query_result_cg          0.0%        100    ZERO                 
+    covered/total bins:                                     0         11                      
+    missing/total bins:                                    11         11                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint query_result_cg::cp_expected_path         0.0%        100    ZERO                 
+        covered/total bins:                                 0          4                      
+        missing/total bins:                                 4          4                      
+        % Hit:                                           0.0%        100                      
+        bin no_match                                        0          1    ZERO                 
+        bin bloom_only                                      0          1    ZERO                 
+        bin fallback_only                                   0          1    ZERO                 
+        bin bloom_and_fallback                              0          1    ZERO                 
+    Coverpoint query_result_cg::cp_actual_match          0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin allowed                                         0          1    ZERO                 
+        bin blocked                                         0          1    ZERO                 
+    Coverpoint query_result_cg::cp_actual_fallback       0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin fallback_miss                                   0          1    ZERO                 
+        bin fallback_hit                                    0          1    ZERO                 
+    Coverpoint query_result_cg::cp_done                  0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin not_done                                 0               ZERO                 
+        bin done                                            0          1    ZERO                 
+    Coverpoint query_result_cg::cp_match_agreement       0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          0          1    ZERO                 
+    Coverpoint query_result_cg::cp_fallback_agreement 
+                                                         0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          0          1    ZERO                 
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::query_result_cg  
+                                                         0.0%        100    ZERO                 
+    covered/total bins:                                     0         11                      
+    missing/total bins:                                    11         11                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint cp_expected_path                          0.0%        100    ZERO                 
+        covered/total bins:                                 0          4                      
+        missing/total bins:                                 4          4                      
+        % Hit:                                           0.0%        100                      
+        bin no_match                                        0          1    ZERO                 
+        bin bloom_only                                      0          1    ZERO                 
+        bin fallback_only                                   0          1    ZERO                 
+        bin bloom_and_fallback                              0          1    ZERO                 
+    Coverpoint cp_actual_match                           0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin allowed                                         0          1    ZERO                 
+        bin blocked                                         0          1    ZERO                 
+    Coverpoint cp_actual_fallback                        0.0%        100    ZERO                 
+        covered/total bins:                                 0          2                      
+        missing/total bins:                                 2          2                      
+        % Hit:                                           0.0%        100                      
+        bin fallback_miss                                   0          1    ZERO                 
+        bin fallback_hit                                    0          1    ZERO                 
+    Coverpoint cp_done                                   0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin not_done                                 0               ZERO                 
+        bin done                                            0          1    ZERO                 
+    Coverpoint cp_match_agreement                        0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          0          1    ZERO                 
+    Coverpoint cp_fallback_agreement                     0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin disagrees                                0               ZERO                 
+        bin agrees                                          0          1    ZERO                 
+ TYPE /env_pkg/metro_scoreboard/idle_status_cg           0.0%        100    ZERO                 
+    covered/total bins:                                     0          1                      
+    missing/total bins:                                     1          1                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint idle_status_cg::cp_idle_status            0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin nonzero_status                           0               ZERO                 
+        bin zero_status                                     0          1    ZERO                 
+ CLASS metro_scoreboard
+ Covergroup instance \/env_pkg::metro_scoreboard::idle_status_cg  
+                                                         0.0%        100    ZERO                 
+    covered/total bins:                                     0          1                      
+    missing/total bins:                                     1          1                      
+    % Hit:                                               0.0%        100                      
+    Coverpoint cp_idle_status                            0.0%        100    ZERO                 
+        covered/total bins:                                 0          1                      
+        missing/total bins:                                 1          1                      
+        % Hit:                                           0.0%        100                      
+        ignore_bin nonzero_status                           0               ZERO                 
+        bin zero_status                                     0          1    ZERO                 
+
+TOTAL COVERGROUP COVERAGE: 0.0%  COVERGROUP TYPES: 4
+
+Total Coverage By File (code coverage only, filtered view): 38.4%
+
+End time: 10:16:26 on Nov 03,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

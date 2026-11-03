@@ -1,5 +1,5 @@
 QuestaSim-64 vcover 10.6d_1 Coverage Utility 2018.04 Apr 11 2018
-Start time: 00:25:27 on Nov 03,2026
+Start time: 10:16:52 on Nov 03,2026
 vcover report -details -codeAll -cvg log/IP_MERGE.ucdb 
 Coverage Report by file with details
 
@@ -94,7 +94,7 @@ Toggle Coverage      =      100.0% (12 of 12 bins)
 Statement Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Stmts                           17        17         0     100.0
+    Stmts                           21        20         1      95.2
 
 ================================Statement Details================================
 
@@ -112,119 +112,173 @@ Statement Coverage for file ../rtl/fallback_lookup.sv --
     10                                                   input  logic             PRESETN,
     11                                                   input  logic             wr_en,
     12                                                   input  logic             rd_en,
-    13                                                   input  logic [ADDR-1:0]  PADDR,
-    14                                                   input  logic [DATA-1:0]  PWDATA,
-    15                                                   input  logic [DATA-1:0]  id_data,
-    16                                                   output logic             hit,
-    17                                                   output logic [DATA-1:0]  read_data
-    18                                               );
-    19                                               	
-    20                                                   logic [DATA-1:0] entries [0:DEPTH-1];
-    21                                                   integer write_slot;
-    22                                                   integer read_slot;
-    23                                               
-    24                                                   function automatic integer slot_from_addr(input logic [ADDR-1:0] addr);
-    25                                                       integer offset;
-    26                                                       begin
-    27              1                      26272                 slot_from_addr = -1;
-    28                                                           if (addr >= BASE_ADDR) begin
-    29              1                        420                     offset = addr - BASE_ADDR;
-    30                                                               if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
-    31              1                        396                         slot_from_addr = offset / 4;
-    32                                                           end
-    33                                                       end
-    34                                                   endfunction
-    35                                               
-    36              1                      13136         always_comb begin
-    37              1                      13136             write_slot = slot_from_addr(PADDR);
-    38              1                      13136             read_slot = slot_from_addr(PADDR);
-    39              1                      13136             hit = 1'b0;
-    40              1                      13136             for (int unsigned k = 0; k < DEPTH; k++) begin
-    40              2                     210176     
-    41                                                           if ((id_data != '0) && (entries[k] == id_data))
-    42              1                        162                     hit = 1'b1;
-    43                                                       end
-    44              1                      13136             read_data = '0;
-    45                                                       if (rd_en && (read_slot >= 0))
-    46              1                         38                 read_data = entries[read_slot];
-    47                                                   end
-    48                                               
-    49              1                      11244         always_ff @(posedge PCLK or negedge PRESETN) begin
-    50                                                       if (!PRESETN) begin
-    51              1                         18                 for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
-    51              2                        288     
-    52              1                        288                     entries[reset_idx] <= '0;
-    53                                                       end else if (wr_en && (write_slot >= 0)) begin
-    54              1                         61                 entries[write_slot] <= PWDATA;
-    55                                                       end
-    56                                                   end
-    57                                               	
-    58                                               endmodule
+    13                                                   input  logic             program_done,
+    14                                                   input  logic [ADDR-1:0]  PADDR,
+    15                                                   input  logic [DATA-1:0]  PWDATA,
+    16                                                   input  logic [DATA-1:0]  id_data,
+    17                                                   input  logic [DATA-1:0]  programmed_id,
+    18                                                   output logic             hit,
+    19                                                   output logic [DATA-1:0]  read_data
+    20                                               );
+    21                                               	
+    22                                                   logic [DATA-1:0] entries [0:DEPTH-1];
+    23                                                   integer write_slot;
+    24                                                   integer read_slot;
+    25                                               
+    26                                                   function automatic integer slot_from_addr(input logic [ADDR-1:0] addr);
+    27                                                       integer offset;
+    28                                                       begin
+    29              1                      26272                 slot_from_addr = -1;
+    30                                                           if (addr >= BASE_ADDR) begin
+    31              1                        420                     offset = addr - BASE_ADDR;
+    32                                                               if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
+    33              1                        396                         slot_from_addr = offset / 4;
+    34                                                           end
+    35                                                       end
+    36                                                   endfunction
+    37                                               
+    38              1                      13136         always_comb begin
+    39              1                      13136             write_slot = slot_from_addr(PADDR);
+    40              1                      13136             read_slot = slot_from_addr(PADDR);
+    41              1                      13136             hit = 1'b0;
+    42              1                      13136             for (int unsigned k = 0; k < DEPTH; k++) begin
+    42              2                     210176     
+    43                                                           if ((id_data != '0) && (entries[k] == id_data))
+    44              1                        162                     hit = 1'b1;
+    45                                                       end
+    46              1                      13136             read_data = '0;
+    47                                                       if (rd_en && (read_slot >= 0))
+    48              1                         38                 read_data = entries[read_slot];
+    49                                                   end
+    50                                               
+    51              1                      12222         always_ff @(posedge PCLK or negedge PRESETN) begin
+    52                                                       if (!PRESETN) begin
+    53              1                         18                 for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
+    53              2                        288     
+    54              1                        288                     entries[reset_idx] <= '0;
+    55                                                       end else begin
+    56                                                           if (program_done && (programmed_id != '0)) begin
+    57              1                        489                     for (int clear_idx = 0; clear_idx < DEPTH; clear_idx++) begin
+    57              2                       7824     
+    58                                                                   if (entries[clear_idx] == programmed_id)
+    59              1                    ***0***                             entries[clear_idx] <= '0;
+    60                                                               end
+    61                                                           end
+    62                                                           if (wr_en && (write_slot >= 0)) begin
+    63                                                               if (PWDATA == '0) begin
+    64              1                         22                         entries[write_slot] <= '0;
+    65                                                               end else begin
+    66              1                         39                         entries[write_slot] <= PWDATA;
+    67                                                               end
+    68                                                           end
+    69                                                       end
+    70                                                   end
+    71                                               	
+    72                                               endmodule
 
 Branch Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Branches                        11        11         0     100.0
+    Branches                        18        17         1      94.4
 
 ================================Branch Details================================
 
 Branch Coverage for file ../rtl/fallback_lookup.sv --
 
 ------------------------------------IF Branch------------------------------------
-    28                                     26272     Count coming in to IF
-    28              1                        420                 if (addr >= BASE_ADDR) begin
+    30                                     26272     Count coming in to IF
+    30              1                        420                 if (addr >= BASE_ADDR) begin
                                            25852     All False Count
 Branch totals: 2 hits of 2 branches = 100.0%
 
 ------------------------------------IF Branch------------------------------------
-    30                                       420     Count coming in to IF
-    30              1                        396                     if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
+    32                                       420     Count coming in to IF
+    32              1                        396                     if (((offset % 4) == 0) && ((offset / 4) < DEPTH))
                                               24     All False Count
 Branch totals: 2 hits of 2 branches = 100.0%
 
 ------------------------------------IF Branch------------------------------------
-    41                                    210176     Count coming in to IF
-    41              1                        162                 if ((id_data != '0) && (entries[k] == id_data))
+    43                                    210176     Count coming in to IF
+    43              1                        162                 if ((id_data != '0) && (entries[k] == id_data))
                                           210014     All False Count
 Branch totals: 2 hits of 2 branches = 100.0%
 
 ------------------------------------IF Branch------------------------------------
-    45                                     13136     Count coming in to IF
-    45              1                         38             if (rd_en && (read_slot >= 0))
+    47                                     13136     Count coming in to IF
+    47              1                         38             if (rd_en && (read_slot >= 0))
                                            13098     All False Count
 Branch totals: 2 hits of 2 branches = 100.0%
 
 ------------------------------------IF Branch------------------------------------
-    50                                     11244     Count coming in to IF
-    50              1                         18             if (!PRESETN) begin
-    53              1                         61             end else if (wr_en && (write_slot >= 0)) begin
-                                           11165     All False Count
-Branch totals: 3 hits of 3 branches = 100.0%
+    52                                     12222     Count coming in to IF
+    52              1                         18             if (!PRESETN) begin
+    55              1                      12204             end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    56                                     12204     Count coming in to IF
+    56              1                        489                 if (program_done && (programmed_id != '0)) begin
+                                           11715     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    58                                      7824     Count coming in to IF
+    58              1                    ***0***                         if (entries[clear_idx] == programmed_id)
+                                            7824     All False Count
+Branch totals: 1 hit of 2 branches = 50.0%
+
+------------------------------------IF Branch------------------------------------
+    62                                     12204     Count coming in to IF
+    62              1                         61                 if (wr_en && (write_slot >= 0)) begin
+                                           12143     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    63                                        61     Count coming in to IF
+    63              1                         22                     if (PWDATA == '0) begin
+    65              1                         39                     end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
 
 
 Condition Coverage:
     Enabled Coverage            Active   Covered    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    FEC Condition Terms              8         8         0     100.0
+    FEC Condition Terms             10         9         1      90.0
 
 ================================Condition Details================================
 
 Condition Coverage for file ../rtl/fallback_lookup.sv --
 
 ----------------Focused Condition View-------------------
-Line       30 Item    1  (((offset % 4) == 0) && ((offset / 4) < 16))
+Line       32 Item    1  (((offset % 4) == 0) && ((offset / 4) < 16))
 Condition totals: 2 of 2 input terms covered = 100.0%
 
 ----------------Focused Condition View-------------------
-Line       41 Item    1  ((id_data != 1'b0) && (entries[k] == id_data))
+Line       43 Item    1  ((id_data != 1'b0) && (entries[k] == id_data))
 Condition totals: 2 of 2 input terms covered = 100.0%
 
 ----------------Focused Condition View-------------------
-Line       45 Item    1  (rd_en && (read_slot >= 0))
+Line       47 Item    1  (rd_en && (read_slot >= 0))
 Condition totals: 2 of 2 input terms covered = 100.0%
 
 ----------------Focused Condition View-------------------
-Line       53 Item    1  (wr_en && (write_slot >= 0))
+Line       56 Item    1  (program_done && (programmed_id != 1'b0))
+Condition totals: 1 of 2 input terms covered = 50.0%
+
+               Input Term   Covered  Reason for no coverage   Hint
+              -----------  --------  -----------------------  --------------
+             program_done         Y
+  (programmed_id != 1'b0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target                 Non-masking condition(s)      
+ ---------  ---------  --------------------       -------------------------     
+  Row   1:          8  program_done_0             -                             
+  Row   2:          4  program_done_1             (programmed_id != 1'b0)       
+  Row   3:    ***0***  (programmed_id != 1'b0)_0  program_done                  
+  Row   4:          4  (programmed_id != 1'b0)_1  program_done                  
+
+----------------Focused Condition View-------------------
+Line       62 Item    1  (wr_en && (write_slot >= 0))
 Condition totals: 2 of 2 input terms covered = 100.0%
 
 
@@ -241,7 +295,7 @@ FSM Coverage:
 Toggle Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Toggle Bins                    346       346         0     100.0
+    Toggle Bins                    412       401        11      97.3
 
 ================================Toggle Details================================
 
@@ -249,12 +303,21 @@ Toggle Coverage for File ../rtl/fallback_lookup.sv --
 
        Line                                   Node      1H->0L      0L->1H  "Coverage"
 --------------------------------------------------------------------------------------
+         17                       programmed_id[8]           0           0        0.00 
+         17                      programmed_id[30]           0           2       50.00 
+         17                      programmed_id[27]           0           2       50.00 
+         17                      programmed_id[25]           0           2       50.00 
+         17                      programmed_id[21]           0           2       50.00 
+         17                      programmed_id[20]           0           0        0.00 
+         17                      programmed_id[19]           0           2       50.00 
+         17                      programmed_id[18]           0           2       50.00 
+         17                      programmed_id[15]           0           2       50.00 
 
-Total Node Count     =        173 
-Toggled Node Count   =        173 
-Untoggled Node Count =          0 
+Total Node Count     =        206 
+Toggled Node Count   =        197 
+Untoggled Node Count =          9 
 
-Toggle Coverage      =      100.0% (346 of 346 bins)
+Toggle Coverage      =       97.3% (401 of 412 bins)
 
 =================================================================================
 === File: ../rtl/hash_engine.sv
@@ -345,7 +408,128 @@ Toggle Coverage      =      100.0% (288 of 288 bins)
 Statement Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Stmts                            0         0         0     100.0
+    Stmts                            1         1         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ../rtl/metro_card_top.sv --
+
+    1                                                `timescale 1ns/1ps
+    2                                                
+    3                                                module metro_card_top #(
+    4                                                    parameter int ADDR = 8,
+    5                                                    parameter int DATA = 32,
+    6                                                    parameter int HASH = 24,
+    7                                                    parameter int BIT_COUNT = 9_600_000,
+    8                                                    parameter int FALLBACK_DEPTH = 16,
+    9                                                    parameter logic [ADDR-1:0] FALLBACK_BASE_ADDR = 8'h10
+    10                                               ) (
+    11                                                   input  logic             PCLK,
+    12                                                   input  logic             PRESETN,
+    13                                                   input  logic             PSEL,
+    14                                                   input  logic             PWRITE,
+    15                                                   input  logic             PENABLE,
+    16                                                   input  logic [ADDR-1:0]  PADDR,
+    17                                                   input  logic [DATA-1:0]  PWDATA,
+    18                                                   output logic [DATA-1:0]  PRDATA,
+    19                                                   output logic             PREADY
+    20                                               );
+    21                                               	
+    22                                                   logic [DATA-1:0] id_data;
+    23                                                   logic start, mode, match, fallback_hit, fallback_match, done;
+    24                                                   logic program_done, clear_done;
+    25                                                   logic [DATA-1:0] programmed_id;
+    26                                                   logic [DATA-1:0] fallback_rdata;
+    27                                                   logic [HASH-1:0] index1, index2, index3, index4;
+    28                                                   logic wr_en, rd_en;
+    29                                               
+    30              1                      20346         assign clear_done = wr_en && (PADDR == 8'h04) && PWDATA[0];
+    31                                               
+    32                                                   apb_slave apb_dut (
+    33                                                       .PSEL			(PSEL),
+    34                                               		.PWRITE			(PWRITE),
+    35                                               		.PENABLE		(PENABLE),
+    36                                               		.PREADY		(PREADY),
+    37                                                       .wr_en			(wr_en),
+    38                                               		.rd_en			(rd_en)
+    39                                                   );
+    40                                               
+    41                                                   hash_engine #( 
+    42                                               		.DATA			(DATA),
+    43                                               		.HASH			(HASH),
+    44                                               		.BIT_COUNT		(BIT_COUNT)
+    45                                               	) hash_engine_dut (
+    46                                                       .id_data		(id_data),
+    47                                               		.index1			(index1),
+    48                                               		.index2			(index2),
+    49                                                       .index3			(index3),
+    50                                               		.index4			(index4)
+    51                                                   );
+    52                                               
+    53                                                   fallback_lookup #(
+    54                                                       .ADDR			(ADDR),
+    55                                               		.DATA			(DATA),
+    56                                               		.DEPTH			(FALLBACK_DEPTH),
+    57                                               		.BASE_ADDR		(FALLBACK_BASE_ADDR)
+    58                                                   ) fallback_lookup_dut (
+    59                                                       .PCLK			(PCLK),
+    60                                               		.PRESETN		(PRESETN),
+    61                                               		.wr_en			(wr_en),
+    62                                               		.rd_en			(rd_en),
+    63                                                       .program_done	(program_done),
+    64                                                       .PADDR			(PADDR),
+    65                                               		.PWDATA			(PWDATA),
+    66                                               		.id_data		(id_data),
+    67                                                       .programmed_id	(programmed_id),
+    68                                               		.hit			(fallback_hit),
+    69                                               		.read_data		(fallback_rdata)
+    70                                                   );
+    71                                               
+    72                                                   register #(
+    73                                               		.ADDR			(ADDR),
+    74                                               		.DATA			(DATA)
+    75                                               	) reg_dut (
+    76                                                       .PCLK			(PCLK),
+    77                                               		.PRESETN		(PRESETN),
+    78                                               		.wr_en			(wr_en),
+    79                                               		.rd_en			(rd_en),
+    80                                                       .PADDR			(PADDR),
+    81                                               		.PWDATA			(PWDATA),
+    82                                               		.PRDATA			(PRDATA),
+    83                                               		.id_data		(id_data),
+    84                                                       .start			(start),
+    85                                               		.mode			(mode),
+    86                                               		.match			(match),
+    87                                               		.fallback_match	(fallback_match),
+    88                                                       .done			(done),
+    89                                               		.fallback_rdata	(fallback_rdata)
+    90                                                   );
+    91                                               
+    92                                                   sram #(
+    93                                               		.DATA			(DATA),
+    94                                               		.HASH			(HASH),
+    95                                               		.BIT_COUNT		(BIT_COUNT)
+    96                                               	) sram_dut (
+    97                                                       .PCLK			(PCLK),
+    98                                               		.PRESETN		(PRESETN),
+    99                                               		.start			(start),
+    100                                              		.mode			(mode),
+    101                                                      .id_data		(id_data),
+    102                                              		.index1			(index1),
+    103                                              		.index2			(index2),
+    104                                                      .index3			(index3),
+    105                                              		.index4			(index4),
+    106                                              		.fallback_hit	(fallback_hit),
+    107                                                      .clear_done		(clear_done),
+    108                                              		.match			(match),
+    109                                              		.fallback_match	(fallback_match),
+    110                                              		.done			(done),
+    111                                                      .program_done	(program_done),
+    112                                                      .programmed_id	(programmed_id)
+    113                                                  );
+    114                                              	
+    115                                              endmodule
+
 Branch Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
@@ -357,7 +541,17 @@ Condition Coverage:
 Expression Coverage:
     Enabled Coverage            Active   Covered    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    FEC Expression Terms             0         0         0     100.0
+    FEC Expression Terms             3         3         0     100.0
+
+================================Expression Details================================
+
+Expression Coverage for file ../rtl/metro_card_top.sv --
+
+----------------Focused Expression View-----------------
+Line       30 Item    1  ((wr_en && (PADDR == 4)) && PWDATA[0])
+Expression totals: 3 of 3 input terms covered = 100.0%
+
+
 FSM Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
@@ -367,7 +561,7 @@ FSM Coverage:
 Toggle Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Toggle Bins                    380       380         0     100.0
+    Toggle Bins                    448       437        11      97.5
 
 ================================Toggle Details================================
 
@@ -375,12 +569,21 @@ Toggle Coverage for File ../rtl/metro_card_top.sv --
 
        Line                                   Node      1H->0L      0L->1H  "Coverage"
 --------------------------------------------------------------------------------------
+         25                       programmed_id[8]           0           0        0.00 
+         25                      programmed_id[30]           0           2       50.00 
+         25                      programmed_id[27]           0           2       50.00 
+         25                      programmed_id[25]           0           2       50.00 
+         25                      programmed_id[21]           0           2       50.00 
+         25                      programmed_id[20]           0           0        0.00 
+         25                      programmed_id[19]           0           2       50.00 
+         25                      programmed_id[18]           0           2       50.00 
+         25                      programmed_id[15]           0           2       50.00 
 
-Total Node Count     =        190 
-Toggled Node Count   =        190 
-Untoggled Node Count =          0 
+Total Node Count     =        224 
+Toggled Node Count   =        215 
+Untoggled Node Count =          9 
 
-Toggle Coverage      =      100.0% (380 of 380 bins)
+Toggle Coverage      =       97.5% (437 of 448 bins)
 
 =================================================================================
 === File: ../rtl/register.sv
@@ -535,7 +738,7 @@ Toggle Coverage      =      100.0% (290 of 290 bins)
 Statement Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Stmts                           19        19         0     100.0
+    Stmts                           25        25         0     100.0
 
 ================================Statement Details================================
 
@@ -558,73 +761,95 @@ Statement Coverage for file ../rtl/sram.sv --
     15                                                   input  logic [HASH-1:0]  index3,
     16                                                   input  logic [HASH-1:0]  index4,
     17                                                   input  logic             fallback_hit,
-    18                                                   output logic             match,
-    19                                                   output logic             fallback_match,
-    20                                                   output logic             done
-    21                                               );
-    22                                                   
-    23                                                   parameter int BANK_COUNT = 4;
-    24                                                   parameter int BANK_BITS = BIT_COUNT / BANK_COUNT;
-    25                                                   parameter int BANK_ADDR_WIDTH = $clog2(BANK_BITS);
-    26                                               
-    27                                                   logic bank0 [0:BANK_BITS-1];
-    28                                                   logic bank1 [0:BANK_BITS-1];
-    29                                                   logic bank2 [0:BANK_BITS-1];
-    30                                                   logic bank3 [0:BANK_BITS-1];
-    31                                               
-    32                                                   initial begin
-    33              1                          8             for (int unsigned init_idx = 0; init_idx < BANK_BITS; init_idx++) begin
-    33              2                       8192     
-    34              1                       8192                 bank0[init_idx] = 1'b0;
-    35              1                       8192                 bank1[init_idx] = 1'b0;
-    36              1                       8192                 bank2[init_idx] = 1'b0;
-    37              1                       8192                 bank3[init_idx] = 1'b0;
-    38                                                       end
-    39                                                   end
-    40                                               
-    41              1                       5466         always @(posedge PCLK or negedge PRESETN) begin
-    42                                                       if (!PRESETN) begin
-    43              1                         18                 match <= 1'b0;
-    44              1                         18                 fallback_match <= 1'b0;
-    45              1                         18                 done <= 1'b0;
-    46                                                       end else if (start) begin
-    47              1                       1791                 done <= 1'b1;
-    48                                                           if (mode) begin
-    49              1                        489                     bank0[index1[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
-    50              1                        489                     bank1[index2[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
-    51              1                        489                     bank2[index3[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
-    52              1                        489                     bank3[index4[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
-    53              1                        489                     match <= 1'b0;
-    54              1                        489                     fallback_match <= 1'b0;
-    55                                                           end else begin
-    56              1                       1302                     fallback_match <= fallback_hit;
-    57              1                       1302                     match <= (bank0[index1[BANK_ADDR_WIDTH-1:0]] & bank1[index2[BANK_ADDR_WIDTH-1:0]] & bank2[index3[BANK_ADDR_WIDTH-1:0]] & bank3[index4[BANK_ADDR_WIDTH-1:0]]) | fallback_hit;
-    58                                                           end
-    59                                                       end
-    60                                                   end
-    61                                                   
-    62                                               endmodule
+    18                                                   input  logic             clear_done,
+    19                                                   output logic             match,
+    20                                                   output logic             fallback_match,
+    21                                                   output logic             done,
+    22                                                   output logic             program_done,
+    23                                                   output logic [DATA-1:0]  programmed_id
+    24                                               );
+    25                                                   
+    26                                                   parameter int unsigned BANK_COUNT = 4;
+    27                                                   parameter int unsigned BANK_BITS = BIT_COUNT / BANK_COUNT;
+    28                                                   parameter int unsigned BANK_ADDR_WIDTH = $clog2(BANK_BITS);
+    29                                               
+    30                                                   logic bank0 [0:BANK_BITS-1];
+    31                                                   logic bank1 [0:BANK_BITS-1];
+    32                                                   logic bank2 [0:BANK_BITS-1];
+    33                                                   logic bank3 [0:BANK_BITS-1];
+    34                                               
+    35                                                   initial begin
+    36              1                          8             for (int unsigned init_idx = 0; init_idx < BANK_BITS; init_idx++) begin
+    36              2                       8192     
+    37              1                       8192                 bank0[init_idx] = 1'b0;
+    38              1                       8192                 bank1[init_idx] = 1'b0;
+    39              1                       8192                 bank2[init_idx] = 1'b0;
+    40              1                       8192                 bank3[init_idx] = 1'b0;
+    41                                                       end
+    42                                                   end
+    43                                               
+    44              1                       7746         always @(posedge PCLK or negedge PRESETN) begin
+    45                                                       if (!PRESETN) begin
+    46              1                         18                 match <= 1'b0;
+    47              1                         18                 fallback_match <= 1'b0;
+    48              1                         18                 done <= 1'b0;
+    49              1                         18                 program_done <= 1'b0;
+    50              1                         18                 programmed_id <= '0;
+    51                                                       end else begin
+    52                                                           if (clear_done)
+    53              1                       1791                     done <= 1'b0;
+    54              1                       7728                 program_done <= 1'b0;
+    55                                                           if (start) begin
+    56              1                       1791                     done <= 1'b1;
+    57                                                               if (mode) begin
+    58              1                        489                         bank0[index1[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    59              1                        489                         bank1[index2[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    60              1                        489                         bank2[index3[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    61              1                        489                         bank3[index4[BANK_ADDR_WIDTH-1:0]] <= 1'b1;
+    62              1                        489                         match <= 1'b0;
+    63              1                        489                         fallback_match <= 1'b0;
+    64              1                        489                         program_done <= 1'b1;
+    65              1                        489                         programmed_id <= id_data;
+    66                                                               end else begin
+    67              1                       1302                         fallback_match <= fallback_hit;
+    68              1                       1302                         match <= (bank0[index1[BANK_ADDR_WIDTH-1:0]] & bank1[index2[BANK_ADDR_WIDTH-1:0]] & bank2[index3[BANK_ADDR_WIDTH-1:0]] & bank3[index4[BANK_ADDR_WIDTH-1:0]]) | fallback_hit;
+    69                                                               end
+    70                                                           end
+    71                                                       end
+    72                                                   end
+    73                                               endmodule
 
 Branch Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Branches                         5         5         0     100.0
+    Branches                         8         8         0     100.0
 
 ================================Branch Details================================
 
 Branch Coverage for file ../rtl/sram.sv --
 
 ------------------------------------IF Branch------------------------------------
-    42                                      5466     Count coming in to IF
-    42              1                         18             if (!PRESETN) begin
-    46              1                       1791             end else if (start) begin
-                                            3657     All False Count
-Branch totals: 3 hits of 3 branches = 100.0%
+    45                                      7746     Count coming in to IF
+    45              1                         18             if (!PRESETN) begin
+    51              1                       7728             end else begin
+Branch totals: 2 hits of 2 branches = 100.0%
 
 ------------------------------------IF Branch------------------------------------
-    48                                      1791     Count coming in to IF
-    48              1                        489                 if (mode) begin
-    55              1                       1302                 end else begin
+    52                                      7728     Count coming in to IF
+    52              1                       1791                 if (clear_done)
+                                            5937     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    55                                      7728     Count coming in to IF
+    55              1                       1791                 if (start) begin
+                                            5937     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    57                                      1791     Count coming in to IF
+    57              1                        489                     if (mode) begin
+    66              1                       1302                     end else begin
 Branch totals: 2 hits of 2 branches = 100.0%
 
 
@@ -642,7 +867,7 @@ Expression Coverage:
 Expression Coverage for file ../rtl/sram.sv --
 
 ----------------Focused Expression View-----------------
-Line       57 Item    1  ((((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4]) | fallback_hit)
+Line       68 Item    1  ((((bank0[index1] & bank1[index2]) & bank2[index3]) & bank3[index4]) | fallback_hit)
 Expression totals: 5 of 5 input terms covered = 100.0%
 
 
@@ -655,7 +880,7 @@ FSM Coverage:
 Toggle Coverage:
     Enabled Coverage            Active      Hits    Misses % Covered
     ----------------            ------      ----    ------ ---------
-    Toggle Bins                    160       160         0     100.0
+    Toggle Bins                    228       217        11      95.1
 
 ================================Toggle Details================================
 
@@ -663,12 +888,21 @@ Toggle Coverage for File ../rtl/sram.sv --
 
        Line                                   Node      1H->0L      0L->1H  "Coverage"
 --------------------------------------------------------------------------------------
+         23                       programmed_id[8]           0           0        0.00 
+         23                      programmed_id[30]           0           2       50.00 
+         23                      programmed_id[27]           0           2       50.00 
+         23                      programmed_id[25]           0           2       50.00 
+         23                      programmed_id[21]           0           2       50.00 
+         23                      programmed_id[20]           0           0        0.00 
+         23                      programmed_id[19]           0           2       50.00 
+         23                      programmed_id[18]           0           2       50.00 
+         23                      programmed_id[15]           0           2       50.00 
 
-Total Node Count     =         80 
-Toggled Node Count   =         80 
-Untoggled Node Count =          0 
+Total Node Count     =        114 
+Toggled Node Count   =        105 
+Untoggled Node Count =          9 
 
-Toggle Coverage      =      100.0% (160 of 160 bins)
+Toggle Coverage      =       95.1% (217 of 228 bins)
 
 COVERGROUP COVERAGE:
 -----------------------------------------------------------------------------------------------
@@ -882,7 +1116,7 @@ Covergroup                                             Metric       Goal    Stat
 
 TOTAL COVERGROUP COVERAGE: 100.0%  COVERGROUP TYPES: 4
 
-Total Coverage By File (code coverage only, filtered view): 100.0%
+Total Coverage By File (code coverage only, filtered view): 96.8%
 
-End time: 00:25:27 on Nov 03,2026, Elapsed time: 0:00:00
+End time: 10:16:52 on Nov 03,2026, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0

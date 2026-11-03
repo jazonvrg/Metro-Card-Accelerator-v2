@@ -7,13 +7,13 @@ Failed              : 0
 Unknown             : 0
 ------------------------------------------------------------
 Run log detail:
-log/metro_coverage_closure_test_814575.log   : Passed
-log/metro_fallback_miss_test_201684.log      : Passed
-log/metro_fallback_table_test_283763.log     : Passed
-log/metro_hash_program_test_523585.log       : Passed
-log/metro_metrics_test_271607.log            : Passed
-log/metro_register_test_945524.log           : Passed
-log/metro_reset_test_309076.log              : Passed
-log/metro_smoke_test_804959.log              : Passed
+log/metro_coverage_closure_test_900518.log   : Passed
+log/metro_fallback_miss_test_677899.log      : Passed
+log/metro_fallback_table_test_673294.log     : Passed
+log/metro_hash_program_test_435954.log       : Passed
+log/metro_metrics_test_419479.log            : Passed
+log/metro_register_test_668325.log           : Passed
+log/metro_reset_test_485353.log              : Passed
+log/metro_smoke_test_725035.log              : Passed
 ------------------------------------------------------------
 Note: only simulation logs with TEST PASSED / TEST FAILED markers are conclusive.

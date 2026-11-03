@@ -1,45 +1,45 @@
 QuestaSim-64 vcover 10.6d_1 Coverage Utility 2018.04 Apr 11 2018
-Start time: 00:25:29 on Nov 03,2026
+Start time: 10:16:53 on Nov 03,2026
 vcover report -totals -codeAll -cvg log/IP_MERGE.ucdb 
-Coverage Report Totals BY FILES: Number of Files 5
+Coverage Report Totals BY FILES: Number of Files 6
 
     Enabled Coverage            Active      Hits    Misses    Weight % Covered
     ----------------            ------      ----    ------    ------ ---------
-    Stmts                           60        60         0         1     100.0
-    Branches                        29        29         0         1     100.0
-    Conditions                                                     1     100.0
+    Stmts                           71        70         1         1      98.5
+    Branches                        39        38         1         1      97.4
+    Conditions                                                     1      95.0
         UDP Condition Rows           0         0         0         1     100.0
-        FEC Condition Terms          8         8         0         1     100.0
+        FEC Condition Terms         10         9         1         1      90.0
     Expressions                                                    1     100.0
         UDP Expression Rows          0         0         0         1     100.0
-        FEC Expression Terms        13        13         0         1     100.0
+        FEC Expression Terms        16        16         0         1     100.0
     FSMs                                                           1     100.0
         States                       0         0         0         1     100.0
         Transitions                  0         0         0         1     100.0
-    Toggle Bins                   1476      1476         0         1     100.0
+    Toggle Bins                   1678      1645        33         1      98.0
 
-Total coverage (Code Coverage Only, filtered view): 100.0%
+Total coverage (Code Coverage Only, filtered view): 96.8%
 
 Coverage Report Totals BY INSTANCES: Number of Instances 13
 
     Enabled Coverage            Active      Hits    Misses    Weight % Covered
     ----------------            ------      ----    ------    ------ ---------
-    Stmts                           60        60         0         1     100.0
-    Branches                        29        29         0         1     100.0
-    Conditions                                                     1     100.0
+    Stmts                           71        70         1         1      98.5
+    Branches                        39        38         1         1      97.4
+    Conditions                                                     1      95.0
         UDP Condition Rows           0         0         0         1     100.0
-        FEC Condition Terms          8         8         0         1     100.0
+        FEC Condition Terms         10         9         1         1      90.0
     Expressions                                                    1     100.0
         UDP Expression Rows          0         0         0         1     100.0
-        FEC Expression Terms        13        13         0         1     100.0
+        FEC Expression Terms        16        16         0         1     100.0
     FSMs                                                           1     100.0
         States                       0         0         0         1     100.0
         Transitions                  0         0         0         1     100.0
-    Toggle Bins                   1298      1298         0         1     100.0
+    Toggle Bins                   1500      1467        33         1      97.8
     Cover Group Types                4        na        na         1     100.0
     Coverpoints/Crosses             12        na        na         1        na
         Covergroup Bins             28        28         0         1     100.0
-Total coverage (filtered view): 100.0%
+Total coverage (filtered view): 97.3%
 
-End time: 00:25:29 on Nov 03,2026, Elapsed time: 0:00:00
+End time: 10:16:53 on Nov 03,2026, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
