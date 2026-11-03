@@ -40,13 +40,14 @@ class metro_base_sequence extends uvm_sequence #(metro_apb_transaction);
     task query_card(input logic [31:0] id, input logic expected_match, input logic expected_fallback = 1'b0);
         logic [31:0] status;
         set_card_id(id);
-        apb_write(METRO_CTRL_REG, 32'h0000_0001); 
+        apb_write(METRO_CTRL_REG, 32'h0000_0001);
         apb_read(METRO_STAT_REG, status);
         if (status[0] !== 1'b1 || status[1] !== expected_match || status[2] !== expected_fallback)
             `uvm_error(get_type_name(), $sformatf("Query mismatch ID=0x%08h exp_match=%0b exp_fallback=%0b status=0x%08h", id, expected_match, expected_fallback, status))
         else
             `uvm_info(get_type_name(), $sformatf("QUERY PASS ID=0x%08h status=0x%08h", id, status), UVM_LOW)
     endtask
+			
     task query_card_capture(input logic [31:0] id, output logic [31:0] status);
         set_card_id(id);
         apb_write(METRO_CTRL_REG, 32'h0000_0001);
@@ -79,11 +80,11 @@ class metro_hash_sequence extends metro_base_sequence;
             program_bloom(auto_clear_ids[i]);
             apb_read(auto_clear_addrs[i], readback);
             if (readback !== 32'h0000_0000)
-				`uvm_error(get_type_name(), $sformatf("AUTO-CLEAR failed: slot addr=0x%02h expected=0 got=0x%08h", auto_clear_addrs[i], readback))
+                `uvm_error(get_type_name(), $sformatf("AUTO-CLEAR failed: slot addr=0x%02h expected=0 got=0x%08h", auto_clear_addrs[i], readback))
             for (int j = i + 1; j < 3; j++) begin
                 apb_read(auto_clear_addrs[j], readback);
                 if (readback !== auto_clear_ids[j])
-					`uvm_error(get_type_name(), $sformatf("AUTO-CLEAR removed an uncommitted ID: addr=0x%02h expected=0x%08h got=0x%08h", auto_clear_addrs[j], auto_clear_ids[j], readback))
+                    `uvm_error(get_type_name(), $sformatf("AUTO-CLEAR removed an uncommitted ID: addr=0x%02h expected=0x%08h got=0x%08h", auto_clear_addrs[j], auto_clear_ids[j], readback))
             end
         end
         foreach (auto_clear_ids[i])
@@ -94,6 +95,7 @@ class metro_hash_sequence extends metro_base_sequence;
         ids[3] = 32'hDEAD_BEEF;
         foreach (ids[i]) program_bloom(ids[i]);
         foreach (ids[i]) query_card(ids[i], 1'b1, 1'b0);
+        program_bloom(32'h0000_0000);
     endtask
 				
 endclass
@@ -150,8 +152,8 @@ class metro_reset_sequence extends metro_base_sequence;
     function new(string name = "metro_reset_sequence");
 		super.new(name);
 	endfunction
-	
-    virtual task body();
+
+	virtual task body();
         logic [31:0] rdata;
         apb_read(METRO_STAT_REG, rdata);
         if (rdata !== 32'h0)
@@ -159,7 +161,6 @@ class metro_reset_sequence extends metro_base_sequence;
     endtask
 			
 endclass
-
 
 class metro_fallback_table_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_fallback_table_sequence)
@@ -196,7 +197,7 @@ class metro_fallback_table_sequence extends metro_base_sequence;
     endtask
 			
 endclass
-
+			
 class metro_metrics_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_metrics_sequence)
 
@@ -249,7 +250,7 @@ class metro_metrics_sequence extends metro_base_sequence;
         $fdisplay(metrics_fd, "card_id,true_label,predicted_label,fallback_match,status_word,source");
         samples_written = 0;
         predicted_black_count = 0;
-		`uvm_info(get_type_name(), $sformatf("Preparing labelled metric dataset: bloom_black=%0d fallback_black=%0d clean=%0d", num_bloom_black, num_fallback_black, num_clean), UVM_LOW)
+        `uvm_info(get_type_name(), $sformatf("Preparing labelled metric dataset: bloom_black=%0d fallback_black=%0d clean=%0d", num_bloom_black, num_fallback_black, num_clean), UVM_LOW)
         for (int i = 0; i < num_bloom_black; i++) begin
             id = bloom_base + i;
             program_bloom(id);
@@ -273,10 +274,11 @@ class metro_metrics_sequence extends metro_base_sequence;
             id = clean_base + i;
             collect_sample(id, 1'b0, "clean");
         end
+
         $fflush(metrics_fd);
         $fclose(metrics_fd);
         metrics_fd = 0;
         `uvm_info(get_type_name(), $sformatf("Wrote %0d observed samples to log/metro_metrics_results.csv; predicted_black=%0d", samples_written, predicted_black_count), UVM_LOW)
     endtask
-
+	
 endclass
