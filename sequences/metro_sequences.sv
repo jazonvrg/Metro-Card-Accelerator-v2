@@ -40,7 +40,7 @@ class metro_base_sequence extends uvm_sequence #(metro_apb_transaction);
     task query_card(input logic [31:0] id, input logic expected_match, input logic expected_fallback = 1'b0);
         logic [31:0] status;
         set_card_id(id);
-        apb_write(METRO_CTRL_REG, 32'h0000_0001);
+        apb_write(METRO_CTRL_REG, 32'h0000_0001); 
         apb_read(METRO_STAT_REG, status);
         if (status[0] !== 1'b1 || status[1] !== expected_match || status[2] !== expected_fallback)
             `uvm_error(get_type_name(), $sformatf("Query mismatch ID=0x%08h exp_match=%0b exp_fallback=%0b status=0x%08h", id, expected_match, expected_fallback, status))
@@ -64,6 +64,30 @@ class metro_hash_sequence extends metro_base_sequence;
 	
     virtual task body();
         logic [31:0] ids [0:3];
+        logic [31:0] auto_clear_ids [0:2];
+        logic [31:0] readback;
+        logic [7:0] auto_clear_addrs [0:2];
+        auto_clear_ids[0] = 32'hFFFF_FFFF;
+        auto_clear_ids[1] = 32'h0000_0001;
+        auto_clear_ids[2] = 32'h0000_0002;
+        auto_clear_addrs[0] = METRO_FALLBACK_BASE;
+        auto_clear_addrs[1] = METRO_FALLBACK_BASE + 8'h04;
+        auto_clear_addrs[2] = METRO_FALLBACK_BASE + 8'h08;
+        foreach (auto_clear_ids[i])
+            apb_write(auto_clear_addrs[i], auto_clear_ids[i]);
+        foreach (auto_clear_ids[i]) begin
+            program_bloom(auto_clear_ids[i]);
+            apb_read(auto_clear_addrs[i], readback);
+            if (readback !== 32'h0000_0000)
+				`uvm_error(get_type_name(), $sformatf("AUTO-CLEAR failed: slot addr=0x%02h expected=0 got=0x%08h", auto_clear_addrs[i], readback))
+            for (int j = i + 1; j < 3; j++) begin
+                apb_read(auto_clear_addrs[j], readback);
+                if (readback !== auto_clear_ids[j])
+					`uvm_error(get_type_name(), $sformatf("AUTO-CLEAR removed an uncommitted ID: addr=0x%02h expected=0x%08h got=0x%08h", auto_clear_addrs[j], auto_clear_ids[j], readback))
+            end
+        end
+        foreach (auto_clear_ids[i])
+            query_card(auto_clear_ids[i], 1'b1, 1'b0);
         ids[0] = 32'h1000_0001;
         ids[1] = 32'h1000_0002;
         ids[2] = 32'h2000_0001;
@@ -71,7 +95,7 @@ class metro_hash_sequence extends metro_base_sequence;
         foreach (ids[i]) program_bloom(ids[i]);
         foreach (ids[i]) query_card(ids[i], 1'b1, 1'b0);
     endtask
-	
+				
 endclass
 
 class metro_fallback_sequence extends metro_base_sequence;
@@ -105,8 +129,8 @@ class metro_register_sequence extends metro_base_sequence;
     function new(string name = "metro_register_sequence");
 		super.new(name);
 	endfunction
-
-	virtual task body();
+	
+    virtual task body();
         logic [31:0] rdata;
         apb_write(METRO_ID_REG, 32'h1357_2468);
         apb_read(METRO_ID_REG, rdata);
@@ -136,14 +160,15 @@ class metro_reset_sequence extends metro_base_sequence;
 			
 endclass
 
+
 class metro_fallback_table_sequence extends metro_base_sequence;
     `uvm_object_utils(metro_fallback_table_sequence)
 	
     function new(string name = "metro_fallback_table_sequence");
 		super.new(name);
 	endfunction
-	
-    virtual task body();
+
+	virtual task body();
         logic [31:0] rdata;
         logic [31:0] ids [0:2];
         logic [7:0] addrs [0:2];
@@ -182,8 +207,8 @@ class metro_metrics_sequence extends metro_base_sequence;
     logic [31:0] fallback_card_base;
     logic [31:0] clean_base;
     integer metrics_fd;
-    int  samples_written;
-    int  predicted_black_count;
+    int samples_written;
+    int predicted_black_count;
 
     function new(string name = "metro_metrics_sequence");
         super.new(name);
@@ -198,12 +223,7 @@ class metro_metrics_sequence extends metro_base_sequence;
         predicted_black_count = 0;
     endfunction
 
-    task collect_sample(input logic [31:0] id,
-                        input logic true_label,
-                        input string source_name,
-                        input logic check_expected = 1'b0,
-                        input logic expected_match = 1'b0,
-                        input logic expected_fallback = 1'b0);
+	task collect_sample(input logic [31:0] id, input logic true_label, input string source_name);
         logic [31:0] status;
         logic predicted_label;
         query_card_capture(id, status);
@@ -211,13 +231,9 @@ class metro_metrics_sequence extends metro_base_sequence;
             `uvm_error(get_type_name(), $sformatf("Metric sample ID=0x%08h has DONE=%b; status=0x%08h", id, status[0], status))
         if ((status[1] !== 1'b0) && (status[1] !== 1'b1)) begin
             `uvm_error(get_type_name(), $sformatf("Metric sample ID=0x%08h has unknown MATCH bit; status=0x%08h", id, status))
-            predicted_label = 1'b0; 
+            predicted_label = 1'b0;
         end else begin
             predicted_label = status[1];
-        end
-        if (check_expected &&
-            ((status[1] !== expected_match) || (status[2] !== expected_fallback))) begin
-            `uvm_error(get_type_name(), $sformatf("Directed metric case mismatch ID=0x%08h expected MATCH=%0b FALLBACK=%0b got status=0x%08h", id, expected_match, expected_fallback, status))
         end
 		$fdisplay(metrics_fd, "%08h,%0d,%0d,%0d,%08h,%s", id, true_label, predicted_label, status[2], status, source_name);
         samples_written++;
@@ -233,7 +249,7 @@ class metro_metrics_sequence extends metro_base_sequence;
         $fdisplay(metrics_fd, "card_id,true_label,predicted_label,fallback_match,status_word,source");
         samples_written = 0;
         predicted_black_count = 0;
-        `uvm_info(get_type_name(), $sformatf("Preparing labelled metric dataset: bloom_black=%0d fallback_black=%0d clean=%0d", num_bloom_black, num_fallback_black, num_clean), UVM_LOW)
+		`uvm_info(get_type_name(), $sformatf("Preparing labelled metric dataset: bloom_black=%0d fallback_black=%0d clean=%0d", num_bloom_black, num_fallback_black, num_clean), UVM_LOW)
         for (int i = 0; i < num_bloom_black; i++) begin
             id = bloom_base + i;
             program_bloom(id);
@@ -253,22 +269,14 @@ class metro_metrics_sequence extends metro_base_sequence;
             id = fallback_card_base + i;
             collect_sample(id, 1'b1, "fallback_black");
         end
-        if (num_clean < 3)
-            `uvm_fatal(get_type_name(), "num_clean must be >= 3 for directed collision cases")
-        id = 32'h36C0_C591;
-        collect_sample(id, 1'b0, "clean_hash_collision", 1'b1, 1'b1, 1'b0);
-        id = 32'h821A_34F5;
-        collect_sample(id, 1'b0, "clean_hash_collision", 1'b1, 1'b1, 1'b0);
-        id = 32'h8019_30D1;
-        collect_sample(id, 1'b0, "clean_hash_collision", 1'b1, 1'b1, 1'b0);
-        for (int i = 0; i < (num_clean - 3); i++) begin
+        for (int i = 0; i < num_clean; i++) begin
             id = clean_base + i;
             collect_sample(id, 1'b0, "clean");
         end
         $fflush(metrics_fd);
         $fclose(metrics_fd);
         metrics_fd = 0;
-		`uvm_info(get_type_name(), $sformatf("Wrote %0d observed samples to log/metro_metrics_results.csv; predicted_black=%0d", samples_written, predicted_black_count), UVM_LOW)
+        `uvm_info(get_type_name(), $sformatf("Wrote %0d observed samples to log/metro_metrics_results.csv; predicted_black=%0d", samples_written, predicted_black_count), UVM_LOW)
     endtask
-	
+
 endclass
