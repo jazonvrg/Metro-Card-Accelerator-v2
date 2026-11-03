@@ -10,9 +10,11 @@ module fallback_lookup #(
     input  logic             PRESETN,
     input  logic             wr_en,
     input  logic             rd_en,
+    input  logic             program_done,
     input  logic [ADDR-1:0]  PADDR,
     input  logic [DATA-1:0]  PWDATA,
     input  logic [DATA-1:0]  id_data,
+    input  logic [DATA-1:0]  programmed_id,
     output logic             hit,
     output logic [DATA-1:0]  read_data
 );
@@ -50,11 +52,19 @@ module fallback_lookup #(
         if (!PRESETN) begin
             for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
                 entries[reset_idx] <= '0;
-        end else if (wr_en && (write_slot >= 0)) begin
-            if (PWDATA == '0) begin
-                entries[write_slot] <= '0;
-            end else begin
-                entries[write_slot] <= PWDATA;
+        end else begin
+            if (program_done && (programmed_id != '0)) begin
+                for (int clear_idx = 0; clear_idx < DEPTH; clear_idx++) begin
+                    if (entries[clear_idx] == programmed_id)
+                        entries[clear_idx] <= '0;
+                end
+            end
+            if (wr_en && (write_slot >= 0)) begin
+                if (PWDATA == '0) begin
+                    entries[write_slot] <= '0;
+                end else begin
+                    entries[write_slot] <= PWDATA;
+                end
             end
         end
     end
