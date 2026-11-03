@@ -1,11 +1,11 @@
 `timescale 1ns/1ps
 
 module metro_card_top #(
-    parameter int unsigned ADDR = 8,
-    parameter int unsigned DATA = 32,
-    parameter int unsigned HASH = 24,
-    parameter int unsigned BIT_COUNT = 9_600_000,
-    parameter int unsigned FALLBACK_DEPTH = 16,
+    parameter int ADDR = 8,
+    parameter int DATA = 32,
+    parameter int HASH = 24,
+    parameter int BIT_COUNT = 9_600_000,
+    parameter int FALLBACK_DEPTH = 16,
     parameter logic [ADDR-1:0] FALLBACK_BASE_ADDR = 8'h10
 ) (
     input  logic             PCLK,
