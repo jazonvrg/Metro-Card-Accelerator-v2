@@ -51,7 +51,11 @@ module fallback_lookup #(
             for (int reset_idx = 0; reset_idx < DEPTH; reset_idx++)
                 entries[reset_idx] <= '0;
         end else if (wr_en && (write_slot >= 0)) begin
-            entries[write_slot] <= PWDATA;
+            if (PWDATA == '0) begin
+                entries[write_slot] <= '0;
+            end else begin
+                entries[write_slot] <= PWDATA;
+            end
         end
     end
 	
