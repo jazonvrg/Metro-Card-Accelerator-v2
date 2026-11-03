@@ -23,7 +23,7 @@ class metro_scoreboard extends uvm_scoreboard;
     covergroup operation_mode_cg with function sample(logic sample_is_program);
         option.per_instance = 1;
         cp_operation_mode: coverpoint sample_is_program {
-            bins query_mode = {1'b0};
+            bins query_mode   = {1'b0};
             bins program_mode = {1'b1};
         }
     endgroup
@@ -34,22 +34,22 @@ class metro_scoreboard extends uvm_scoreboard;
     );
         option.per_instance = 1;
         cp_slot: coverpoint sample_slot {
-            bins first_slot = {0};
+            bins first_slot  = {0};
             bins middle_slot = {[1:14]};
-            bins last_slot = {15};
+            bins last_slot   = {15};
         }
         cp_action: coverpoint sample_action {
             bins insert_new = {2'd0};
-            bins overwrite = {2'd1};
-            bins clear = {2'd2};
+            bins overwrite  = {2'd1};
+            bins clear      = {2'd2};
         }
         cp_clear_vs_write: coverpoint (sample_action == 2'd2) {
             bins write_or_overwrite = {1'b0};
-            bins clear_slot = {1'b1};
+            bins clear_slot         = {1'b1};
         }
         slot_x_action: cross cp_slot, cp_clear_vs_write;
     endgroup
-
+    
     covergroup query_result_cg with function sample(
         logic [1:0] sample_expected_path,
         logic sample_actual_match,
@@ -95,7 +95,7 @@ class metro_scoreboard extends uvm_scoreboard;
         }
     endgroup
 
-    function new(string name = "metro_scoreboard", uvm_component parent = null);
+    function new(string name = "metro_scoreboard", uvm_component parent);
         super.new(name, parent);
         apb_export = new("apb_export", this);
         operation_mode_cg = new();
@@ -136,7 +136,7 @@ class metro_scoreboard extends uvm_scoreboard;
     endfunction
 
     function automatic void calc_indices(
-        input  logic [31:0] id,
+        input logic [31:0] id,
         output int i1,
         output int i2,
         output int i3,
@@ -190,7 +190,7 @@ class metro_scoreboard extends uvm_scoreboard;
                 if (tr.data == 32'h0)
                     fallback_action = 2'd2;
                 else if (previous_entry_valid)
-                    fallback_action = 2'd1; 
+                    fallback_action = 2'd1;
                 else
                     fallback_action = 2'd0; 
                 fallback_slot_action_cg.sample(slot, fallback_action);
@@ -212,6 +212,13 @@ class metro_scoreboard extends uvm_scoreboard;
                                 model_bank1[i2] = 1'b1;
                                 model_bank2[i3] = 1'b1;
                                 model_bank3[i4] = 1'b1;
+                                for (int clear_idx = 0; clear_idx < METRO_FALLBACK_DEPTH; clear_idx++) begin
+                                    if ((current_id != '0) && (fallback_ids[clear_idx] == current_id)) begin
+                                        fallback_slot_action_cg.sample(clear_idx, 2'd2);
+                                        fallback_ids[clear_idx] = '0;
+                                        `uvm_info(get_type_name(), $sformatf("MODEL AUTO-CLEAR fallback slot=%0d id=0x%08h", clear_idx, current_id), UVM_MEDIUM)
+                                    end
+                                end
                                 expected_bloom_match = 1'b0;
                                 expected_match = 1'b0;
                                 `uvm_info(get_type_name(), $sformatf("MODEL PROGRAM id=0x%08h indexes={%0d,%0d,%0d,%0d}", current_id, i1, i2, i3, i4), UVM_MEDIUM)
@@ -239,8 +246,8 @@ class metro_scoreboard extends uvm_scoreboard;
                 expected_path = {expected_fallback_match, expected_bloom_match};
                 query_result_cg.sample(expected_path, tr.rdata[1], tr.rdata[2], tr.rdata[0], (tr.rdata[1] === expected_match), (tr.rdata[2] === expected_fallback_match));
             end
-            if ((tr.rdata[0] === 1'b1) && (tr.rdata[1] === expected_match) &&
-                (tr.rdata[2] === expected_fallback_match))
+
+            if ((tr.rdata[0] === 1'b1) && (tr.rdata[1] === expected_match) && (tr.rdata[2] === expected_fallback_match))
                 `uvm_info(get_type_name(), $sformatf("PASS ID=0x%08h bloom=%0b fallback=%0b match=%0b status=0x%08h", current_id, expected_bloom_match, expected_fallback_match, expected_match, tr.rdata), UVM_LOW)
             pending_valid = 1'b0;
         end else if ((tr.addr == METRO_STAT_REG) && !tr.is_write) begin
