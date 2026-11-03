@@ -224,7 +224,7 @@ class metro_metrics_sequence extends metro_base_sequence;
         predicted_black_count = 0;
     endfunction
 
-	task collect_sample(input logic [31:0] id, input logic true_label, input string source_name);
+	task collect_sample(input logic [31:0] id, input logic true_label, input string source_name, input logic check_expected = 1'b0, input logic expected_match = 1'b0, input logic expected_fallback = 1'b0);
         logic [31:0] status;
         logic predicted_label;
         query_card_capture(id, status);
@@ -235,6 +235,10 @@ class metro_metrics_sequence extends metro_base_sequence;
             predicted_label = 1'b0;
         end else begin
             predicted_label = status[1];
+        end
+        if (check_expected &&
+            ((status[1] !== expected_match) || (status[2] !== expected_fallback))) begin
+            `uvm_error(get_type_name(), $sformatf("Directed metric case mismatch ID=0x%08h expected MATCH=%0b FALLBACK=%0b got status=0x%08h", id, expected_match, expected_fallback, status))
         end
 		$fdisplay(metrics_fd, "%08h,%0d,%0d,%0d,%08h,%s", id, true_label, predicted_label, status[2], status, source_name);
         samples_written++;
@@ -270,11 +274,18 @@ class metro_metrics_sequence extends metro_base_sequence;
             id = fallback_card_base + i;
             collect_sample(id, 1'b1, "fallback_black");
         end
-        for (int i = 0; i < num_clean; i++) begin
+        if (num_clean < 3)
+            `uvm_fatal(get_type_name(), "num_clean must be >= 3 for directed collision cases")
+        id = 32'h36C0_C591;
+        collect_sample(id, 1'b0, "clean_hash_collision", 1'b1, 1'b1, 1'b0);
+        id = 32'h821A_34F5;
+        collect_sample(id, 1'b0, "clean_hash_collision", 1'b1, 1'b1, 1'b0);
+        id = 32'h8019_30D1; 
+        collect_sample(id, 1'b0, "clean_hash_collision", 1'b1, 1'b1, 1'b0);
+        for (int i = 0; i < (num_clean - 3); i++) begin
             id = clean_base + i;
             collect_sample(id, 1'b0, "clean");
         end
-
         $fflush(metrics_fd);
         $fclose(metrics_fd);
         metrics_fd = 0;
