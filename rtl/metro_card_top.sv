@@ -21,20 +21,24 @@ module metro_card_top #(
 	
     logic [DATA-1:0] id_data;
     logic start, mode, match, fallback_hit, fallback_match, done;
+    logic program_done, clear_done;
+    logic [DATA-1:0] programmed_id;
     logic [DATA-1:0] fallback_rdata;
     logic [HASH-1:0] index1, index2, index3, index4;
     logic wr_en, rd_en;
+
+    assign clear_done = wr_en && (PADDR == 8'h04) && PWDATA[0];
 
     apb_slave apb_dut (
         .PSEL			(PSEL),
 		.PWRITE			(PWRITE),
 		.PENABLE		(PENABLE),
-		.PREADY			(PREADY),
+		.PREADY		(PREADY),
         .wr_en			(wr_en),
 		.rd_en			(rd_en)
     );
 
-    hash_engine #(
+    hash_engine #( 
 		.DATA			(DATA),
 		.HASH			(HASH),
 		.BIT_COUNT		(BIT_COUNT)
@@ -56,10 +60,12 @@ module metro_card_top #(
 		.PRESETN		(PRESETN),
 		.wr_en			(wr_en),
 		.rd_en			(rd_en),
+        .program_done	(program_done),
         .PADDR			(PADDR),
 		.PWDATA			(PWDATA),
 		.id_data		(id_data),
-        .hit			(fallback_hit),
+        .programmed_id	(programmed_id),
+		.hit			(fallback_hit),
 		.read_data		(fallback_rdata)
     );
 
@@ -98,9 +104,12 @@ module metro_card_top #(
         .index3			(index3),
 		.index4			(index4),
 		.fallback_hit	(fallback_hit),
-        .match			(match),
+        .clear_done		(clear_done),
+		.match			(match),
 		.fallback_match	(fallback_match),
-		.done			(done)
+		.done			(done),
+        .program_done	(program_done),
+        .programmed_id	(programmed_id)
     );
 	
 endmodule
