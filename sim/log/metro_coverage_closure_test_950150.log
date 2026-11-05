@@ -1,0 +1,366 @@
+# vsim -sv_seed 950150 -coverage -coveranalysis -cvgperinstance -voptargs="+acc" -assertdebug -c testbench "+UVM_TESTNAME=metro_coverage_closure_test" "+UVM_VERBOSITY=UVM_LOW" -do "coverage save -codeAll -cvg -onexit metro_coverage_closure_test_950150.ucdb; log -r /*; run -all; quit -f" -l metro_coverage_closure_test_950150.log 
+# Start time: 19:02:00 on Nov 05,2026
+# Loading /tmp/vannghia_1108@ictc-eda-ldap.ipa.test_dpi_85960/linux_x86_64_gcc-11/export_tramp.so
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# //  Questa Sim-64
+# //  Version 10.6d_1 linux_x86_64 Apr 11 2018
+# //
+# //  Copyright 1991-2018 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.metro_apb_if(fast)
+# Loading work.uvm_pkg(fast)
+# Loading work.metro_apb_pkg(fast)
+# ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
+# This also means that later if you turn on UVM-aware debugging your debug simulations may have
+# different random seeds from your non-debug simulations.
+# Loading work.seq_pkg(fast)
+# Loading work.env_pkg(fast)
+# Loading work.test_pkg(fast)
+# Loading work.testbench(fast)
+# Loading work.metro_apb_if(fast)
+# Loading work.metro_card_top(fast)
+# Loading work.apb_slave(fast)
+# Loading work.hash_engine(fast)
+# Loading work.fallback_lookup(fast)
+# Loading work.register(fast)
+# Loading work.sram(fast)
+# Compiling /tmp/vannghia_1108@ictc-eda-ldap.ipa.test_dpi_85960/linux_x86_64_gcc-5.3.0/exportwrapper.c
+# Compiling /tmp/vannghia_1108@ictc-eda-ldap.ipa.test_dpi_85960/linux_x86_64_gcc-11/exportwrapper.c
+# Loading /tmp/vannghia_1108@ictc-eda-ldap.ipa.test_dpi_85960/linux_x86_64_gcc-11/vsim_auto_compile.so
+# coverage save -codeAll -cvg -onexit metro_coverage_closure_test_950150.ucdb
+#  log -r /*
+#  run -all
+# UVM_INFO /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
+# ----------------------------------------------------------------
+# UVM-1.2
+# (C) 2007-2014 Mentor Graphics Corporation
+# (C) 2007-2014 Cadence Design Systems, Inc.
+# (C) 2006-2014 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# (C) 2013-2014 NVIDIA Corporation
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_root.svh(453) @ 0: reporter [NO_DPI_TSTNAME] UVM_NO_DPI defined--getting UVM_TESTNAME directly, without DPI
+# UVM_INFO @ 0: reporter [RNTST] Running test metro_coverage_closure_test...
+# UVM_INFO /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_root.svh(579) @ 0: reporter [UVMTOP] UVM testbench topology:
+# -------------------------------------------------------------------
+# Name                       Type                         Size  Value
+# -------------------------------------------------------------------
+# uvm_test_top               metro_coverage_closure_test  -     @345 
+#   env                      metro_environment            -     @360 
+#     apb_agent              metro_apb_agent              -     @375 
+#       driver               metro_apb_driver             -     @546 
+#         rsp_port           uvm_analysis_port            -     @565 
+#         seq_item_port      uvm_seq_item_pull_port       -     @555 
+#       monitor              metro_apb_monitor            -     @575 
+#         ap                 uvm_analysis_port            -     @584 
+#       sequencer            metro_apb_sequencer          -     @409 
+#         rsp_export         uvm_analysis_export          -     @418 
+#         seq_item_export    uvm_seq_item_pull_imp        -     @536 
+#         arbitration_queue  array                        0     -    
+#         lock_queue         array                        0     -    
+#         num_last_reqs      integral                     32    'd1  
+#         num_last_rsps      integral                     32    'd1  
+#     scoreboard             metro_scoreboard             -     @384 
+#       apb_export           uvm_analysis_imp             -     @393 
+# -------------------------------------------------------------------
+# 
+# UVM_INFO /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_traversal.svh(279) @ 0: reporter [UVM/COMP/NAMECHECK] This implementation of the component name checks requires DPI to be enabled
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6195000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000000 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6285000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000001 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6375000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000002 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6465000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000003 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6555000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000004 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6645000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000005 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6735000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000006 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6825000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000007 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 6915000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000008 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7005000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000009 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7095000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000000a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7185000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000000b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7275000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000000c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7365000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000000d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7455000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000000e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7545000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000000f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7635000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000010 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7725000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000011 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7815000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000012 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7905000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000013 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 7995000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000014 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8085000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000015 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8175000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000016 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8265000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000017 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8355000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000018 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8445000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000019 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8535000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000001a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8625000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000001b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8715000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000001c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8805000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000001d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8895000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000001e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 8985000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000001f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9075000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000020 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9165000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000021 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9255000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000022 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9345000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000023 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9435000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000024 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9525000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000025 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9615000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000026 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9705000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000027 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9795000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000028 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9885000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000029 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 9975000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000002a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10065000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000002b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10155000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000002c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10245000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000002d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10335000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000002e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10425000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000002f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10515000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000030 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10605000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000031 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10695000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000032 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10785000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000033 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10875000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000034 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 10965000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000035 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11055000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000036 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11145000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000037 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11235000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000038 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11325000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000039 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11415000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000003a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11505000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000003b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11595000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000003c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11685000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000003d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11775000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000003e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11865000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000003f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 11955000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000040 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12045000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000041 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12135000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000042 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12225000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000043 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12315000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000044 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12405000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000045 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12495000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000046 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12585000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000047 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12675000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000048 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12765000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000049 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12855000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000004a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 12945000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000004b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13035000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000004c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13125000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000004d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13215000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000004e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13305000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000004f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13395000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000050 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13485000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000051 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13575000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000052 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13665000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000053 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13755000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000054 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13845000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000055 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 13935000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000056 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14025000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000057 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14115000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000058 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14205000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000059 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14295000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000005a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14385000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000005b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14475000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000005c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14565000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000005d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14655000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000005e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14745000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000005f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14835000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000060 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 14925000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000061 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15015000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000062 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15105000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000063 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15195000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000064 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15285000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000065 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15375000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000066 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15465000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000067 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15555000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000068 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15645000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000069 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15735000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000006a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15825000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000006b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 15915000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000006c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16005000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000006d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16095000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000006e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16185000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000006f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16275000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000070 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16365000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000071 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16455000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000072 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16545000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000073 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16635000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000074 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16725000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000075 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16815000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000076 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16905000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000077 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 16995000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000078 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17085000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000079 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17175000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000007a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17265000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000007b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17355000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000007c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17445000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000007d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17535000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000007e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17625000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000007f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17715000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000080 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17805000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000081 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17895000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000082 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 17985000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000083 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18075000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000084 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18165000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000085 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18255000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000086 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18345000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000087 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18435000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000088 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18525000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000089 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18615000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000008a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18705000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000008b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18795000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000008c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18885000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000008d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 18975000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000008e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19065000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000008f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19155000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000090 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19245000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000091 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19335000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000092 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19425000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000093 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19515000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000094 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19605000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000095 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19695000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000096 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19785000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000097 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19875000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000098 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 19965000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x10000099 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20055000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000009a bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20145000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000009b bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20235000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000009c bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20325000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000009d bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20415000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000009e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20505000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x1000009f bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20595000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a0 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20685000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a1 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20775000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a2 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20865000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a3 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 20955000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a4 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21045000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a5 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21135000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a6 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21225000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a7 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21315000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a8 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21405000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000a9 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21495000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000aa bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21585000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ab bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21675000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ac bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21765000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ad bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21855000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ae bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 21945000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000af bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22035000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b0 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22125000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b1 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22215000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b2 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22305000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b3 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22395000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b4 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22485000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b5 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22575000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b6 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22665000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b7 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22755000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b8 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22845000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000b9 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 22935000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ba bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23025000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000bb bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23115000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000bc bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23205000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000bd bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23295000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000be bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23385000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000bf bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23475000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c0 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23565000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c1 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23655000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c2 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23745000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c3 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23835000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c4 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 23925000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c5 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24015000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c6 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24105000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c7 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24195000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c8 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24285000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000c9 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24375000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ca bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24465000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000cb bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24555000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000cc bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24645000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000cd bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24735000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ce bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24825000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000cf bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 24915000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d0 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25005000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d1 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25095000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d2 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25185000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d3 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25275000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d4 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25365000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d5 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25455000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d6 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25545000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d7 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25635000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d8 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25725000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000d9 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25815000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000da bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25905000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000db bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 25995000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000dc bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26085000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000dd bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26175000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000de bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26265000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000df bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26355000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e0 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26445000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e1 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26535000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e2 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26625000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e3 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26715000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e4 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26805000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e5 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26895000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e6 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 26985000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e7 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27075000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e8 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27165000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000e9 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27255000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ea bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27345000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000eb bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27435000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ec bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27525000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ed bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27615000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ee bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27705000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x100000ef bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../testcases/metro_coverage_closure_test.sv(85) @ 27710000: uvm_test_top.env.apb_agent.sequencer@@coverage_closure_seq [metro_coverage_closure_sequence] BANK3_ZERO_TARGET id=0x7000056e indexes={769,530,445,562}; expected bank bits={1,1,1,0}
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27795000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0x7000056e bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../sequences/metro_sequences.sv(48) @ 27800000: uvm_test_top.env.apb_agent.sequencer@@coverage_closure_seq [metro_coverage_closure_sequence] QUERY PASS ID=0x7000056e status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 27885000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0xa5c37e19 bloom=0 fallback=0 match=0 status=0x00000001
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 28005000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0xa5c37e19 bloom=1 fallback=1 match=1 status=0x00000007
+# UVM_INFO ../sequences/metro_sequences.sv(48) @ 28010000: uvm_test_top.env.apb_agent.sequencer@@coverage_closure_seq [metro_coverage_closure_sequence] QUERY PASS ID=0xa5c37e19 status=0x00000007
+# UVM_INFO ../tb/metro_scoreboard.sv(251) @ 28125000: uvm_test_top.env.scoreboard [metro_scoreboard] PASS ID=0xa5c37e19 bloom=1 fallback=0 match=1 status=0x00000003
+# UVM_INFO ../sequences/metro_sequences.sv(48) @ 28130000: uvm_test_top.env.apb_agent.sequencer@@coverage_closure_seq [metro_coverage_closure_sequence] QUERY PASS ID=0xa5c37e19 status=0x00000003
+# UVM_INFO /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_objection.svh(1271) @ 28175000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# UVM_INFO ../tb/metro_scoreboard.sv(260) @ 28175000: uvm_test_top.env.scoreboard [metro_scoreboard] Scoreboard: operations=244 status_checks=244 fallback_hits=1 BIT_COUNT=4096
+# UVM_INFO ../tb/metro_scoreboard.sv(261) @ 28175000: uvm_test_top.env.scoreboard [SCOREBOARD_FUNC_COV] Scoreboard functional coverage: operation_mode=100.00% fallback_slot_action=91.67% query_result=95.83% idle_status=0.00%
+#### TEST PASSED ####
+# UVM_INFO /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_report_server.svh(847) @ 28175000: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :  256
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [NO_DPI_TSTNAME]     1
+# [RNTST]     1
+# [SCOREBOARD_FUNC_COV]     1
+# [TEST_DONE]     1
+# [UVM/COMP/NAMECHECK]     1
+# [UVM/RELNOTES]     1
+# [UVMTOP]     1
+# [metro_coverage_closure_sequence]     4
+# [metro_scoreboard]   245
+# 
+# ** Note: $finish    : /ictc/other/tools/QuestaDVA/questasim/verilog_src/uvm-1.2/src/base/uvm_root.svh(517)
+#    Time: 28175 ns  Iteration: 69  Instance: /testbench
+# Saving coverage database on exit...
+# End time: 19:02:02 on Nov 05,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
