@@ -16,6 +16,7 @@ package test_pkg;
     `include "metro_smoke_test.sv"
     `include "metro_metrics_test.sv"
     `include "metro_coverage_closure_test.sv"
+    `include "metro_fallback_auto_clear_test.sv"
     
 endpackage
 `endif
