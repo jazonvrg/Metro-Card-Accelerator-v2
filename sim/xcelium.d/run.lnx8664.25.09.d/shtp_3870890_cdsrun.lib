@@ -1,0 +1,2 @@
+SOFTINCLUDE /data/cadence/installs/XCELIUM251/tools/inca/files/cds.lib
+define worklib ../worklib

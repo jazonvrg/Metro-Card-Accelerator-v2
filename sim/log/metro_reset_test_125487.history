@@ -1,0 +1,4 @@
+#e1(08Nov2026:11:11:59): source ./xcelium.d/env.d/env.history.08Nov2026_11_11_59
+s1(08Nov2026:11:11:59):  xrun -64bit -sv -uvm -uvmhome CDNS-1.2 -timescale 1ns/1ps -access +rwc -f rtl.f -f tb.f -top testbench +define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR -coverage all -covdut metro_card_top -covfile cov.ccf -elaborate -l xrun_build.log 
+#e2(08Nov2026:11:12:04): source ./xcelium.d/env.d/env.history.08Nov2026_11_12_04
+s2(08Nov2026:11:12:04):  xrun -64bit -sv -uvm -uvmhome CDNS-1.2 -timescale 1ns/1ps -access +rwc -f rtl.f -f tb.f -top testbench +define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR -coverage all -covdut metro_card_top -covfile cov.ccf -covworkdir log/cov_work -covtest metro_reset_test_125487 -covoverwrite -svseed 125487 +UVM_TESTNAME=metro_reset_test +UVM_VERBOSITY=UVM_LOW -input "@database -open waves -into log/metro_reset_test_125487.shm -default; probe -create -shm testbench -all -variables -depth all; run; exit" -l log/metro_reset_test_125487.log 

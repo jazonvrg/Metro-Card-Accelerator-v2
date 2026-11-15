@@ -1,0 +1,58 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[23:12:26.214401] Configured Lic search path (25.01-s002): 5280@10.253.1.1
+
+Version: 25.12-s067_1, built Sun Nov 16 22:10:10 PST 2025
+Options: -files run_genus.tcl -log logs/genus_run.log 
+Date:    Sun Nov 01 23:12:26 2026
+Host:    shtp (x86_64 w/Linux 5.14.0-687.20.1.el9_8.x86_64) (20cores*80cpus*2physical cpus*Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz 28160KB) (526400084KB)
+PID:     665918
+OS:      AlmaLinux 9.8 (Olive Jaguar)
+
+Checking out license: Genus_Synthesis
+[23:12:26.276090] Periodic Lic check successful
+[23:12:26.800402] Feature usage summary:
+[23:12:26.800403] Genus_Synthesis  
+License checkout complete (0 seconds elapsed).
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Finished executable startup (3 seconds elapsed).
+
+Loading tool scripts...Using chipware dir from user defined $CW_DIR environment variable set to /data/cadence/installs/DDI251/GENUS251/tools.lnx86/lib/chipware
+Using chipware simulation model dir from user defined $CW_DIR_SIM environment variable set to /data/cadence/installs/DDI251/GENUS251/tools.lnx86/lib/chipware/sim
+
+Finished loading tool scripts (23 seconds elapsed).
+
+#@ Processing -files option
+@genus:root: 1> source run_genus.tcl
+File 'run_genus.tcl' does not exist.
+Encountered problems processing file: run_genus.tcl
+WARNING: This version of the tool is 349 days old.
+@genus:root: 2> ls
+constraints
+docs
+lib
+logs
+metrics
+outputs
+reports
+rtl
+scripts
+sequences
+sim
+tb
+testcases
+vip
+@genus:root: 3> cd scripts
+@genus:root: 4> ls
+run_genus.tcl
+@genus:root: 5> cd ..
+@genus:root: 6> genus -files scripts/run_genus.tcl -log logs/genus_run.log

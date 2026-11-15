@@ -1,0 +1,23 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-sv
+-INCDIR
+../vip
+-INCDIR
+../tb
+-INCDIR
+../sequences
+-INCDIR
+../testcases
+-INCDIR
+../vip
+-DEFINE
+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR
+-I_INCDIR
+/data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/sv/src
+-DEFINE
+USE_PARAMETERIZED_WRAPPER
+-I_INCDIR
+/data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/additions/sv

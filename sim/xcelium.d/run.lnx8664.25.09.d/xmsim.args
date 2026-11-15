@@ -1,0 +1,46 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-INPUT
+"@source /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/additions/sv/files/tcl/uvm_sim.tcl"
++UVM_VERBOSITY=UVM_LOW
++incdir+../vip
++incdir+../tb
++incdir+../sequences
++incdir+../testcases
++incdir+../vip
++define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR
+-uvmhome
+/data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2
+-sv_lib
+/data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/additions/sv/lib/64bit/libuvmpli.so
+-COVWORKDIR
+log/cov_work
+-COVTEST
+metro_fallback_auto_clear_test_615384
+-COVOVERWRITE
+-SVSEED
+615384
++UVM_TESTNAME=metro_fallback_auto_clear_test
+-INPUT
+"@database -open waves -into log/metro_fallback_auto_clear_test_615384.shm -default; probe -create -shm testbench -all -variables -depth all; run; exit"
+-MESSAGES
+-SV_LIB
+/data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/additions/sv/lib/64bit/libuvmdpi.so
++EMGRLOG
+log/metro_fallback_auto_clear_test_615384.log
+-XLSTIME
+1794111130
+-XLKEEP
+-XLMODE
+./xcelium.d/run.lnx8664.25.09.d
+-RUNMODE
+-CDSLIB
+./xcelium.d/run.lnx8664.25.09.d/cds.lib
+-HDLVAR
+./xcelium.d/run.lnx8664.25.09.d/hdl.var
+-XLNAME
+xrun
+-XLVERSION
+"TOOL:	xrun(64)	25.09-s001"

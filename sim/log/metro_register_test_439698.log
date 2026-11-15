@@ -1,0 +1,146 @@
+xrun(64): 25.09-s001: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	25.09-s001: Started on Nov 08, 2026 at 11:12:05 +07
+xrun
+	-64bit
+	-sv
+	-uvm
+	-uvmhome CDNS-1.2
+	-timescale 1ns/1ps
+	-access +rwc
+	-f rtl.f
+		../rtl/apb_slave.sv
+		../rtl/hash_engine.sv
+		../rtl/fallback_lookup.sv
+		../rtl/register.sv
+		../rtl/sram.sv
+		../rtl/metro_card_top.sv
+	-f tb.f
+		+incdir+../vip
+		+incdir+../tb
+		+incdir+../sequences
+		+incdir+../testcases
+		-f ../vip/vip.f
+			+incdir+../vip
+			../vip/metro_apb_if.sv
+			../vip/metro_apb_pkg.sv
+		../tb/env_pkg.sv
+		../sequences/seq_pkg.sv
+		../testcases/test_pkg.sv
+		../tb/testbench.sv
+	-top testbench
+	+define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR
+	-coverage all
+	-covdut metro_card_top
+	-covfile cov.ccf
+	-covworkdir log/cov_work
+	-covtest metro_register_test_439698
+	-covoverwrite
+	-svseed 439698
+	+UVM_TESTNAME=metro_register_test
+	+UVM_VERBOSITY=UVM_LOW
+	-input "@database -open waves -into log/metro_register_test_439698.shm -default; probe -create -shm testbench -all -variables -depth all; run; exit"
+	-l log/metro_register_test_439698.log
+
+   User defined plus("+") options:
+	+UVM_VERBOSITY=UVM_LOW
+
+Loading snapshot worklib.testbench:sv .................... Done
+SVSEED set from command line: 439698
+xcelium> source /data/cadence/installs/XCELIUM251/tools/xcelium/files/xmsimrc
+xcelium> source /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> database -open waves -into log/metro_register_test_439698.shm -default; probe -create -shm testbench -all -variables -depth all; run; exit
+UVM_INFO /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh(412) @ 0: reporter [UVM/RELNOTES] 
+----------------------------------------------------------------
+CDNS-UVM-1.2 (25.09-s001)
+(C) 2007-2014 Mentor Graphics Corporation
+(C) 2007-2014 Cadence Design Systems, Inc.
+(C) 2006-2014 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+(C) 2013-2014 NVIDIA Corporation
+----------------------------------------------------------------
+
+  ***********       IMPORTANT RELEASE NOTES         ************
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_NO_DEPRECATED undefined.
+  See http://www.eda.org/svdb/view.php?id=3313 for more details.
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+  See http://www.eda.org/svdb/view.php?id=3770 for more details.
+
+      (Specify +UVM_NO_RELNOTES to turn off this notice)
+
+UVM_INFO @ 0: reporter [RNTST] Running test metro_register_test...
+UVM_INFO /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh(605) @ 0: reporter [UVMTOP] UVM testbench topology:
+--------------------------------------------------------------
+Name                       Type                    Size  Value
+--------------------------------------------------------------
+uvm_test_top               metro_register_test     -     @1718
+  env                      metro_environment       -     @1782
+    apb_agent              metro_apb_agent         -     @1826
+      driver               metro_apb_driver        -     @2614
+        rsp_port           uvm_analysis_port       -     @2714
+        seq_item_port      uvm_seq_item_pull_port  -     @2664
+      monitor              metro_apb_monitor       -     @2745
+        ap                 uvm_analysis_port       -     @2795
+      sequencer            metro_apb_sequencer     -     @1963
+        rsp_export         uvm_analysis_export     -     @2023
+        seq_item_export    uvm_seq_item_pull_imp   -     @2583
+        arbitration_queue  array                   0     -    
+        lock_queue         array                   0     -    
+        num_last_reqs      integral                32    'd1  
+        num_last_rsps      integral                32    'd1  
+    scoreboard             metro_scoreboard        -     @1857
+      apb_export           uvm_analysis_imp        -     @1912
+--------------------------------------------------------------
+
+SDI/Verilog Transaction Recording Facility Version 25.09-s001
+UVM_INFO /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_objection.svh(1271) @ 160000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO ../tb/metro_scoreboard.sv(260) @ 160000: uvm_test_top.env.scoreboard [metro_scoreboard] Scoreboard: operations=0 status_checks=0 fallback_hits=0 BIT_COUNT=4096
+UVM_INFO ../tb/metro_scoreboard.sv(261) @ 160000: uvm_test_top.env.scoreboard [SCOREBOARD_FUNC_COV] Scoreboard functional coverage: operation_mode=0.00% fallback_slot_action=0.00% query_result=0.00% idle_status=0.00%
+#### TEST PASSED ####
+UVM_INFO /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_catcher.svh(705) @ 160000: reporter [UVM/REPORT/CATCHER] 
+--- UVM Report catcher Summary ---
+
+
+Number of demoted UVM_FATAL reports  :    0
+Number of demoted UVM_ERROR reports  :    0
+Number of demoted UVM_WARNING reports:    0
+Number of caught UVM_FATAL reports   :    0
+Number of caught UVM_ERROR reports   :    0
+Number of caught UVM_WARNING reports :    0
+
+UVM_INFO /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_server.svh(851) @ 160000: reporter [UVM/REPORT/SERVER] 
+--- UVM Report Summary ---
+
+** Report counts by severity
+UVM_INFO :    7
+UVM_WARNING :    0
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[RNTST]     1
+[SCOREBOARD_FUNC_COV]     1
+[TEST_DONE]     1
+[UVM/RELNOTES]     1
+[UVM/REPORT/CATCHER]     1
+[UVMTOP]     1
+[metro_scoreboard]     1
+
+xmsim: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.operation_mode_cg" will be generated for covergroup instance "operation_mode_cg" as the name of the covergroup instance is not specified explicitly: ../tb/metro_scoreboard.sv, 23.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.fallback_slot_action_cg" will be generated for covergroup instance "fallback_slot_action_cg" as the name of the covergroup instance is not specified explicitly: ../tb/metro_scoreboard.sv, 31.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.query_result_cg" will be generated for covergroup instance "query_result_cg" as the name of the covergroup instance is not specified explicitly: ../tb/metro_scoreboard.sv, 53.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.idle_status_cg" will be generated for covergroup instance "idle_status_cg" as the name of the covergroup instance is not specified explicitly: ../tb/metro_scoreboard.sv, 90.
+
+coverage setup:
+  workdir  :  log/cov_work
+  dutinst  :  testbench.dut(metro_card_top)
+  scope    :  scope
+  testname :  metro_register_test_439698
+
+coverage files:
+  model(design data) :  log/cov_work/scope/icc_47b0527f_0985cb8a.ucm (reused)
+  data               :  log/cov_work/scope/metro_register_test_439698/icc_47b0527f_0985cb8a.ucd
+TOOL:	xrun(64)	25.09-s001: Exiting on Nov 08, 2026 at 11:12:05 +07  (total: 00:00:00)

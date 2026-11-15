@@ -1,0 +1,177 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[17:56:31.214457] Configured Lic search path (25.01-s002): 5280@10.253.1.1
+
+Version: 25.12-s067_1, built Sun Nov 16 22:10:10 PST 2025
+Options: -files scripts/run_genus.tcl -log logs/genus_run.log 
+Date:    Mon Nov 02 17:56:31 2026
+Host:    shtp (x86_64 w/Linux 5.14.0-687.20.1.el9_8.x86_64) (20cores*80cpus*2physical cpus*Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz 28160KB) (526400084KB)
+PID:     1073479
+OS:      AlmaLinux 9.8 (Olive Jaguar)
+
+Checking out license: Genus_Synthesis
+[17:56:31.414977] Periodic Lic check successful
+[17:56:31.414993] Feature usage summary:
+[17:56:31.414994] Genus_Synthesis  
+License checkout complete (0 seconds elapsed).
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Finished executable startup (4 seconds elapsed).
+
+Loading tool scripts...
+Finished loading tool scripts (21 seconds elapsed).
+
+#@ Processing -files option
+@genus:root: 1> source scripts/run_genus.tcl
+#@ Begin verbose source ./scripts/run_genus.tcl
+@file(run_genus.tcl) 2: set PROJECT_DIR [pwd]
+@file(run_genus.tcl) 3: set RTL_DIR "$PROJECT_DIR/rtl"
+@file(run_genus.tcl) 4: set CONSTRAINTS_DIR "$PROJECT_DIR/constraints"
+@file(run_genus.tcl) 5: set REPORTS_DIR "$PROJECT_DIR/reports"
+@file(run_genus.tcl) 6: set OUTPUTS_DIR "$PROJECT_DIR/outputs"
+@file(run_genus.tcl) 8: set DESIGN "metro_card_top"
+@file(run_genus.tcl) 10: set LIB_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/timing/"
+@file(run_genus.tcl) 11: set TARGET_LIB "typical.lib"
+@file(run_genus.tcl) 14: set_db init_lib_search_path [list $LIB_DIR]
+  Setting attribute of root '/': 'init_lib_search_path' = /data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/timing/
+@file(run_genus.tcl) 15: set_db init_hdl_search_path [list $RTL_DIR]
+  Setting attribute of root '/': 'init_hdl_search_path' = /data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl
+@file(run_genus.tcl) 17: read_libs $TARGET_LIB
+
+  Message Summary for Library typical.lib:
+  ****************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  Missing library level attribute. [LBR-516]: 1
+  ****************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.200000, 25.000000) in library 'typical.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHX2'.
+        : Specify a valid area value for the libcell.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHX4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDHX2'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDHXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2X4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2X6'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3X8'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X8'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21X2'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO22X1'.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-43'.
+@file(run_genus.tcl) 19: set LEF_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/"
+@file(run_genus.tcl) 20: read_physical -lef [list "$LEF_DIR/gsclib045.lef"]
+
+  According to lef_library, there are total 9 routing layers [ V(4) / H(5) ]
+
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DFFNSRX4 cannot be found in library.
+        : Ensure that the proper library files are available and have been imported.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL1 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL64 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL8 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL16 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ANTENNA cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL4 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DFFSX2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL32 cannot be found in library.
+@file(run_genus.tcl) 23: set RTL_FILES {
+	apb_slave.sv 
+	hash_engine.sv 
+	fallback_lookup.sv 
+	register.sv 
+	sram.sv 
+	metro_card_top.sv 
+}
+@file(run_genus.tcl) 31: set_db hdl_max_memory_address_range 16777216
+  Setting attribute of root '/': 'hdl_max_memory_address_range' = 16777216
+@file(run_genus.tcl) 32: set_db hdl_max_loop_limit 16777216
+  Setting attribute of root '/': 'hdl_max_loop_limit' = 16777216
+@file(run_genus.tcl) 33: read_hdl -sv $RTL_FILES
+    initial begin
+          |
+Warning : Ignoring unsynthesizable construct. [VLOGPT-37]
+        : Initial in file '/data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl/sram.sv' on line 32, column 11.
+        : For example, the following constructs will be ignored:
+    - initial block
+    - final block
+    - program block
+    - property block
+    - sequence block
+    - covergroup
+    - checker block
+    - gate drive strength
+    - system task enable
+    - reg declaration with initial value
+    - specify block.
+@file(run_genus.tcl) 36: elaborate $DESIGN
+  Libraries have 324 usable logic and 126 usable sequential lib-cells.
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'metro_card_top' from file '/data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl/metro_card_top.sv'.
+Warning : Using default parameter value for module elaboration. [CDFG-818]
+        : Elaborating block 'metro_card_top' with default parameters value.
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 15977s, ST: 15905s, FG: 15905s, CPU: 101.9%}, MEM {curr: 36.3G, peak: 36.3G, phys curr: 35.6G, phys peak: 35.6G}, SYS {load: 1.2, cpu: 80, total: 502.0G, free: 90.7G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 15978s, ST: 15906s, FG: 15906s, CPU: 101.9%}, MEM {curr: 36.3G, peak: 36.3G, phys curr: 35.6G, phys peak: 35.6G}, SYS {load: 1.2, cpu: 80, total: 502.0G, free: 90.7G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 15979s, ST: 15908s, FG: 15908s, CPU: 101.9%}, MEM {curr: 36.3G, peak: 36.3G, phys curr: 35.6G, phys peak: 35.6G}, SYS {load: 1.2, cpu: 80, total: 502.0G, free: 90.7G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 15981s, ST: 15909s, FG: 15909s, CPU: 101.9%}, MEM {curr: 36.3G, peak: 36.3G, phys curr: 35.6G, phys peak: 35.6G}, SYS {load: 1.2, cpu: 80, total: 502.0G, free: 90.7G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 15983s, ST: 15911s, FG: 15911s, CPU: 101.9%}, MEM {curr: 36.3G, peak: 36.3G, phys curr: 35.6G, phys peak: 35.6G}, SYS {load: 1.2, cpu: 80, total: 502.0G, free: 90.7G}
+Abnormal exit.

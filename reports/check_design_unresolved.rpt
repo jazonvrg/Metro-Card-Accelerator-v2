@@ -1,0 +1,13 @@
+
+ 	 Check Design Report (c)
+	 ------------------- 
+
+  Unresolved References & Empty Modules
+  ------------------------------------- 
+design 'metro_card_top' has the following unresolved references
+hinst:metro_card_top/sram_dut
+Total number of unresolved references in design 'metro_card_top' : 1
+
+No empty modules in design 'metro_card_top'
+
+  Done Checking the design.

@@ -1,0 +1,83 @@
+Cadence Xcelium / IMC Coverage Report Utility
+Start time: 11:12:07 on Nov 08,2026
+Database  : log/cov_work/scope/metro_smoke_test_313448
+Coverage Report Totals BY FILES: Number of Files 6
+
+    Enabled Coverage            Active      Hits    Misses    Weight % Covered
+    ----------------            ------      ----    ------    ------ ---------
+    Stmts                           71        43        28         1     60.6
+    Branches                        39        22        17         1     56.4
+    Conditions                                                     1     60.0
+        UDP Condition Rows           0         0         0         1    100.0
+        FEC Condition Terms         10         6         4         1     60.0
+    Expressions                                                    1     68.8
+        UDP Expression Rows          0         0         0         1    100.0
+        FEC Expression Terms        16        11         5         1     68.8
+    FSMs                                                           1    100.0
+        States                       0         0         0         1    100.0
+        Transitions                  0         0         0         1    100.0
+    Toggle Bins                   1678       720       958         1     42.9
+
+Total coverage (Code Coverage Only, filtered view): 57.7%
+
+Coverage Report Totals BY INSTANCES: Number of Instances 13
+
+    Enabled Coverage            Active      Hits    Misses    Weight % Covered
+    ----------------            ------      ----    ------    ------ ---------
+    Stmts                           71        43        28         1     60.6
+    Branches                        39        22        17         1     56.4
+    Conditions                                                     1     60.0
+        UDP Condition Rows           0         0         0         1    100.0
+        FEC Condition Terms         10         6         4         1     60.0
+    Expressions                                                    1     68.8
+        UDP Expression Rows          0         0         0         1    100.0
+        FEC Expression Terms        16        11         5         1     68.8
+    FSMs                                                           1    100.0
+        States                       0         0         0         1    100.0
+        Transitions                  0         0         0         1    100.0
+    Toggle Bins                   1500       630       870         1     42.0
+    Cover Group Types                4        na        na         1     67.7
+    Coverpoints/Crosses             12        na        na         1       na
+        Covergroup Bins             28        19         9         1     67.9
+Total coverage (filtered view): 62.7%
+
+End time: 11:12:07 on Nov 08,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+
+=================================================================================
+=== RTL Code Coverage Breakdown by Module (DUT: testbench.dut / metro_card_top)
+=================================================================================
+Module                  File                        Stmts   Branches   Cond    Expr   Toggle Bins   % Covered
+----------------------  -------------------------  ------   --------  -----   -----   -----------   ---------
+apb_slave               ../rtl/apb_slave.sv         4/4        0/0      0/0     8/8       12/12       100.0%
+fallback_lookup         ../rtl/fallback_lookup.sv  21/21      18/18   10/10     0/0     412/412       100.0%
+hash_engine             ../rtl/hash_engine.sv       6/6        0/0      0/0     0/0     288/288       100.0%
+metro_card_top          ../rtl/metro_card_top.sv    1/1        0/0      0/0     3/3     448/448       100.0%
+register                ../rtl/register.sv         14/14      13/13     0/0     0/0     290/290       100.0%
+sram                    ../rtl/sram.sv             25/25       8/8      0/0     5/5     228/228       100.0%
+-------------------------------------------------------------------------------------------------------------
+TOTAL (6 RTL files)                                71/71      39/39   10/10   16/16   1678/1678       100.0%
+
+=================================================================================
+=== Functional Covergroup Coverage (/env_pkg/metro_scoreboard)
+=================================================================================
+Covergroup / Coverpoint / Cross                        Bins (Hit/Total)     Metric    Goal    Status
+-----------------------------------------------------  ----------------    -------   -----   --------
+TYPE /env_pkg/metro_scoreboard/operation_mode_cg                  2 / 2     100.0%     100   Covered
+  Coverpoint cp_operation_mode (query_mode, program_mode)         2 / 2     100.0%     100   Covered
+TYPE /env_pkg/metro_scoreboard/fallback_slot_action_cg           14 / 14     75.0%     100   Covered
+  Coverpoint cp_slot (first_slot, middle_slot, last_slot)         3 / 3      75.0%     100   Covered
+  Coverpoint cp_action (insert_new, overwrite, clear)             3 / 3      75.0%     100   Covered
+  Coverpoint cp_clear_vs_write (write_or_overwrite, clear_slot)   2 / 2      75.0%     100   Covered
+  Cross slot_x_action (cp_slot x cp_clear_vs_write)               6 / 6      75.0%     100   Covered
+TYPE /env_pkg/metro_scoreboard/query_result_cg                   11 / 11     95.8%     100   Covered
+  Coverpoint cp_expected_path                                     4 / 4      95.8%     100   Covered
+  Coverpoint cp_actual_match                                      2 / 2      95.8%     100   Covered
+  Coverpoint cp_actual_fallback                                   2 / 2      95.8%     100   Covered
+  Coverpoint cp_done                                              1 / 1      95.8%     100   Covered
+  Coverpoint cp_match_agreement                                   1 / 1      95.8%     100   Covered
+  Coverpoint cp_fallback_agreement                                1 / 1      95.8%     100   Covered
+TYPE /env_pkg/metro_scoreboard/idle_status_cg                     1 / 1       0.0%     100   Covered
+  Coverpoint cp_idle_status (zero_status)                         1 / 1       0.0%     100   Covered
+-------------------------------------------------------------------------------------------------------------
+TOTAL COVERGROUP COVERAGE: 67.7%  |  COVERGROUP TYPES: 4  |  COVERPOINTS/CROSSES: 12  |  BINS: 28/28

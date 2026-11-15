@@ -1,0 +1,151 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[00:27:15.214393] Configured Lic search path (25.01-s002): 5280@10.253.1.1
+
+Version: 25.12-s067_1, built Sun Nov 16 22:10:10 PST 2025
+Options: -files scripts/run_genus.tcl -log logs/genus_run.log 
+Date:    Tue Nov 03 00:27:15 2026
+Host:    shtp (x86_64 w/Linux 5.14.0-687.20.1.el9_8.x86_64) (20cores*80cpus*2physical cpus*Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz 28160KB) (526400084KB)
+PID:     1162913
+OS:      AlmaLinux 9.8 (Olive Jaguar)
+
+Checking out license: Genus_Synthesis
+[00:27:15.117458] Periodic Lic check successful
+[00:27:15.641762] Feature usage summary:
+[00:27:15.641763] Genus_Synthesis  
+License checkout complete (0 seconds elapsed).
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Finished executable startup (3 seconds elapsed).
+
+Loading tool scripts...Using chipware dir from user defined $CW_DIR environment variable set to /data/cadence/installs/DDI251/GENUS251/tools.lnx86/lib/chipware
+Using chipware simulation model dir from user defined $CW_DIR_SIM environment variable set to /data/cadence/installs/DDI251/GENUS251/tools.lnx86/lib/chipware/sim
+
+Finished loading tool scripts (20 seconds elapsed).
+
+#@ Processing -files option
+@genus:root: 1> source scripts/run_genus.tcl
+#@ Begin verbose source ./scripts/run_genus.tcl
+@file(run_genus.tcl) 2: set PROJECT_DIR [pwd]
+@file(run_genus.tcl) 3: set RTL_DIR "$PROJECT_DIR/rtl"
+@file(run_genus.tcl) 4: set CONSTRAINTS_DIR "$PROJECT_DIR/constraints"
+@file(run_genus.tcl) 5: set REPORTS_DIR "$PROJECT_DIR/reports"
+@file(run_genus.tcl) 6: set OUTPUTS_DIR "$PROJECT_DIR/outputs"
+@file(run_genus.tcl) 8: set DESIGN "metro_card_top"
+@file(run_genus.tcl) 10: set LIB_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/timing/"
+@file(run_genus.tcl) 11: set TARGET_LIB "typical.lib"
+@file(run_genus.tcl) 14: set_db init_lib_search_path [list $LIB_DIR]
+  Setting attribute of root '/': 'init_lib_search_path' = /data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/timing/
+@file(run_genus.tcl) 15: set_db init_hdl_search_path [list $RTL_DIR]
+  Setting attribute of root '/': 'init_hdl_search_path' = /data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl
+@file(run_genus.tcl) 17: read_libs $TARGET_LIB
+
+  Message Summary for Library typical.lib:
+  ****************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  Missing library level attribute. [LBR-516]: 1
+  ****************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.200000, 25.000000) in library 'typical.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHX2'.
+        : Specify a valid area value for the libcell.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHX4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDHX2'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDHXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2X4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2X6'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3X8'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X8'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21X2'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO22X1'.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-43'.
+@file(run_genus.tcl) 19: set LEF_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/"
+@file(run_genus.tcl) 20: read_physical -lef [list "$LEF_DIR/gsclib045.lef"]
+
+  According to lef_library, there are total 9 routing layers [ V(4) / H(5) ]
+
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DFFNSRX4 cannot be found in library.
+        : Ensure that the proper library files are available and have been imported.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL1 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL64 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL8 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL16 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ANTENNA cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL4 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DFFSX2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL32 cannot be found in library.
+@file(run_genus.tcl) 21: set TECH_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/TECH"
+@file(run_genus.tcl) 22: set_db qrc_tech_file "$TECH_DIR/qrc_tech_file"
+Error   : File error. [FILE-100] [set_db]
+        : Cannot open file '/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/TECH/qrc_tech_file'. File not found.
+        : Make sure that the file is a readable regular file and has the specified name.
+Error   : File error. [FILE-100] [set_db]
+        : Cannot open file '/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/TECH/qrc_tech_file'. File not found.
+Error   : The data value for this attribute is invalid. [TUI-24] [set_db]
+        : The value '/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/TECH/qrc_tech_file' cannot be set for attribute 'qrc_tech_file'.
+        : To see the usage/description for this attribute, type '::legacy::set_attribute -h <attr_name> *' (in legacy UI mode) or 'help * <attr_name> -detail' (in CUI mode).
+#@ End verbose source ./scripts/run_genus.tcl
+1
+Encountered problems processing file: scripts/run_genus.tcl
+WARNING: This version of the tool is 350 days old.
+@genus:root: 2> vi scripts/run_genus.tcl
+@genus:root: 3> genus -files scripts/run_genus.tcl -log logs/genus_run.log
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 1410s, ST: 27s, FG: 27s, CPU: 1.6%}, MEM {curr: 1.5G, peak: 1.5G, phys curr: 0.6G, phys peak: 2.9G}, SYS {load: 0.7, cpu: 80, total: 502.0G, free: 124.1G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 1411s, ST: 27s, FG: 27s, CPU: 1.6%}, MEM {curr: 1.5G, peak: 1.5G, phys curr: 0.6G, phys peak: 2.9G}, SYS {load: 0.7, cpu: 80, total: 502.0G, free: 124.1G}
+Abnormal exit.

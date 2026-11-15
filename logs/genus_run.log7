@@ -1,0 +1,238 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[22:25:17.214425] Configured Lic search path (25.01-s002): 5280@10.253.1.1
+
+Version: 25.12-s067_1, built Sun Nov 16 22:10:10 PST 2025
+Options: -files scripts/run_genus.tcl -log logs/genus_run.log 
+Date:    Mon Nov 02 22:25:17 2026
+Host:    shtp (x86_64 w/Linux 5.14.0-687.20.1.el9_8.x86_64) (20cores*80cpus*2physical cpus*Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz 28160KB) (526400084KB)
+PID:     1123860
+OS:      AlmaLinux 9.8 (Olive Jaguar)
+
+Checking out license: Genus_Synthesis
+[22:25:17.214002] Periodic Lic check successful
+[22:25:17.738297] Feature usage summary:
+[22:25:17.738298] Genus_Synthesis  
+License checkout complete (0 seconds elapsed).
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Finished executable startup (3 seconds elapsed).
+
+Loading tool scripts...
+Finished loading tool scripts (20 seconds elapsed).
+
+#@ Processing -files option
+@genus:root: 1> source scripts/run_genus.tcl
+#@ Begin verbose source ./scripts/run_genus.tcl
+@file(run_genus.tcl) 2: set PROJECT_DIR [pwd]
+@file(run_genus.tcl) 3: set RTL_DIR "$PROJECT_DIR/rtl"
+@file(run_genus.tcl) 4: set CONSTRAINTS_DIR "$PROJECT_DIR/constraints"
+@file(run_genus.tcl) 5: set REPORTS_DIR "$PROJECT_DIR/reports"
+@file(run_genus.tcl) 6: set OUTPUTS_DIR "$PROJECT_DIR/outputs"
+@file(run_genus.tcl) 8: set DESIGN "metro_card_top"
+@file(run_genus.tcl) 10: set LIB_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/timing/"
+@file(run_genus.tcl) 11: set TARGET_LIB "typical.lib"
+@file(run_genus.tcl) 14: set_db init_lib_search_path [list $LIB_DIR]
+  Setting attribute of root '/': 'init_lib_search_path' = /data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/timing/
+@file(run_genus.tcl) 15: set_db init_hdl_search_path [list $RTL_DIR]
+  Setting attribute of root '/': 'init_hdl_search_path' = /data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl
+@file(run_genus.tcl) 17: read_libs $TARGET_LIB
+
+  Message Summary for Library typical.lib:
+  ****************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  Missing library level attribute. [LBR-516]: 1
+  ****************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.200000, 25.000000) in library 'typical.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHX2'.
+        : Specify a valid area value for the libcell.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHX4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFHXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDFXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDHX2'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/ADDHXL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2X4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2X6'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND2XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3X8'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND3XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X4'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4X8'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AND4XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21X1'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21X2'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO21XL'.
+Warning : Libcell has no area attribute.  Defaulting to 0 area. [LBR-43]
+        : Assigning 0 area to library cell 'typical/AO22X1'.
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'LBR-43'.
+@file(run_genus.tcl) 19: set LEF_DIR "/data/loadtest-eda-design/INNOVUS/DESIGN/GPDK/LIBS/GPDK045/"
+@file(run_genus.tcl) 20: read_physical -lef [list "$LEF_DIR/gsclib045.lef"]
+
+  According to lef_library, there are total 9 routing layers [ V(4) / H(5) ]
+
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DFFNSRX4 cannot be found in library.
+        : Ensure that the proper library files are available and have been imported.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL1 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL64 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL8 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL16 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell ANTENNA cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL4 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DFFSX2 cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILL32 cannot be found in library.
+@file(run_genus.tcl) 23: set RTL_FILES {
+	apb_slave.sv 
+	hash_engine.sv 
+	fallback_lookup.sv 
+	register.sv  
+	metro_card_top.sv 
+}
+@file(run_genus.tcl) 30: set_db hdl_max_memory_address_range 16777216
+  Setting attribute of root '/': 'hdl_max_memory_address_range' = 16777216
+@file(run_genus.tcl) 31: set_db hdl_max_loop_limit 16777216
+  Setting attribute of root '/': 'hdl_max_loop_limit' = 16777216
+@file(run_genus.tcl) 32: read_hdl -sv $RTL_FILES
+@file(run_genus.tcl) 35: elaborate $DESIGN
+  Libraries have 324 usable logic and 126 usable sequential lib-cells.
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'metro_card_top' from file '/data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl/metro_card_top.sv'.
+Warning : Using default parameter value for module elaboration. [CDFG-818]
+        : Elaborating block 'metro_card_top' with default parameters value.
+Warning : In legacy_ui mode, Genus creates a blackbox as description for a module is not found. Black boxes represent unresolved references in the design and are usually not expected. Another possible reason is, some libraries are not read and the tool could not get the content for some macros or lib_cells. [CDFG-428]
+        : A blackbox was created for instance 'sram_dut' in file '/data/thithietkevmbd/home/competitor01/metro_card_accelerator/Metro-Card-Accelerator-v2/rtl/metro_card_top.sv' on line 90.
+        : Check the kind of module a black box is. If it is a lib_cell or a macro, check why the corresponding .lib was not read in. This could be either due to a missing or faulty file or due to an incomplete init_lib_search_path attribute value making restricting access to the missing file. If it is a module of your design, verify whether the path to this module is a part of the files you read or else check that the init_hdl_search_path attribute is not missing some paths.
+Info    : Done Elaborating Design. [ELAB-3]
+        : Done elaborating 'metro_card_top'.
+Warning : Black-boxes are represented as unresolved references in the design. [TUI-273]
+        : Cannot resolve reference to 'sram_DATA32_HASH24_BIT_COUNT9600000'.
+        : Run check_design to get all unresolved instance. To resolve the reference, either load a technology library containing the cell by appending to the 'library' attribute, or read in the hdl file containing the module before performing elaboration. As the design is incomplete, synthesis results may not correspond to the entire design.
+Checking for source RTL...
+Check completed for source RTL.
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+
+Stage: post_elab
+-------------------------------------------------------
+| Trick             | Accepts | Rejects | Runtime (s) | 
+-------------------------------------------------------
+| ume_constant_bmux |       0 |       0 |        0.00 | 
+| ume_merge         |       0 |       0 |        0.00 | 
+| ume_ssm           |       0 |       0 |        0.00 | 
+| ume_cse           |       1 |       0 |        0.06 | 
+| ume_shrink        |       0 |       0 |        0.00 | 
+| ume_sweep         |       0 |       0 |        0.00 | 
+| ume_constant_bmux |       0 |       0 |        0.00 | 
+| ume_merge         |       0 |       0 |        0.00 | 
+| ume_ssm           |       0 |       0 |        0.00 | 
+| ume_cse           |       0 |       0 |        0.04 | 
+| ume_shrink        |       0 |       0 |        0.00 | 
+| ume_sweep         |       0 |       0 |        0.00 | 
+-------------------------------------------------------
+Starting optimize datapath shifters [v1.0] (stage: post_elab, startdef: metro_card_top, recur: true)
+Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.000s)
+Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: metro_card_top, recur: true)
+Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.001s)
+Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: metro_card_top, recur: true)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.000s)
+Starting basic netlist cleanup [v1.0] (stage: post_elab, startdef: metro_card_top, recur: true)
+Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.000s)
+
+Stage: post_elab
+--------------------------------------------------------------------
+| Transform                      | Accepts | Rejects | Runtime (s) | 
+--------------------------------------------------------------------
+| hlo_optimize_datapath_shifters |       0 |       0 |        0.00 | 
+| hlo_clip_mux_input             |       0 |       0 |        0.00 | 
+| hlo_clip                       |       0 |       0 |        0.00 | 
+| hlo_cleanup                    |       0 |       0 |        0.00 | 
+--------------------------------------------------------------------
+UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   elaborate
+@file(run_genus.tcl) 38: check_design -unresolved > "$REPORTS_DIR/check_design_unresolved.rpt"
+
+@file(run_genus.tcl) 39: check_design -all > "$REPORTS_DIR/check_design_all.rpt"
+
+@file(run_genus.tcl) 42: read_sdc "$CONSTRANTS_DIR/${DESIGN}.sdc"
+#@ End verbose source ./scripts/run_genus.tcl
+can't read "CONSTRANTS_DIR": no such variable
+Encountered problems processing file: scripts/run_genus.tcl
+WARNING: This version of the tool is 350 days old.
+@genus:root: 2> ls
+constraints
+docs
+fv
+lib
+logs
+metrics
+outputs
+reports
+rtl
+scripts
+sequences
+sim
+tb
+testcases
+vip
+@genus:root: 3> vi scripts/run_gen.tcl
+@genus:root: 4> vi scripts/run_genus.tcl
+@genus:root: 5> ls
+constraints
+docs
+fv
+lib
+logs
+metrics
+outputs
+reports
+rtl
+scripts
+sequences
+sim
+tb
+testcases
+vip
+@genus:root: 6> genus -files scripts/run_genus.tcl -log logs/genus_run.log

@@ -1,0 +1,12 @@
+# Cadence Xcelium Coverage Configuration File (CCF)
+# Instrument only the RTL DUT hierarchy (metro_card_top) for Code Coverage
+select_coverage -block -expr -toggle -fsm -module metro_card_top...
+deselect_coverage -block -expr -toggle -fsm -module testbench
+
+# Score continuous assignments and branches in RTL
+set_assign_scoring
+set_branch_scoring
+
+# Collect SystemVerilog functional coverage (covergroups in UVM scoreboard)
+select_functional
+set_covergroup -per_instance_default_one

@@ -1,0 +1,16 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-timescale
+1ns/1ps
+-ACCESS
++rwc
+
+testbench
+-COVERAGE
+all
+-COVDUT
+metro_card_top
+-COVFILE
+cov.ccf

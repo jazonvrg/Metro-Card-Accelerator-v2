@@ -1,0 +1,151 @@
+xrun(64): 25.09-s001: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	25.09-s001: Started on Nov 08, 2026 at 11:11:59 +07
+xrun
+	-64bit
+	-sv
+	-uvm
+	-uvmhome CDNS-1.2
+	-timescale 1ns/1ps
+	-access +rwc
+	-f rtl.f
+		../rtl/apb_slave.sv
+		../rtl/hash_engine.sv
+		../rtl/fallback_lookup.sv
+		../rtl/register.sv
+		../rtl/sram.sv
+		../rtl/metro_card_top.sv
+	-f tb.f
+		+incdir+../vip
+		+incdir+../tb
+		+incdir+../sequences
+		+incdir+../testcases
+		-f ../vip/vip.f
+			+incdir+../vip
+			../vip/metro_apb_if.sv
+			../vip/metro_apb_pkg.sv
+		../tb/env_pkg.sv
+		../sequences/seq_pkg.sv
+		../testcases/test_pkg.sv
+		../tb/testbench.sv
+	-top testbench
+	+define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR
+	-coverage all
+	-covdut metro_card_top
+	-covfile cov.ccf
+	-elaborate
+	-l xrun_build.log
+Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2
+file: ../rtl/apb_slave.sv
+	module worklib.apb_slave:sv
+		errors: 0, warnings: 0
+file: ../rtl/hash_engine.sv
+	module worklib.hash_engine:sv
+		errors: 0, warnings: 0
+file: ../rtl/fallback_lookup.sv
+	module worklib.fallback_lookup:sv
+		errors: 0, warnings: 0
+file: ../rtl/register.sv
+	module worklib.register:sv
+		errors: 0, warnings: 0
+file: ../rtl/sram.sv
+	module worklib.sram:sv
+		errors: 0, warnings: 0
+file: ../rtl/metro_card_top.sv
+	module worklib.metro_card_top:sv
+		errors: 0, warnings: 0
+file: ../vip/metro_apb_if.sv
+	interface worklib.metro_apb_if:sv
+		errors: 0, warnings: 0
+file: ../vip/metro_apb_pkg.sv
+	package worklib.metro_apb_pkg:sv
+		errors: 0, warnings: 0
+file: ../tb/env_pkg.sv
+	package worklib.env_pkg:sv
+		errors: 0, warnings: 0
+file: ../sequences/seq_pkg.sv
+	package worklib.seq_pkg:sv
+		errors: 0, warnings: 0
+file: ../testcases/test_pkg.sv
+	package worklib.test_pkg:sv
+		errors: 0, warnings: 0
+file: ../tb/testbench.sv
+	module worklib.testbench:sv
+		errors: 0, warnings: 0
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		worklib.uvm_pkg:sv (package)
+		worklib.cdns_uvmapi:svp (package)
+		worklib.cdns_assert2uvm_pkg:sv (package)
+		worklib.cdns_uvm_pkg:sv (package)
+		worklib.metro_apb_pkg:sv (package)
+		worklib.env_pkg:sv (package)
+		worklib.seq_pkg:sv (package)
+		worklib.test_pkg:sv (package)
+		worklib.testbench:sv (module)
+
+	Extracting FSMs for coverage:
+		worklib.apb_slave
+		worklib.hash_engine
+		worklib.fallback_lookup
+		worklib.register
+		worklib.sram
+		worklib.metro_card_top
+	Total FSMs extracted = 0
+	Building instance overlay tables: .................... Done
+	Enabling instrumentation for coverage types: block expression FSM toggle functional
+xmelab: *W,COVDCL: By default expression coverage is scored only for Verilog logical operators (|| and &&) and VHDL logical operators (OR, AND, NOR, and NAND), and is scored only in condition expressions. To score coverage for other operators and for expressions in other statements, use the "set_expr_coverable_operators" and "set_expr_coverable_statements" coverage configuration file commands with suitable options at elaboration.
+	Generating native compiled code:
+		worklib.sram:sv <0x391dadbb>
+			streams:   9, words:  6721
+		worklib.register:sv <0x6ccf3dbd>
+			streams:   5, words:  4266
+		worklib.fallback_lookup:sv <0x2f168d11>
+			streams:   7, words:  9768
+		worklib.hash_engine:sv <0x508c0e72>
+			streams:   5, words:  3866
+		worklib.apb_slave:sv <0x4944c5f2>
+			streams:   1, words:  1354
+		worklib.metro_card_top:sv <0x159aff70>
+			streams:  36, words: 12438
+		worklib.testbench:sv <0x6f978aa6>
+			streams: 1056, words: 1294111
+		worklib.cdns_uvm_pkg:sv <0x49696dea>
+			streams: 249, words: 389156
+		worklib.cdns_uvmapi:svp <0x25bcb058>
+			streams:  27, words: 30102
+		worklib.cdns_assert2uvm_pkg:sv <0x658212bb>
+			streams:   3, words:  1700
+		worklib.uvm_pkg:sv <0x66e29b76>
+			streams: 5940, words: 9088391
+    logic [DATA-1:0] entries [0:DEPTH-1];
+                           |
+xmelab: *W,COVMDD (../rtl/fallback_lookup.sv,22|27): Toggle coverage for bit, logic, reg, wire, enum and struct multi-dimensional static arrays and vectors is not supported by default. To enable toggle coverage for enum multi-dimensional static arrays specify 'set_toggle_scoring -sv_enum enable_mda' and for other multi-dimensional static arrays, specify 'set_toggle_scoring -sv_mda [<max_bit_base2_exponent>] [-sv_mda_of_struct]' ccf command in the coverage configuration file.
+    integer write_slot;
+                     |
+xmelab: *W,COVUTA (../rtl/fallback_lookup.sv,23|21): Toggle coverage is not supported for SystemVerilog integer, real array, string, dynamic array, sparse memory and reference ports. It is also not supported for VHDL multi-dimensional array and array of record. There may also be other such objects in the design.
+	Building instance specific data structures.
+xmelab: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                        Instances  Unique
+		Modules:                        7       7
+		Interfaces:                     1       1
+		Verilog packages:               8       8
+		Registers:                 17,345  12,101
+		Scalar wires:                  41       -
+		Vectored wires:                33       -
+		Named events:                   4      12
+		Always blocks:                  8       8
+		Initial blocks:               380     184
+		Parallel blocks:               27      28
+		Cont. assignments:              5       5
+		Pseudo assignments:            44       -
+		Assertions:                     3       3
+		Covergroup Instances:           0       4
+		SV Class declarations:        249     365
+		SV Class specializations:     475     475
+		Process Clocks:                 3       1
+		Simulation timescale:         1ps
+	Writing initial simulation snapshot: worklib.testbench:sv
+TOOL:	xrun(64)	25.09-s001: Exiting on Nov 08, 2026 at 11:12:03 +07  (total: 00:00:04)

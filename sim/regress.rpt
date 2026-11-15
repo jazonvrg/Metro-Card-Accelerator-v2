@@ -1,0 +1,20 @@
+############################################################
+####          Metro Card Regression Report             ####
+############################################################
+Log files classified: 9
+Passed              : 9
+Failed              : 0
+Unknown             : 0
+------------------------------------------------------------
+Run log detail:
+log/metro_coverage_closure_test_193684.log   : Passed
+log/metro_fallback_auto_clear_test_615384.log : Passed
+log/metro_fallback_miss_test_536350.log      : Passed
+log/metro_fallback_table_test_155566.log     : Passed
+log/metro_hash_program_test_619852.log       : Passed
+log/metro_metrics_test_273337.log            : Passed
+log/metro_register_test_439698.log           : Passed
+log/metro_reset_test_125487.log              : Passed
+log/metro_smoke_test_313448.log              : Passed
+------------------------------------------------------------
+Note: only simulation logs with TEST PASSED / TEST FAILED markers are conclusive.

@@ -1,0 +1,39 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-64bit
+-sv
+-uvm
+-uvmhome
+CDNS-1.2
+-timescale
+1ns/1ps
+-access
++rwc
+-f
+rtl.f
+-f
+tb.f
+-top
+testbench
++define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR
+-coverage
+all
+-covdut
+metro_card_top
+-covfile
+cov.ccf
+-covworkdir
+log/cov_work
+-covtest
+metro_fallback_auto_clear_test_615384
+-covoverwrite
+-svseed
+615384
++UVM_TESTNAME=metro_fallback_auto_clear_test
++UVM_VERBOSITY=UVM_LOW
+-input
+"@database -open waves -into log/metro_fallback_auto_clear_test_615384.shm -default; probe -create -shm testbench -all -variables -depth all; run; exit"
+-l
+log/metro_fallback_auto_clear_test_615384.log

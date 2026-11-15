@@ -1,0 +1,36 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
++incdir+../vip
++incdir+../tb
++incdir+../sequences
++incdir+../testcases
++incdir+../vip
++define+UVM_OBJECT_MUST_HAVE_CONSTRUCTOR
+-loadpli
+/data/cadence/installs/XCELIUM251/tools/methodology/UVM/CDNS-1.2/additions/sv/lib/64bit/libuvmpli.so:uvm_pli_boot
+-timescale
+1ns/1ps
+-ACCESS
++rwc
+-COVERAGE
+all
+-COVDUT
+metro_card_top
+-COVFILE
+cov.ccf
+-no_analogsolver
+-MESSAGES
+testbench
+-XLMODE
+./xcelium.d/run.lnx8664.25.09.d
+-RUNMODE
+-CDSLIB
+./xcelium.d/run.lnx8664.25.09.d/cds.lib
+-HDLVAR
+./xcelium.d/run.lnx8664.25.09.d/hdl.var
+-WORK
+worklib
+-IRUNHASTOP
+-HASXLMODE

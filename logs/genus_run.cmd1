@@ -1,0 +1,32 @@
+# Cadence Genus(TM) Synthesis Solution, Version 25.12-s067_1, built Nov 17 2025 13:10:10
+
+# Date: Sun Nov 01 20:24:18 2026
+# Host: shtp (x86_64 w/Linux 5.14.0-687.20.1.el9_8.x86_64) (20cores*80cpus*2physical cpus*Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz 28160KB)
+# OS:   AlmaLinux 9.8 (Olive Jaguar)
+
+source scripts/run_genus.tcl
+ls
+vi scripts/run_genus.tcl
+ls
+cd logs
+ls
+cat genus_run.log
+nano genus_run.log
+torch genus_run.log
+vi genus_run.log
+vi genus_run.log
+ls
+cd ..
+ls
+vi scripts/genus_run.tcl
+ls
+cd scripts/run_genus.tcl
+vi scripts/run_genus.tcl
+vi scripts/run_genus.tcl
+vi scripts/run_genus.tcl
+ls
+cd logs
+ls
+cd ..
+ls
+genus -files run_genus.tcl -log logs/genus_run.log
